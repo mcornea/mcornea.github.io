@@ -14,9 +14,8 @@ Since then I’ve been working as a Linux sysadmin and got pretty amazed of how 
 
 Find me on [Facebook][facebook] / [Github][github] / [Twitter][Twitter] or just say `Hello` at 
 [marius at remote-lab.net](marius at remote-lab.net).
-<img src="{{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="Marius" width="200" height="350"/>
 
-![Marius]({{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }} "Marius"){: .center-image }
+![Marius]({{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }} "Marius")
 
 [tf]: http://template-factory.nl
 [m]: http://mearch.com

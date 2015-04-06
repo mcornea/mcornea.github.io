@@ -3,10 +3,10 @@
   <channel>
     <title></title>
     <description>learn by doing</description>
-    <link>http://remoteur.github.io:4000//</link>
-    <atom:link href="http://remoteur.github.io:4000//feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Apr 2015 16:18:40 +0000</pubDate>
-    <lastBuildDate>Mon, 06 Apr 2015 16:18:40 +0000</lastBuildDate>
+    <link>https://remote-lab.net//</link>
+    <atom:link href="https://remote-lab.net//feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Mon, 06 Apr 2015 16:36:32 +0000</pubDate>
+    <lastBuildDate>Mon, 06 Apr 2015 16:36:32 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -17,7 +17,7 @@
 
 &lt;p&gt;First thing that came to mind and most handy I guess is to build a LAMP stack environment for Wordpress sites. So how do I start? Well, let’s take the LAMP environment and split it into components: we need a database to store data and a web server that can process the Wordpress PHP code. Based on this I decided to create a container for the MySQL database and a container for running Apache plus additional PHP modules. Then I would also like to run multiple Wordpress instances on the same server to make use of all the resources. In order to achieve isolation between the apps we can create separate containers for each WP instance, each with its own database on the MySQL server. Nevertheless since we want all the instances accessible by a single IP address, we also need a load balancer that routes traffic to the webserver containers according to the Host field in the HTTP header. 
 Below is a diagram that better describes the flow:
-&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/Containers-start-New-Page1.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/Containers-start-New-Page1.png&quot; alt=&quot;Containers start - New Page&quot; width=&quot;1167&quot; height=&quot;657&quot; class=&quot;aligncenter size-full wp-image-303&quot; /&gt;&lt;/a&gt;
+&lt;a href=&quot;https://remote-lab.net/assets/static/Containers-start-New-Page1.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/assets/static/Containers-start-New-Page1.png&quot; alt=&quot;Containers start - New Page&quot; width=&quot;1167&quot; height=&quot;657&quot; class=&quot;aligncenter size-full wp-image-303&quot; /&gt;&lt;/a&gt;
 So, let’s get started. I got a Fedora21 instance powered up and followed the documentation &lt;a href=&quot;https://docs.docker.com/installation/fedora/&quot;&gt;here&lt;/a&gt;[1] to get Docker up and running. Once I got the docker environment ready I started searching for some examples that would quickly get me started with the apps that I needed. So I started with the MySQL server. A quick search on Google pointed me to the official MySQL &lt;a href=&quot;https://registry.hub.docker.com/_/mysql/&quot;&gt;repo&lt;/a&gt;[2] on Docker Hub that contains pretty straight forward documentation on how to get a running MySQL container. &lt;/p&gt;
 
 &lt;p&gt;Here’s the command that I ran in order to get it running:&lt;/p&gt;
@@ -85,7 +85,7 @@ c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&
 
 &lt;p&gt;And the result:&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot; alt=&quot;Screenshot from 2015-04-05 21:24:08&quot; width=&quot;1430&quot; height=&quot;847&quot; class=&quot;aligncenter size-full wp-image-304&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/assets/static/Screenshot-from-2015-04-05-212408.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/assets/static/Screenshot-from-2015-04-05-212408.png&quot; alt=&quot;Screenshot from 2015-04-05 21:24:08&quot; width=&quot;1430&quot; height=&quot;847&quot; class=&quot;aligncenter size-full wp-image-304&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;That’s pretty awesome given the fact that I was able to do this in a couple of hours on a lazy Sunday. I’m pretty sure Docker has its caveats (building images takes such a long time) but it’s amazing how fast you can achieve this kind of automation and get familiar with the technology. Long live the Open Source community! :)&lt;/p&gt;
 
@@ -98,8 +98,8 @@ c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&
 
 </description>
         <pubDate>Sun, 05 Apr 2015 22:07:40 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//getting-started-with-docker</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//getting-started-with-docker</guid>
+        <link>https://remote-lab.net//getting-started-with-docker</link>
+        <guid isPermaLink="true">https://remote-lab.net//getting-started-with-docker</guid>
         
         
         <category>linux</category>
@@ -113,7 +113,7 @@ c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&
         <description>&lt;p&gt;In this post we’ll see how we can quickly get a basic OSPF lab deployed by using Ansible. Our setup consists of 3 x Cisco IOS routers which are connected according to the diagram below. All the routers should already have SSH set up and an interface connected to the management network that will be used for retrieving the configuration files from the server. On the server side we need a Linux machine that has Ansible installed.&lt;/p&gt;
 
 &lt;hr /&gt;
-&lt;p&gt;&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/ansible_ospf-New-Page.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/ansible_ospf-New-Page.png&quot; alt=&quot;ansible_ospf - New Page&quot; width=&quot;649&quot; height=&quot;594&quot; class=&quot;aligncenter size-full wp-image-297&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/assets/static/ansible_ospf-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/assets/static/ansible_ospf-New-Page.png&quot; alt=&quot;ansible_ospf - New Page&quot; width=&quot;649&quot; height=&quot;594&quot; class=&quot;aligncenter size-full wp-image-297&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;So let’s get started by building the Ansible playbook. I’ll explain the site.yml file below:&lt;/p&gt;
 
@@ -220,8 +220,8 @@ Thanks&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 24 Feb 2015 19:21:31 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//opsf-on-ios-with-ansible</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//opsf-on-ios-with-ansible</guid>
+        <link>https://remote-lab.net//opsf-on-ios-with-ansible</link>
+        <guid isPermaLink="true">https://remote-lab.net//opsf-on-ios-with-ansible</guid>
         
         
         <category>linux</category>
@@ -245,7 +245,7 @@ Thanks&lt;/p&gt;
 &lt;p&gt;OpenFlow is a communications protocol that allows remote manipulation of the devices forwarding tables. Think of this protocol like a standard API that you can consume by running any software. This is great because you can purchase the networking device from a specific vendor and run the controller by your own code, open source project or other proprietary software. In my opinion this provides you the freedom to choose and will push the vendors to create better and better software. Personally I’m a big fan of opensource software and I’m dreaming about the moment when the networking world will be able to get the benefits of a big opensource project. 
 Another advantage that SDN brings is a central point that controls the network. Think about how we currently manage the networking devices. Even if the network is a whole that provides services to upper applications, we currently log into each separate device and write some commands that configure services. SDN would save us from doing repetitive and boring tasks such as provisioning vlans.
 Enough with the talk, let’s start a simple scenario by using the remote-lab.net environment. The lab topology consists of two hosts connected to an OpenvSwitch switch. The OVS switch is connected to an OpenFlow controller running Pox. The controller runs the code that enables L2 connectivity between the hosts but the actual forwarding is done by the OVS switch.
-&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/sdn_lab.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/sdn_lab.png&quot; alt=&quot;sdn_lab&quot; width=&quot;686&quot; height=&quot;364&quot; class=&quot;aligncenter size-full wp-image-284&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;https://remote-lab.net/assets/static/sdn_lab.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/assets/static/sdn_lab.png&quot; alt=&quot;sdn_lab&quot; width=&quot;686&quot; height=&quot;364&quot; class=&quot;aligncenter size-full wp-image-284&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Let’s first enable the ports the hosts are connected to, set an openvswitch bridge where the hosts are connected, set the IP addreses on the hosts and check we have connectivity between the hosts. By default the L2 learning mechanism is done by the OpenvSwitch internals. &lt;/p&gt;
 
@@ -331,8 +331,8 @@ NXST_FLOW reply &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&qu
 &lt;p&gt;You can take any of these headers and manipulate them as you wish. I believe the whole model provides great flexibility and freedom and it will lead to better networking software. &lt;/p&gt;
 </description>
         <pubDate>Sun, 12 Oct 2014 21:35:48 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//sdn-intro-basic-with-ovs-and-pox</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//sdn-intro-basic-with-ovs-and-pox</guid>
+        <link>https://remote-lab.net//sdn-intro-basic-with-ovs-and-pox</link>
+        <guid isPermaLink="true">https://remote-lab.net//sdn-intro-basic-with-ovs-and-pox</guid>
         
         
         <category>linux</category>
@@ -390,8 +390,8 @@ node01.remote-lab.net      : &lt;span class=&quot;nv&quot;&gt;ok&lt;/span&gt;&lt
 
 </description>
         <pubDate>Sun, 14 Sep 2014 12:52:15 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//ansible-postfix-with-mandrill</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//ansible-postfix-with-mandrill</guid>
+        <link>https://remote-lab.net//ansible-postfix-with-mandrill</link>
+        <guid isPermaLink="true">https://remote-lab.net//ansible-postfix-with-mandrill</guid>
         
         
         <category>linux</category>
@@ -410,11 +410,11 @@ node01.remote-lab.net      : &lt;span class=&quot;nv&quot;&gt;ok&lt;/span&gt;&lt
 
 &lt;p&gt;Each of the hosts will be connected to a router that  will be the first hop router for the hosts subnet. The 2 routers will be connected by 2 redundant links. We’ll set up OSPF as a routing protocol between the 2 routers that will be used to advertise the clients subnets. 
 rtr01 is an Arista vEOS and rtr02 is running Vyatta core. host01 and host02 are running Debian.
-&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/routing-lab-New-Page.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/routing-lab-New-Page.png&quot; alt=&quot;ospf routing lab logical&quot; width=&quot;821&quot; height=&quot;729&quot; class=&quot;aligncenter size-full wp-image-260&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;https://remote-lab.net/assets/static/routing-lab-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/assets/static/routing-lab-New-Page.png&quot; alt=&quot;ospf routing lab logical&quot; width=&quot;821&quot; height=&quot;729&quot; class=&quot;aligncenter size-full wp-image-260&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Now let’s get to the physical setup (which is actually virtual as all the components are VMs ). Each system (clients and routers) will be connected to the layer 2 switch (openvswitch running on Linux). We’ll need to set up the links that connect the routers to the switch as trunks in order to allow multiple vlans to get through. The ports that connect the clients to the switch will be set as access ports. Please note that in a real world scenario you’ll need to connect the routers by 2 different physical links across separate geographical paths to ensure rendundancy. Below is the physical diagram of the setup.&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/routing-physical-New-Page.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/routing-physical-New-Page.png&quot; alt=&quot;routing lab physical&quot; width=&quot;745&quot; height=&quot;625&quot; class=&quot;aligncenter size-full wp-image-259&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/assets/static/routing-physical-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/assets/static/routing-physical-New-Page.png&quot; alt=&quot;routing lab physical&quot; width=&quot;745&quot; height=&quot;625&quot; class=&quot;aligncenter size-full wp-image-259&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;First thing we need to do is to configure the openvswitch. We’ll create a bridge that contains all the ports and set up the client ports in access mode. By default all the openvswitch ports are trunks.&lt;/p&gt;
 
@@ -579,8 +579,8 @@ Codes: C - connected, S - static, K - kernel,
 &lt;p&gt;I hope this post is useful for getting an idea of how you can use the virtual lab. Please let me know if you any questions.                                                             &lt;/p&gt;
 </description>
         <pubDate>Wed, 21 May 2014 20:25:28 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//basic-ospf-routing-lab</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//basic-ospf-routing-lab</guid>
+        <link>https://remote-lab.net//basic-ospf-routing-lab</link>
+        <guid isPermaLink="true">https://remote-lab.net//basic-ospf-routing-lab</guid>
         
         
         <category>linux</category>
@@ -599,7 +599,7 @@ Codes: C - connected, S - static, K - kernel,
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://remoteur.github.io:4000/assets/static//rlug-New-Page.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static//rlug-New-Page.png&quot; alt=&quot;rlug - New Page&quot; width=&quot;832&quot; height=&quot;814&quot; class=&quot;aligncenter size-full wp-image-255&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/assets/static//rlug-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/assets/static//rlug-New-Page.png&quot; alt=&quot;rlug - New Page&quot; width=&quot;832&quot; height=&quot;814&quot; class=&quot;aligncenter size-full wp-image-255&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;Install kvm and tools:&lt;/p&gt;
 
@@ -832,8 +832,8 @@ mysql&amp;gt; &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;/code&gt;&lt
 &lt;p&gt;After this final step we have our setup ready and http://app.nullzero.me/ should show the Hello World!&lt;/p&gt;
 </description>
         <pubDate>Wed, 07 May 2014 12:32:41 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//virtualized-application-infrastructure</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//virtualized-application-infrastructure</guid>
+        <link>https://remote-lab.net//virtualized-application-infrastructure</link>
+        <guid isPermaLink="true">https://remote-lab.net//virtualized-application-infrastructure</guid>
         
         
         <category>linux</category>
@@ -892,8 +892,8 @@ mysql&amp;gt; &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;/code&gt;&lt
 
 </description>
         <pubDate>Sun, 23 Feb 2014 21:28:17 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//junos-interfaces-ip-addresses-dns-records-generator</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//junos-interfaces-ip-addresses-dns-records-generator</guid>
+        <link>https://remote-lab.net//junos-interfaces-ip-addresses-dns-records-generator</link>
+        <guid isPermaLink="true">https://remote-lab.net//junos-interfaces-ip-addresses-dns-records-generator</guid>
         
         
         <category>linux</category>
@@ -1032,8 +1032,8 @@ mysql&amp;gt; &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;/code&gt;&lt
 
 </description>
         <pubDate>Sun, 23 Feb 2014 20:58:36 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//junos-curly-brackets-config-parser</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//junos-curly-brackets-config-parser</guid>
+        <link>https://remote-lab.net//junos-curly-brackets-config-parser</link>
+        <guid isPermaLink="true">https://remote-lab.net//junos-curly-brackets-config-parser</guid>
         
         
         <category>linux</category>
@@ -1049,7 +1049,7 @@ mysql&amp;gt; &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;/code&gt;&lt
 &lt;hr /&gt;
 
 &lt;p&gt;Our topology consists of 5 virtual machines running Debian Wheezy with Linux Kernel 3.2.0. Our scenario objective is to ensure L2 connectivity between HOST01 and HOST02. In order to accomplish this we’ll create a tunnel between TUNNEL01 and TUNNEL02 that will encapsulate packets coming from the 192.168.0.0/24 network. The INTERNET box just acts as a router for the packets exchanged by TUNNEL01 and TUNNEL02. 
-&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/L2TP.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/L2TP.png&quot; alt=&quot;L2TP&quot; width=&quot;851&quot; height=&quot;408&quot; class=&quot;aligncenter size-full wp-image-238&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;https://remote-lab.net/assets/static/L2TP.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/assets/static/L2TP.png&quot; alt=&quot;L2TP&quot; width=&quot;851&quot; height=&quot;408&quot; class=&quot;aligncenter size-full wp-image-238&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;First thing let’s make sure IP forwarding is enabled on all the machines that’ll forward packets : TUNNEL0[1-2], INTERNET:&lt;/p&gt;
 
@@ -1160,8 +1160,8 @@ root@host01:~# nuttcp 192.168.0.4
 
 </description>
         <pubDate>Sun, 16 Feb 2014 23:29:21 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//linux-l2tp-ethernet-pseudowires</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//linux-l2tp-ethernet-pseudowires</guid>
+        <link>https://remote-lab.net//linux-l2tp-ethernet-pseudowires</link>
+        <guid isPermaLink="true">https://remote-lab.net//linux-l2tp-ethernet-pseudowires</guid>
         
         
         <category>linux</category>
@@ -1204,8 +1204,8 @@ Threads fairness:
 
 </description>
         <pubDate>Sun, 09 Feb 2014 12:00:22 +0000</pubDate>
-        <link>http://remoteur.github.io:4000//cpu-benchmark-using-sysbench</link>
-        <guid isPermaLink="true">http://remoteur.github.io:4000//cpu-benchmark-using-sysbench</guid>
+        <link>https://remote-lab.net//cpu-benchmark-using-sysbench</link>
+        <guid isPermaLink="true">https://remote-lab.net//cpu-benchmark-using-sysbench</guid>
         
         
         <category>linux</category>

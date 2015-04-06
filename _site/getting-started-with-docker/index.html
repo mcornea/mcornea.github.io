@@ -8,13 +8,13 @@
         <meta name="description" content="Harmony is a free responsive jekyll theme by Gayan Virajith and Maheshika Lakmali. Sourced on Github -  https://github.com/gayanvirajith/harmony
 ">
         <link rel="canonical" 
-        href="http://remoteur.github.io:4000//getting-started-with-docker">
+        href="https://remote-lab.net//getting-started-with-docker">
         
         <!-- Harmony styles -->
-        <link rel="stylesheet" type="text/css" href="http://remoteur.github.io:4000/assets/css/main.css">
+        <link rel="stylesheet" type="text/css" href="https://remote-lab.net/assets/css/main.css">
 
         <!-- Modernizr js -->
-        <script async src="http://remoteur.github.io:4000/assets/js/modernizr.js"></script>    
+        <script async src="https://remote-lab.net/assets/js/modernizr.js"></script>    
 
         <!-- IE Fixes -->
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -27,17 +27,17 @@
     <body class="theme-base-01">
         <header class="main-header">
             <div class="wc-container">
-                <h1><a href="http://remoteur.github.io:4000/">remote-lab.net</a></h1>
+                <h1><a href="https://remote-lab.net/">remote-lab.net</a></h1>
                 <h2>learn by doing</h2>
                 <ul>
 	<li>
-		<a href="http://remoteur.github.io:4000">Home</a><span>/</span>
+		<a href="https://remote-lab.net">Home</a><span>/</span>
 	</li>
 	<li>
-		<a href="http://remoteur.github.io:4000//about">About</a><span>/</span>
+		<a href="https://remote-lab.net//about">About</a><span>/</span>
 	</li>
 	<li>
-		<a href="http://remoteur.github.io:4000//blog">Blog</a><span>/</span>
+		<a href="https://remote-lab.net//blog">Blog</a><span>/</span>
 	</li>
 	<li>
 		<a href="https://compute.remote-lab.net" target="_blank">Compute</a><span>/</span>
@@ -67,7 +67,7 @@
 
 <p>First thing that came to mind and most handy I guess is to build a LAMP stack environment for Wordpress sites. So how do I start? Well, let’s take the LAMP environment and split it into components: we need a database to store data and a web server that can process the Wordpress PHP code. Based on this I decided to create a container for the MySQL database and a container for running Apache plus additional PHP modules. Then I would also like to run multiple Wordpress instances on the same server to make use of all the resources. In order to achieve isolation between the apps we can create separate containers for each WP instance, each with its own database on the MySQL server. Nevertheless since we want all the instances accessible by a single IP address, we also need a load balancer that routes traffic to the webserver containers according to the Host field in the HTTP header. 
 Below is a diagram that better describes the flow:
-<a href="http://remoteur.github.io:4000/assets/static/Containers-start-New-Page1.png"><img src="http://remoteur.github.io:4000/assets/static/Containers-start-New-Page1.png" alt="Containers start - New Page" width="1167" height="657" class="aligncenter size-full wp-image-303" /></a>
+<a href="https://remote-lab.net/assets/static/Containers-start-New-Page1.png"><img src="https://remote-lab.net/assets/static/Containers-start-New-Page1.png" alt="Containers start - New Page" width="1167" height="657" class="aligncenter size-full wp-image-303" /></a>
 So, let’s get started. I got a Fedora21 instance powered up and followed the documentation <a href="https://docs.docker.com/installation/fedora/">here</a>[1] to get Docker up and running. Once I got the docker environment ready I started searching for some examples that would quickly get me started with the apps that I needed. So I started with the MySQL server. A quick search on Google pointed me to the official MySQL <a href="https://registry.hub.docker.com/_/mysql/">repo</a>[2] on Docker Hub that contains pretty straight forward documentation on how to get a running MySQL container. </p>
 
 <p>Here’s the command that I ran in order to get it running:</p>
@@ -135,7 +135,7 @@ c383c56a7e66        mysql:latest                 <span class="err">&quot;</span>
 
 <p>And the result:</p>
 
-<p><a href="https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png"><img src="https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png" alt="Screenshot from 2015-04-05 21:24:08" width="1430" height="847" class="aligncenter size-full wp-image-304" /></a></p>
+<p><a href="https://remote-lab.net/assets/static/Screenshot-from-2015-04-05-212408.png"><img src="https://remote-lab.net/assets/static/Screenshot-from-2015-04-05-212408.png" alt="Screenshot from 2015-04-05 21:24:08" width="1430" height="847" class="aligncenter size-full wp-image-304" /></a></p>
 
 <p>That’s pretty awesome given the fact that I was able to do this in a couple of hours on a lazy Sunday. I’m pretty sure Docker has its caveats (building images takes such a long time) but it’s amazing how fast you can achieve this kind of automation and get familiar with the technology. Long live the Open Source community! :)</p>
 
@@ -158,17 +158,17 @@ c383c56a7e66        mysql:latest                 <span class="err">&quot;</span>
 		    
 		    <li>
 			  <span>24 Feb 2015 &raquo;</span>
-			  <a href="http://remoteur.github.io:4000//opsf-on-ios-with-ansible">OSPF lab provisioning on IOS with Ansible</a>
+			  <a href="https://remote-lab.net//opsf-on-ios-with-ansible">OSPF lab provisioning on IOS with Ansible</a>
 		    </li>
 		    
 		    <li>
 			  <span>12 Oct 2014 &raquo;</span>
-			  <a href="http://remoteur.github.io:4000//sdn-intro-basic-with-ovs-and-pox">SDN Intro: Basic L2 connectivity by using OVS and POX</a>
+			  <a href="https://remote-lab.net//sdn-intro-basic-with-ovs-and-pox">SDN Intro: Basic L2 connectivity by using OVS and POX</a>
 		    </li>
 		    
 		    <li>
 			  <span>14 Sep 2014 &raquo;</span>
-			  <a href="http://remoteur.github.io:4000//ansible-postfix-with-mandrill">Ansible playbook: postfix with Mandrill relay</a>
+			  <a href="https://remote-lab.net//ansible-postfix-with-mandrill">Ansible playbook: postfix with Mandrill relay</a>
 		    </li>
 		    
 		</ul>
@@ -178,10 +178,10 @@ c383c56a7e66        mysql:latest                 <span class="err">&quot;</span>
 	<div class="post-footer">
 		<div class="column-1">
 			
-				<a href="http://remoteur.github.io:4000//opsf-on-ios-with-ansible"><< Older</a>
+				<a href="https://remote-lab.net//opsf-on-ios-with-ansible"><< Older</a>
 			
 		</div>
-		<div class="column-2"><a href="http://remoteur.github.io:4000// ">Home</a></div>
+		<div class="column-2"><a href="https://remote-lab.net// ">Home</a></div>
 		<div class="column-3">
 			
 				<span>Newer >></span>
@@ -196,8 +196,8 @@ c383c56a7e66        mysql:latest                 <span class="err">&quot;</span>
                 <div class="column one">
                     <h6>Few more links</h6>
 <ul class="menu">
-    <li><a href="http://remoteur.github.io:4000//about">About</a></li>
-    <li><a href="http://remoteur.github.io:4000//blogroll">Blogroll</a></li>
+    <li><a href="https://remote-lab.net//about">About</a></li>
+    <li><a href="https://remote-lab.net//blogroll">Blogroll</a></li>
 </ul>		
                     
                 </div>
@@ -260,9 +260,9 @@ Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>
         <!-- jQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <!-- When no internet load JQuery from local -->
-        <script>window.jQuery || document.write('<script src="http://remoteur.github.io:4000//assets/js/jquery.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="https://remote-lab.net//assets/js/jquery.min.js"><\/script>')</script>
         <!-- Site js -->
-        <script src="http://remoteur.github.io:4000/assets/js/all.js"></script>
+        <script src="https://remote-lab.net/assets/js/all.js"></script>
         <!-- Google analytics  -->
         
 <script type="text/javascript">

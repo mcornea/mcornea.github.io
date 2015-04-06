@@ -98,7 +98,7 @@ c383c56a7e66        mysql:latest                 "/entrypoint.sh mysq   2 hours 
 
 And the result:
 
-<a href="https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png"><img src="https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png" alt="Screenshot from 2015-04-05 21:24:08" width="1430" height="847" class="aligncenter size-full wp-image-304" /></a>
+<a href="{{'assets/static/Screenshot-from-2015-04-05-212408.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/Screenshot-from-2015-04-05-212408.png' | prepend: site.baseurl | prepend: site.url }}" alt="Screenshot from 2015-04-05 21:24:08" width="1430" height="847" class="aligncenter size-full wp-image-304" /></a>
 
 That's pretty awesome given the fact that I was able to do this in a couple of hours on a lazy Sunday. I'm pretty sure Docker has its caveats (building images takes such a long time) but it's amazing how fast you can achieve this kind of automation and get familiar with the technology. Long live the Open Source community! :)
 

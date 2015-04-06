@@ -5,85 +5,108 @@
     <description>learn by doing</description>
     <link>http://remoteur.github.io//</link>
     <atom:link href="http://remoteur.github.io//feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Apr 2015 09:46:03 +0000</pubDate>
-    <lastBuildDate>Mon, 06 Apr 2015 09:46:03 +0000</lastBuildDate>
+    <pubDate>Mon, 06 Apr 2015 09:59:25 +0000</pubDate>
+    <lastBuildDate>Mon, 06 Apr 2015 09:59:25 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
         <title>Getting started with Docker and the wonders of Open Source</title>
-        <description>&lt;p&gt;As Docker has been a buzzword lately(last year or so) I though that I should give it a try and really do something with it besides reading articles about how great it is. First thing that came to mind and most handy I guess is to build a LAMP stack environment for Wordpress sites. So how do I start? Well, let&#39;s take the LAMP environment and split it into components: we need a database to store data and a web server that can process the Wordpress PHP code. Based on this I decided to create a container for the MySQL database and a container for running Apache plus additional PHP modules. Then I would also like to run multiple Wordpress instances on the same server to make use of all the resources. In order to achieve isolation between the apps we can create separate containers for each WP instance, each with its own database on the MySQL server. Nevertheless since we want all the instances accessible by a single IP address, we also need a load balancer that routes traffic to the webserver containers according to the Host field in the HTTP header. &lt;/p&gt;
-&lt;p&gt;Below is a diagram that better describes the flow:&lt;br /&gt;
-&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot; alt=&quot;Containers start - New Page&quot; width=&quot;1167&quot; height=&quot;657&quot; class=&quot;aligncenter size-full wp-image-303&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;So, let&#39;s get started. I got a Fedora21 instance powered up and followed the documentation &lt;a href=&quot;https://docs.docker.com/installation/fedora/&quot;&gt;here&lt;/a&gt;[1] to get Docker up and running. Once I got the docker environment ready I started searching for some examples that would quickly get me started with the apps that I needed. So I started with the MySQL server. A quick search on Google pointed me to the official MySQL &lt;a href=&quot;https://registry.hub.docker.com/_/mysql/&quot;&gt;repo&lt;/a&gt;[2] on Docker Hub that contains pretty straight forward documentation on how to get a running MySQL container. &lt;/p&gt;
-&lt;p&gt;Here&#39;s the command that I ran in order to get it running:&lt;br /&gt;
-&lt;code lang=&quot;python[notools]&quot;&gt;&lt;br /&gt;
-docker run --name db-server -v /srv/db-server/storage:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=$(openssl rand -hex 10) -d mysql:latest&lt;br /&gt;
-&lt;/code&gt;&lt;/p&gt;
+        <description>&lt;p&gt;As Docker has been a buzzword lately(last year or so) I though that I should give it a try and really do something with it besides reading articles about how great it is.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;First thing that came to mind and most handy I guess is to build a LAMP stack environment for Wordpress sites. So how do I start? Well, let’s take the LAMP environment and split it into components: we need a database to store data and a web server that can process the Wordpress PHP code. Based on this I decided to create a container for the MySQL database and a container for running Apache plus additional PHP modules. Then I would also like to run multiple Wordpress instances on the same server to make use of all the resources. In order to achieve isolation between the apps we can create separate containers for each WP instance, each with its own database on the MySQL server. Nevertheless since we want all the instances accessible by a single IP address, we also need a load balancer that routes traffic to the webserver containers according to the Host field in the HTTP header. 
+Below is a diagram that better describes the flow:
+&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot; alt=&quot;Containers start - New Page&quot; width=&quot;1167&quot; height=&quot;657&quot; class=&quot;aligncenter size-full wp-image-303&quot; /&gt;&lt;/a&gt;
+So, let’s get started. I got a Fedora21 instance powered up and followed the documentation &lt;a href=&quot;https://docs.docker.com/installation/fedora/&quot;&gt;here&lt;/a&gt;[1] to get Docker up and running. Once I got the docker environment ready I started searching for some examples that would quickly get me started with the apps that I needed. So I started with the MySQL server. A quick search on Google pointed me to the official MySQL &lt;a href=&quot;https://registry.hub.docker.com/_/mysql/&quot;&gt;repo&lt;/a&gt;[2] on Docker Hub that contains pretty straight forward documentation on how to get a running MySQL container. &lt;/p&gt;
+
+&lt;p&gt;Here’s the command that I ran in order to get it running:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker run --name db-server -v /srv/db-server/storage:/var/lib/mysql -e &lt;span class=&quot;nv&quot;&gt;MYSQL_ROOT_PASSWORD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;openssl rand -hex 10&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; -d mysql:latest&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;What this does is that it creates a container called db-server with the /var/lib/mysql directory mounted from the /srv/db-server/storage directory on the host file system, injecting the MYSQL_ROOT_PASSWORD(some random generated hex string) environment variable that will be used at database server initialization and it uses the image called mysql(pulled from Docker hub) with the tag latest to build from. I chose storing the mysql content to a directory accessible on the host because I am not familiar yet with the Docker images and file system and I would like to preserve the db data in case I mess up something with the containers. Now that we ran the command we should see the container running:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker ps&lt;br /&gt;
-CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES&lt;br /&gt;
-c383c56a7e66        mysql:latest        &quot;/entrypoint.sh mysq   About an hour ago   Up 7 seconds        3306/tcp            db-server&lt;/code&gt;         &lt;/p&gt;
-&lt;p&gt;We can see that the server is running and it&#39;s exposing the MySQL port 3306. You can check the container properties by running &#39;docker inspect db-server&#39;. This should return a json containing all the container properties including the environment variables that were set at start, including the MySQL root password. &lt;/p&gt;
-&lt;p&gt;We can actually check the current databases by running this dirty one liner:&lt;br /&gt;
-&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker exec db-server mysql -uroot -p`docker inspect --format &#39;&#39; db-server | awk {&#39;print $1&#39;} | awk -F &#39;=&#39; {&#39;print $2&#39;}` -e &#39;show databases&#39;&lt;br /&gt;
-Database&lt;br /&gt;
-information_schema&lt;br /&gt;
-domain&lt;br /&gt;
-mysql&lt;br /&gt;
-performance_schema&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;So now that we have the DB server ready we can proceed further with creating the Apache webserver. First thing before reinventing the wheel is to search if others already created the wheel. As expected I found John Finks docker-wordpress repo &lt;a href=&quot;https://github.com/jbfink/docker-wordpress.git&quot;&gt;here&lt;/a&gt;[3] where he covers a full LAMP stack, including Wordpress container. I didn&#39;t need all that for my webserver containers but it was a great starting point for me. So I forked it, did some changes and it resulted in the following &lt;a href=&quot;https://github.com/remoteur/docker-wordpress.git&quot;&gt;repo&lt;/a&gt;. Let&#39;s take a look at what&#39;s inside the repo. We have a Dockerfile and 2 directories: configs and scripts. The 2 directories actually contain files that are called in the Dockerfile. What is this Dockerfile? It&#39;s the file used for building Docker images. Usually it contains a base image and some additional steps that are ran on top of the base image. For instance my Dockerfile uses the Debian image tagged latest as base, then it adds the Dotdeb repos, installs the packages required for Apache and PHP modules, adds the config files from the config directory inside the image and also the files from the scripts directory that are going to be run when the container starts. Let&#39;s build the image by using this Dockerfile. &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; git clone https://github.com/remoteur/docker-wordpress.git&lt;br /&gt;
-root@docker:~&amp;gt;&amp;gt; cd docker-wordpress/&lt;br /&gt;
-root@docker:~/docker-wordpress&amp;gt;&amp;gt; docker build -t webnode .&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;It takes some time to build the image and after it&#39;s finished we can go ahead and fire up the webnode container. &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker run --name webnode  -v /srv/webnode/www:/var/www/ --link db-server:mysql -d webnode:latest&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;What this does is that it runs a container called webnode which is linked to the db-server container so that it can access it by it&#39;s name (mysql in our example) and it&#39;s using the image that we&#39;ve just built called webnode with the &#39;latest&#39; tag. Again we want the data that&#39;s important to us from the container to be stored directly on the host file system so we mount the /var/www directory from the host&#39;s /srv/webnode/www directory. We can now see both the containers are running:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker ps&lt;br /&gt;
-CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES&lt;br /&gt;
-4aba6d289230        webnode:latest      &quot;/bin/bash /start.sh   3 minutes ago       Up 3 minutes        80/tcp              webnode&lt;br /&gt;
-c383c56a7e66        mysql:latest        &quot;/entrypoint.sh mysq   2 hours ago         Up 32 minutes       3306/tcp            db-server  &lt;/code&gt;         &lt;/p&gt;
-&lt;p&gt;At this point we have the database server and webserver running but without any content in the Apache root directory. So in order to get Wordpress automatically installed when running a webnode container I wrote a quick bash script that creates the requirements for the Wordpress instance such as database, database user, pulls the latest Wordpress  and adjusts the wp-config.php file so it matches the db settings. You may find the script &lt;a href=&quot;https://gist.github.com/remoteur/6b12ce450d0005acc287&quot;&gt;here&lt;/a&gt;[5]&lt;/p&gt;
-&lt;p&gt;After running the container by using this script we have a full runing LAMP environment with Wordpress code installed in the Apache root. The only thing that we&#39;re missing is the load balancer container that will acutally expose the websites publicly by the hosts IP address and route traffic to the webnode containers. Basically this could be done by installing an Nginx container that acts as a reverse proxy. But then we&#39;d need to adjust the Nginx configuration files manually which we don&#39;t want because we hate doing manual operations, right? :) So next step is to search for how others do this, I&#39;m pretty sure I&#39;m not the first one that hit this issue. My searches brought me to Jason Wilder nginx-proxy github &lt;a href=&quot;https://github.com/jwilder/nginx-proxy.git&quot;&gt;repo&lt;/a&gt;[6] which does exactly what I need. Basically the repo contains a Dockerfile that installs nginx plus docker-gen. Docker-gen is a tool that generates files based on templates and docker containers metadata. What this does in our case is that it watches for containers that are ran with the VIRTUAL_HOST env var set, generates the nginx config file containing the server directive with the values passed through VIRTUAL_HOST and reloads the nginx service in the end. That&#39;s pretty awesome so let&#39;s start it:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker run --name loadbalancer -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock jwilder/nginx-proxy&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;The command runs a container called loadbalancer with it&#39;s port 80 translated to the host&#39;s port 80(listening on all interfaces), the Docker socket file on the host(/var/run/docker.sock) is accessible inside the container by /tmp/docker.sock and it&#39;s using the jwilder/nginx-proxy image to run from. We should now be able to create a new webnode container and access it via the the hosts IP address on port 80. Let&#39;s give it a try and see if it works:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; bash create_wordpress&lt;br /&gt;
-Enter wordress domain:&lt;br /&gt;
-domain.com&lt;br /&gt;
-Creating container web root in /srv/webnode/webnode-domain.com/www&lt;br /&gt;
-Downloading Wordpress to webnode-domain.com&lt;br /&gt;
-Creating Wordpress database&lt;br /&gt;
-Adjusting wp-config.php&lt;br /&gt;
-Adjusting permissions for www-data&lt;br /&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker ps
+CONTAINER ID IMAGE 		COMMAND 		CREATED 	  STATUS  PORTS NAMES
+c383c56a7e66 mysql:latest	&lt;span class=&quot;err&quot;&gt;&amp;quot;&lt;/span&gt;/entrypoint.sh mysq   About an hour ago   Up &lt;span class=&quot;m&quot;&gt;7&lt;/span&gt; seconds        3306/tcp            db-server&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We can see that the server is running and it’s exposing the MySQL port 3306. You can check the container properties by running ‘docker inspect db-server’. This should return a json containing all the container properties including the environment variables that were set at start, including the MySQL root password. 
+We can actually check the current databases by running this dirty one liner:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;db-server mysql -uroot -p&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;docker inspect --format &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt; db-server &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;print $1&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F &lt;span class=&quot;s1&quot;&gt;&amp;#39;=&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;print $2&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;show databases&amp;#39;&lt;/span&gt;
+Database
+information_schema
+domain
+mysql
+performance_schema&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So now that we have the DB server ready we can proceed further with creating the Apache webserver. First thing before reinventing the wheel is to search if others already created the wheel. As expected I found John Finks docker-wordpress repo &lt;a href=&quot;https://github.com/jbfink/docker-wordpress.git&quot;&gt;here&lt;/a&gt;[3] where he covers a full LAMP stack, including Wordpress container. I didn’t need all that for my webserver containers but it was a great starting point for me. So I forked it, did some changes and it resulted in the following &lt;a href=&quot;https://github.com/remoteur/docker-wordpress.git&quot;&gt;repo&lt;/a&gt;. Let’s take a look at what’s inside the repo. We have a Dockerfile and 2 directories: configs and scripts. The 2 directories actually contain files that are called in the Dockerfile. What is this Dockerfile? It’s the file used for building Docker images. Usually it contains a base image and some additional steps that are ran on top of the base image. For instance my Dockerfile uses the Debian image tagged latest as base, then it adds the Dotdeb repos, installs the packages required for Apache and PHP modules, adds the config files from the config directory inside the image and also the files from the scripts directory that are going to be run when the container starts. Let’s build the image by using this Dockerfile.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone https://github.com/remoteur/docker-wordpress.git
+&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;docker-wordpress/
+docker build -t webnode .&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It takes some time to build the image and after it’s finished we can go ahead and fire up the webnode container.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker run --name webnode  -v /srv/webnode/www:/var/www/ --link db-server:mysql -d webnode:latest&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;What this does is that it runs a container called webnode which is linked to the db-server container so that it can access it by it’s name (mysql in our example) and it’s using the image that we’ve just built called webnode with the ‘latest’ tag. Again we want the data that’s important to us from the container to be stored directly on the host file system so we mount the /var/www directory from the host’s /srv/webnode/www directory. We can now see both the containers are running:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker ps
+CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES
+4aba6d289230        webnode:latest      &lt;span class=&quot;s2&quot;&gt;&amp;quot;/bin/bash /start.sh   3 minutes ago       Up 3 minutes        80/tcp              webnode&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;c383c56a7e66        mysql:latest        &amp;quot;&lt;/span&gt;/entrypoint.sh mysq   &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; hours ago         Up &lt;span class=&quot;m&quot;&gt;32&lt;/span&gt; minutes       3306/tcp            db-server&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;At this point we have the database server and webserver running but without any content in the Apache root directory. So in order to get Wordpress automatically installed when running a webnode container I wrote a quick bash script that creates the requirements for the Wordpress instance such as database, database user, pulls the latest Wordpress  and adjusts the wp-config.php file so it matches the db settings. You may find the script &lt;a href=&quot;https://gist.github.com/remoteur/6b12ce450d0005acc287&quot;&gt;here&lt;/a&gt;[5]
+After running the container by using this script we have a full runing LAMP environment with Wordpress code installed in the Apache root. The only thing that we’re missing is the load balancer container that will acutally expose the websites publicly by the hosts IP address and route traffic to the webnode containers. Basically this could be done by installing an Nginx container that acts as a reverse proxy. But then we’d need to adjust the Nginx configuration files manually which we don’t want because we hate doing manual operations, right? :) So next step is to search for how others do this, I’m pretty sure I’m not the first one that hit this issue. My searches brought me to Jason Wilder nginx-proxy github &lt;a href=&quot;https://github.com/jwilder/nginx-proxy.git&quot;&gt;repo&lt;/a&gt;[6] which does exactly what I need. Basically the repo contains a Dockerfile that installs nginx plus docker-gen. Docker-gen is a tool that generates files based on templates and docker containers metadata. What this does in our case is that it watches for containers that are ran with the VIRTUAL_HOST env var set, generates the nginx config file containing the server directive with the values passed through VIRTUAL_HOST and reloads the nginx service in the end. &lt;/p&gt;
+
+&lt;p&gt;That’s pretty awesome so let’s start it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker run --name loadbalancer -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock jwilder/nginx-proxy&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The command runs a container called loadbalancer with it’s port 80 translated to the host’s port 80(listening on all interfaces), the Docker socket file on the host(/var/run/docker.sock) is accessible inside the container by /tmp/docker.sock and it’s using the jwilder/nginx-proxy image to run from. We should now be able to create a new webnode container and access it via the the hosts IP address on port 80. 
+Let’s give it a try and see if it works:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;bash create_wordpress
+Enter wordress domain:
+domain.com
+Creating container web root in /srv/webnode/webnode-domain.com/www
+Downloading Wordpress to webnode-domain.com
+Creating Wordpress database
+Adjusting wp-config.php
+Adjusting permissions &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; www-data
 c9f7ebb1935f60c293d6feddfb436321afb9b5d1b57800da62d77d49a292dbdb
-&lt;p&gt;root@docker:~&amp;gt;&amp;gt; docker ps&lt;br /&gt;
-CONTAINER ID        IMAGE                        COMMAND                CREATED             STATUS              PORTS                         NAMES&lt;br /&gt;
-c9f7ebb1935f        webnode:latest               &quot;/bin/bash /start.sh   34 seconds ago      Up 31 seconds       80/tcp                        webnode-domain.com&lt;br /&gt;
-812324707acd        jwilder/nginx-proxy:latest   &quot;forego start -r&quot;      8 minutes ago       Up 8 minutes        443/tcp, 0.0.0.0:80-&amp;gt;80/tcp   loadbalancer&lt;br /&gt;
-4aba6d289230        webnode:latest               &quot;/bin/bash /start.sh   39 minutes ago      Up 39 minutes       80/tcp                        webnode&lt;br /&gt;
-c383c56a7e66        mysql:latest                 &quot;/entrypoint.sh mysq   2 hours ago         Up About an hour    3306/tcp                      db-server            &lt;/p&gt;
-&lt;p&gt;And the result:&lt;br /&gt;
-&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot; alt=&quot;Screenshot from 2015-04-05 21:24:08&quot; width=&quot;1430&quot; height=&quot;847&quot; class=&quot;aligncenter size-full wp-image-304&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;That&#39;s pretty awesome given the fact that I was able to do this in a couple of hours on a lazy Sunday. I&#39;m pretty sure Docker has its caveats (building images takes such a long time) but it&#39;s amazing how fast you can achieve this kind of automation and get familiar with the technology. Long live the Open Source community! :)&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;[1] https://docs.docker.com/installation/fedora/&lt;br /&gt;
-[2] https://registry.hub.docker.com/_/mysql/&lt;br /&gt;
-[3] https://github.com/jbfink/docker-wordpress.git&lt;br /&gt;
-[4] https://github.com/remoteur/docker-wordpress.git&lt;br /&gt;
-[5] https://gist.github.com/remoteur/6b12ce450d0005acc287&lt;br /&gt;
-[6] https://github.com/jwilder/nginx-proxy.git&lt;/code&gt;&lt;/p&gt;
-&lt;/code&gt;&lt;/p&gt;
+root@docker:~&amp;gt;&amp;gt; docker ps
+CONTAINER ID        IMAGE                        COMMAND                CREATED             STATUS              PORTS                         NAMES
+c9f7ebb1935f        webnode:latest               &lt;span class=&quot;s2&quot;&gt;&amp;quot;/bin/bash /start.sh   34 seconds ago      Up 31 seconds       80/tcp                        webnode-domain.com&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;812324707acd        jwilder/nginx-proxy:latest   &amp;quot;&lt;/span&gt;forego start -r&lt;span class=&quot;s2&quot;&gt;&amp;quot;      8 minutes ago       Up 8 minutes        443/tcp, 0.0.0.0:80-&amp;gt;80/tcp   loadbalancer&lt;/span&gt;
+&lt;span class=&quot;s2&quot;&gt;4aba6d289230        webnode:latest               &amp;quot;&lt;/span&gt;/bin/bash /start.sh   &lt;span class=&quot;m&quot;&gt;39&lt;/span&gt; minutes ago      Up &lt;span class=&quot;m&quot;&gt;39&lt;/span&gt; minutes       80/tcp                        webnode
+c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&gt;&amp;quot;&lt;/span&gt;/entrypoint.sh mysq   &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; hours ago         Up About an hour    3306/tcp                      db-server&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And the result:&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot; alt=&quot;Screenshot from 2015-04-05 21:24:08&quot; width=&quot;1430&quot; height=&quot;847&quot; class=&quot;aligncenter size-full wp-image-304&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;That’s pretty awesome given the fact that I was able to do this in a couple of hours on a lazy Sunday. I’m pretty sure Docker has its caveats (building images takes such a long time) but it’s amazing how fast you can achieve this kind of automation and get familiar with the technology. Long live the Open Source community! :)&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://docs.docker.com/installation/fedora/
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://registry.hub.docker.com/_/mysql/
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/jbfink/docker-wordpress.git
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;4&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/remoteur/docker-wordpress.git
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;5&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://gist.github.com/remoteur/6b12ce450d0005acc287
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;6&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/jwilder/nginx-proxy.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 </description>
         <pubDate>Sun, 05 Apr 2015 22:07:40 +0000</pubDate>
-        <link>http://remoteur.github.io//uncategorized/linux/virtualization/python/2015/04/05/getting-started-with-docker-and-the-wonders-of-opensource/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//uncategorized/linux/virtualization/python/2015/04/05/getting-started-with-docker-and-the-wonders-of-opensource/</guid>
+        <link>http://remoteur.github.io//getting-started-with-docker</link>
+        <guid isPermaLink="true">http://remoteur.github.io//getting-started-with-docker</guid>
         
-        
-        <category>uncategorized</category>
         
         <category>linux</category>
         
-        <category>virtualization</category>
+        <category>containers</category>
         
-        <category>python</category>
+        <category>blog</category>
         
       </item>
     

@@ -1,0 +1,8 @@
+<p>Below is a quick expect script that enables you to autologin on Cisco devices with a predefined clear text password by using an OpenSSH client :</p>
+<p><code lang="c[notools]">#!/usr/bin/expect<br />
+set password "yourverycleartextpassword"<br />
+spawn ssh [lindex $argv 0] -o PreferredAuthentications=keyboard-interactive,password<br />
+expect "Password: "<br />
+send "$password\r"<br />
+interact<br />
+exit</code></p>

@@ -18,14 +18,14 @@ harmony:
   # It will appear in your document head meta (for Google search results) and 
   # in your feed.xml site description.
   meta_description: > # 
-   Harmony is a free responsive jekyll theme by Gayan Virajith
-   and Maheshika Lakmali. Sourced on Github - 
-   https://github.com/gayanvirajith/harmony
+      remote-lab.net
+      learn by doing
+   https://remote-lab.net
   basetheme: theme-base-01 # pre defined thmes are darken, blue-water, redish.
   author: # Author details
     name: Marius Cornea
     email: marius@remote-lab.net
-    url: http://remoteur.github.io
+    url: http://remote-lab.net
 
   # Google Analytics key, leave blank to ignore
   google_analytics_key: UA-xxxx-x

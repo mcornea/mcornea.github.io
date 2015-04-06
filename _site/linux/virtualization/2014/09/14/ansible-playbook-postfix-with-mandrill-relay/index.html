@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Ansible playbook: postfix with Mandrill relay</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <meta name="description" content="Harmony is a free responsive jekyll theme by Gayan Virajith and Maheshika Lakmali. Sourced on Github -  https://github.com/gayanvirajith/harmony
+">
+        <link rel="canonical" 
+        href="http://remoteur.github.io//linux/virtualization/2014/09/14/ansible-playbook-postfix-with-mandrill-relay/">
+        
+        <!-- Harmony styles -->
+        <link rel="stylesheet" type="text/css" href="http://remoteur.github.io/assets/css/main.css">
+
+        <!-- Modernizr js -->
+        <script async src="http://remoteur.github.io/assets/js/modernizr.js"></script>    
+
+        <!-- IE Fixes -->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->        
+    </head>
+    <body class="theme-base-01">
+        <header class="main-header">
+            <div class="wc-container">
+                <h1><a href="http://remoteur.github.io/">remote-lab.net</a></h1>
+                <h2>learn by doing</h2>
+                <ul>
+	<li>
+		<a href="http://remoteur.github.io">Home</a><span>/</span>
+	</li>
+	<li>
+		<a href="http://remoteur.github.io//about">About</a><span>/</span>
+	</li>
+	<li>
+		<a href="http://remoteur.github.io//blog">Blog</a><span>/</span>
+	</li>
+	<li>
+		<a href="https://compute.remote-lab.net" target="_blank">Compute</a><span>/</span>
+	</li>
+</ul>
+                
+            </div>
+        </header>
+        <div class="page-content wc-container">
+	
+	<div class="post">
+		<h1>Ansible playbook: postfix with Mandrill relay</h1>
+		<p class="post-meta">
+			
+      <span class="categories">
+      linux and virtualization
+      </span> |
+	    
+	    <span class="post-date">
+    	Sep 14, 2014 
+	    </span>
+		</p>		
+		<div class="post">
+			<p>In this post I will show how you can use Ansible to automatically install postfix mail server and configure it to relay through Mandrill. Mandrill is a transactional email platform that allows you to send up to 12.000 emails for free. I use it for my servers to avoid situations where the IP addresses assigned by my ISP are blacklisted on some RBL lists. </p>
+<p>Ansible is a config manamegement software that runs agentless over SSH. You only need python installed on the remote nodes. Ansible's configuration files are called playbooks. Playbooks are written as YAML files and they are used to manage configurations of and deployments to remote machines.</p>
+<p>Below is the playbook that I use to install postfix, add the required configuration to use Mandrill and reload the service in order to use the new configuration. I will explain the playbook below:</p>
+<p><code lang="bash[notools]"><br />
+---<br />
+- hosts: basenodes<br />
+  tasks:<br />
+    - name: Installs postfix mail server<br />
+      apt: pkg=postfix state=installed update_cache=true<br />
+      notify:<br />
+        - start postfix<br />
+    - name: Upload mandril authentication info<br />
+      copy: src=/opt/files/postfix/mandril_passwd dest=/etc/postfix/mandril_passwd mode=0600<br />
+      register: mandril<br />
+      notify:<br />
+        - postmap mandril_passwd<br />
+    - name: Append mandril relay config<br />
+      lineinfile:<br />
+        dest=/etc/postfix/main.cf<br />
+        line=""<br />
+      with_items:<br />
+        - { line: 'smtp_sasl_auth_enable = yes' }<br />
+        - { line: 'smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd' }<br />
+        - { line: 'smtp_sasl_security_options = noanonymous' }<br />
+        - { line: 'smtp_use_tls = yes' }<br />
+        - { line: 'relayhost = [smtp.mandrillapp.com]' }<br />
+      notify:<br />
+        - restart postfix
+<p>  handlers:<br />
+    - name: start postfix<br />
+      service: name=postfix state=started<br />
+    - name: postmap mandril_passwd<br />
+      command: postmap /etc/postfix/mandril_passwd<br />
+      when: mandril|success<br />
+    - name: restart postfix<br />
+      service: name=postfix state=restarted<br />
+</p>
+<p>The hosts line contains the hosts group that this playbook will be applied to.<br />
+Each play contains a list of tasks, which are actually calls to Ansible modules. We see that the first task is called 'Installs postfix mail server' and it uses the apt module to get the postfix package in the installed stated. update_cache=true ensures that 'apt-get update' will be run before installing the postfix package. The notify section contains the handlers. Handlers are lists of tasks, not really any different from regular tasks, that are referenced by name. You can find them in the handlers sections. Looking at our example - the 'start postfix' handler ensures that the postfix server is started. </p>
+<p>The 'Upload mandril authentication info' task copies the /opt/files/postfix/mandril_passwd file on the ansible server to the remote node with /etc/postfix/mandril_passwd as a destination location. The mandril_passwd file contains the authentication details for the Mandril platform. The mode key contains the permissions the destination file will have. The register line gets the result of the copy operation stored in the mandril variable. After getting the file copied we need to create the postfix lookup table based on that file. In order to do this we run the 'postmap mandril_passwd' handler which runs the 'postmap /etc/postfix/mandril_passwd' command only if the copy task was run successfully.</p>
+<p>The 'Append mandril relay config' task will add the config lines to the postfix main.cf files. We'll store the lines in a dictionary. A dictionary is represented in a simple key: and value form:. Each new line will be the value stored in the 'line' key of each dictionary element. After adding the lines to main.cf we'll restart postfix by running the 'restart postfix' handler. </p>
+<p>You may find below the output of running the playbook : </p>
+<p><code lang="bash[notools]"><br />
+root@ansible:/etc/ansible/playbooks&gt;&gt;&gt; ansible-playbook /etc/ansible/playbooks/playbook.yml
+<p>PLAY [basenodes] ************************************************************** </p>
+<p>GATHERING FACTS *************************************************************** </p>
+<p>TASK: [Installs postfix mail server] ******************************************<br />
+changed: [node01.remote-lab.net]</p>
+<p>TASK: [Upload mandril authentication info] ************************************<br />
+changed: [node01.remote-lab.net]</p>
+<p>TASK: [Append mandril relay config] *******************************************<br />
+changed: [node01.remote-lab.net] =&gt; (item={'line': 'smtp_sasl_auth_enable = yes'})<br />
+changed: [node01.remote-lab.net] =&gt; (item={'line': 'smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd'})<br />
+changed: [node01.remote-lab.net] =&gt; (item={'line': 'smtp_sasl_security_options = noanonymous'})<br />
+changed: [node01.remote-lab.net] =&gt; (item={'line': 'smtp_use_tls = yes'})<br />
+changed: [node01.remote-lab.net] =&gt; (item={'line': 'relayhost = [smtp.mandrillapp.com]'})</p>
+<p>NOTIFIED: [start postfix] *****************************************************<br />
+ok: [node01.remote-lab.net]</p>
+<p>NOTIFIED: [postmap mandril_passwd] ********************************************<br />
+changed: [node01.remote-lab.net]</p>
+<p>NOTIFIED: [restart postfix] ***************************************************<br />
+changed: [node01.remote-lab.net]</p>
+<p>PLAY RECAP ********************************************************************<br />
+node01.remote-lab.net      : ok=7    changed=5    unreachable=0    failed=0<br />
+</p>
+</code></p></code></p>
+
+		</div>
+	</div>
+
+
+	
+	<div class="related">
+		<h4>Related Posts</h2>
+		<ul class="posts">
+		    
+		    <li>
+			  <span>05 Apr 2015 &raquo;</span>
+			  <a href="http://remoteur.github.io//uncategorized/linux/virtualization/python/2015/04/05/getting-started-with-docker-and-the-wonders-of-opensource/">Getting started with Docker and the wonders of Open Source</a>
+		    </li>
+		    
+		    <li>
+			  <span>24 Feb 2015 &raquo;</span>
+			  <a href="http://remoteur.github.io//uncategorized/linux/routing/ios/python/2015/02/24/ospf-lab-provisioning-on-ios-with-ansible/">OSPF lab provisioning on IOS with Ansible</a>
+		    </li>
+		    
+		    <li>
+			  <span>12 Oct 2014 &raquo;</span>
+			  <a href="http://remoteur.github.io//linux/switching/routing/virtualization/ios/python/2014/10/12/sdn-intro-basic-l2-connectivity-by-using-ovs-and-pox/">SDN Intro: Basic L2 connectivity by using OVS and POX</a>
+		    </li>
+		    
+		</ul>
+	</div>
+	
+
+	<div class="post-footer">
+		<div class="column-1">
+			
+				<a href="http://remoteur.github.io//sample-post"><< Older</a>
+			
+		</div>
+		<div class="column-2"><a href="http://remoteur.github.io// ">Home</a></div>
+		<div class="column-3">
+			
+				<a href="http://remoteur.github.io//linux/switching/routing/virtualization/ios/python/2014/10/12/sdn-intro-basic-l2-connectivity-by-using-ovs-and-pox/">Newer >></a>
+			
+		</div>
+	</div>
+</div>
+ 
+
+        <footer class="main-footer">
+            <div class="wc-container">
+                <div class="column one">
+                    <h6>Few more links</h6>
+<ul class="menu">
+    <li><a href="http://remoteur.github.io//about">About</a></li>
+    <li><a href="http://remoteur.github.io//blogroll">Blogroll</a></li>
+</ul>		
+                    
+                </div>
+                <div class="column two">
+                    <h6>Follow me</h6>
+
+<ul class="social-media">
+
+
+    
+    <li>
+        <a title="remoteur on Twitter" 
+            href="https://twitter.com/remoteur" 
+            class="twitter wc-img-replace" target="_blank">Twitter</a>
+    </li>   
+    
+
+    
+    <li>
+        <a title="remoteur on Github" 
+            href="https://github.com/remoteur" 
+            class="github wc-img-replace" target="_blank">Github</a>
+    </li>
+     
+
+    
+    <li>
+        <a title="marius.catalin.31542 on Facebook" 
+            href="https://facebook.com/marius.catalin.31542" 
+            class="facebook wc-img-replace" target="_blank">Facebook</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+</ul>
+                </div>
+            </div>
+            <p class="wc-container disclaimer">
+                
+Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>
+            </p>
+        </footer>
+        <script type="text/javascript">
+          /* To avoid render blocking css */
+          var cb = function() {
+            var l = document.createElement('link'); l.rel = 'stylesheet';
+            l.href = 'http://fonts.googleapis.com/css?family=Ubuntu+Mono&subset=latin';
+            var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+          };
+          var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+              webkitRequestAnimationFrame || msRequestAnimationFrame;
+          if (raf) raf(cb);
+          else window.addEventListener('load', cb);
+        </script>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <!-- When no internet load JQuery from local -->
+        <script>window.jQuery || document.write('<script src="http://remoteur.github.io//assets/js/jquery.min.js"><\/script>')</script>
+        <!-- Site js -->
+        <script src="http://remoteur.github.io/assets/js/all.js"></script>
+        <!-- Google analytics  -->
+        
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-xxxx-x']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+    </body>        
+</html>

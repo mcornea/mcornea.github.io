@@ -4,8 +4,6 @@ title: About me
 permalink: /about/
 ---
 
-                                                                           <img src="{{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="Marius" width="200" height="350"/>
-
 My name is Marius and probably like most of you who are viewing this website I am passionate about computer networks.
 
 I started this project more as a need to develop my networking knowledge after graduating college. Since I dind’t have any working experience the lab hands-on activity was great for developing my skills.
@@ -16,6 +14,7 @@ Since then I’ve been working as a Linux sysadmin and got pretty amazed of how 
 
 Find me on [Facebook][facebook] / [Github][github] / [Twitter][Twitter] or just say `Hello` at 
 [marius at remote-lab.net](marius at remote-lab.net).
+<img src="{{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="Marius" width="200" height="350"/>
 
 
 [tf]: http://template-factory.nl

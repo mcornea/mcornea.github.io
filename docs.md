@@ -1,7 +1,7 @@
 ---
 layout: page
-title: About me
-permalink: /about/
+title: Useful documentation links
+permalink: /docs/
 ---
 
 |       Topic                                               |                                   URL                                         |

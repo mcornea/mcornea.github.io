@@ -12,7 +12,7 @@ Since then I’ve been working as a Linux sysadmin and got pretty amazed of how 
 
 ### Contact me
 
-Find me on [Google+][google] / [Github][github] / [Twitter][Twitter] or just say `Hello` at 
+Find me on [Facebook][facebook] / [Github][github] / [Twitter][Twitter] or just say `Hello` at 
 [marius at remote-lab.net].
 
 
@@ -21,6 +21,6 @@ Find me on [Google+][google] / [Github][github] / [Twitter][Twitter] or just say
 [pw]: http://processwire.com
 [pwf]: http://processwire.com/talk
 [jekyll]: http://jekyllrb.com
-[github]: https://github.com/gayanvirajith
-[google]: https://plus.google.com/+GayanVirajith
-[twitter]: https://twitter.com/gayanvirajith
+[github]: https://github.com/remoteur
+[twitter]: https://twitter.com/remoteur
+[facebook]: https://www.facebook.com/marius.catalin.31542

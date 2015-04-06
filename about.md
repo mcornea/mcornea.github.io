@@ -16,7 +16,7 @@ Find me on [Facebook][facebook] / [Github][github] / [Twitter][Twitter] or just 
 [marius at remote-lab.net](marius at remote-lab.net).
 <img src="{{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="Marius" width="200" height="350"/>
 
-![Marius](./assets/static/marius.jpg "Marius"){: .center-image }
+![Marius]({{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }} "Marius"){: .center-image }
 
 [tf]: http://template-factory.nl
 [m]: http://mearch.com

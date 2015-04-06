@@ -4,8 +4,6 @@ title: About me
 permalink: /about/
 ---
 
-![Figure 1-1]({{ prepend: site.baseurl | prepend: site.url }}{% img /assets/static/marius.jpg 100x200%} "Marius")
-
 My name is Marius and probably like most of you who are viewing this website I am passionate about computer networks.
 
 I started this project more as a need to develop my networking knowledge after graduating college. Since I dind’t have any working experience the lab hands-on activity was great for developing my skills.

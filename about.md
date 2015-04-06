@@ -13,7 +13,7 @@ Since then I’ve been working as a Linux sysadmin and got pretty amazed of how 
 ### Contact me
 
 Find me on [Facebook][facebook] / [Github][github] / [Twitter][Twitter] or just say `Hello` at 
-[marius at remote-lab.net].
+[marius at remote-lab.net](marius@remote-lab.net).
 
 
 [tf]: http://template-factory.nl

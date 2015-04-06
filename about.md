@@ -4,6 +4,8 @@ title: About me
 permalink: /about/
 ---
 
+![Figure 1-1](assets/static/marius.jpg?raw=true "Marius")
+
 My name is Marius and probably like most of you who are viewing this website I am passionate about computer networks.
 
 I started this project more as a need to develop my networking knowledge after graduating college. Since I dind’t have any working experience the lab hands-on activity was great for developing my skills.

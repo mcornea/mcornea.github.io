@@ -5,8 +5,8 @@
     <description>learn by doing</description>
     <link>http://remoteur.github.io//</link>
     <atom:link href="http://remoteur.github.io//feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Apr 2015 00:44:02 +0000</pubDate>
-    <lastBuildDate>Mon, 06 Apr 2015 00:44:02 +0000</lastBuildDate>
+    <pubDate>Mon, 06 Apr 2015 00:56:27 +0000</pubDate>
+    <lastBuildDate>Mon, 06 Apr 2015 00:56:27 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -94,7 +94,7 @@ c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&
 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/jbfink/docker-wordpress.git
 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;4&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/remoteur/docker-wordpress.git
 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;5&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://gist.github.com/remoteur/6b12ce450d0005acc287
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;6&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/jwilder/nginx-proxy.git&amp;lt;/code&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;6&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/jwilder/nginx-proxy.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 </description>
         <pubDate>Sun, 05 Apr 2015 22:07:40 +0000</pubDate>

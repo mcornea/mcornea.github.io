@@ -4,17 +4,16 @@ title: About me
 permalink: /about/
 ---
 
-Hi, I am Gayan Virajith, a developer (who works on the web) based on Sri Lanka. 
-Graduated from the University College Dublin (National University of Ireland). 
+My name is Marius and probably like most of you who are viewing this website I am passionate about computer networks.
 
-I am Working for [template-factory.nl][tf] also known as [Mearch ICT][m].
-Prefer to serve with Php and Ruby based stacks and also love to work 
-on [Jekyll][jekyll] and [Processwire CMS/CMF][pw].
+I started this project more as a need to develop my networking knowledge after graduating college. Since I dind’t have any working experience the lab hands-on activity was great for developing my skills.
+
+Since then I’ve been working as a Linux sysadmin and got pretty amazed of how powerful this OS and all the tools in the open source ecosystem can be. This is why I decided to replace the old Cisco 3550 switches laboratory with Linux virtualized devices and focus on software defined networking. I really love the concept of decoupling the data and control plane and believe that running the latter on an x86 machine would bring you enormous possibilities.
 
 ### Contact me
 
 Find me on [Google+][google] / [Github][github] / [Twitter][Twitter] or just say `Hello` at 
-[gayanvirajith@gmail.com](gayanvirajith@gmail.com).
+[marius at remote-lab.net].
 
 
 [tf]: http://template-factory.nl

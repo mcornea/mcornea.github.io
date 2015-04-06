@@ -4,11 +4,11 @@ title: About me
 permalink: /about/
 ---
 
-My name is Marius and probably like most of you who are viewing this website I am passionate about computer networks.
+My name is Marius and probably like most of you who are viewing this website I am passionate about computer systems and networks. 
 
-I started this project more as a need to develop my networking knowledge after graduating college. Since I dind’t have any working experience the lab hands-on activity was great for developing my skills.
+This project started initially as a physical lab made up of a couple of Cisco switches that could be accessed over the Internet. I started it right after graduating college because I needed a way to develop my networking knowledge which was mostly theoretical at that time. It also served as good way to get some hands on experience with real hardware.
 
-Since then I’ve been working as a Linux sysadmin and got pretty amazed of how powerful this OS and all the tools in the open source ecosystem can be. This is why I decided to replace the old Cisco 3550 switches laboratory with Linux virtualized devices and focus on software defined networking. I really love the concept of decoupling the data and control plane and believe that running the latter on an x86 machine would bring you enormous possibilities.
+Then I got a job as a Linux sysadmin and got pretty amazed of how powerful this OS and all the tools in the open source ecosystem can be. This is why I decided to replace the old Catalyst 3550 switches laboratory with Linux virtualized devices and focus on software implemented networking. Currently I am working as a quality engineer for Openstack on my day job and during the nights and spare time I like looking into topics like network automation and Linux systems administration in general.  
 
 ### Contact me
 

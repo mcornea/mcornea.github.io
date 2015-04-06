@@ -2,11 +2,10 @@
 layout: post
 title: Getting started with Docker and the wonders of Open Source
 date: '2015-04-05 22:07:40 +0000'
-description: As Docker has been a buzzword lately(last year or so) I though that I should give it a try and really do something with it besides reading articles about how great it is.
 categories:
 - Linux
 - Containers
-- blog
+- Blog
 permalink: getting-started-with-docker
 ---
 
@@ -110,5 +109,5 @@ That's pretty awesome given the fact that I was able to do this in a couple of h
 [3] https://github.com/jbfink/docker-wordpress.git
 [4] https://github.com/remoteur/docker-wordpress.git
 [5] https://gist.github.com/remoteur/6b12ce450d0005acc287
-[6] https://github.com/jwilder/nginx-proxy.git</code>
+[6] https://github.com/jwilder/nginx-proxy.git
 {% endhighlight %}

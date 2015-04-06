@@ -5,8 +5,8 @@
     <description>learn by doing</description>
     <link>http://remoteur.github.io//</link>
     <atom:link href="http://remoteur.github.io//feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Apr 2015 09:59:25 +0000</pubDate>
-    <lastBuildDate>Mon, 06 Apr 2015 09:59:25 +0000</lastBuildDate>
+    <pubDate>Mon, 06 Apr 2015 11:11:35 +0000</pubDate>
+    <lastBuildDate>Mon, 06 Apr 2015 11:11:35 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -112,188 +112,119 @@ c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&
     
       <item>
         <title>OSPF lab provisioning on IOS with Ansible</title>
-        <description>&lt;p&gt;In this post we&#39;ll see how we can quickly get a basic OSPF lab deployed by using Ansible. Our setup consists of 3 x Cisco IOS routers which are connected according to the diagram below. All the routers should already have SSH set up and an interface connected to the management network that will be used for retrieving the configuration files from the server. On the server side we need a Linux machine that has Ansible installed.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/02/ansible_ospf-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/02/ansible_ospf-New-Page.png&quot; alt=&quot;ansible_ospf - New Page&quot; width=&quot;649&quot; height=&quot;594&quot; class=&quot;aligncenter size-full wp-image-297&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;So let&#39;s get started by building the Ansible playbook. I&#39;ll explain the site.yml file below: &lt;/p&gt;
-&lt;p&gt;1. Run the playbook on the &#39;localhost&#39; server by using the &#39;marius&#39; username with sudo&lt;br /&gt;
-2. Install and start Apache as the routers will pull the config files over HTTP&lt;br /&gt;
-3. Install Git - used to clone the netmiko library repo&lt;br /&gt;
-4. Install paramiko - dependency library for netmiko&lt;br /&gt;
-5. Clone the netmiko repo and install it as a system module&lt;br /&gt;
-6. Next we use the netmiko.j2 template to create a script file. The script uses netmiko and takes as arguments the ip address, username, password and command that will be run on the remote Cisco device.&lt;br /&gt;
-7. We generate the configuration files that are going to be pulled by the routers. For this we use the config.j2 template and write the configuration files on the Apache DocumentRoot. This will results in 3 files: /var/www/html/rtr-A.config, /var/www/html/rtr-B.config, /var/www/html/rtr-C.config containing the configuration commands for each of the routers.&lt;br /&gt;
-8. We run the script that we have created on step 6 by passing the &#39;copy http://... running-config&#39; command to each of the routers.&lt;br /&gt;
-9. Define the variables used in the template files and commands.&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
----&lt;br /&gt;
-- hosts: localhost&lt;br /&gt;
-  remote_user: marius&lt;br /&gt;
-  sudo: yes
-&lt;p&gt;  tasks:&lt;br /&gt;
-  - name: Install Apache&lt;br /&gt;
-    yum: name=httpd state=installed&lt;/p&gt;
-&lt;p&gt;  - name: Start Apache&lt;br /&gt;
-    service: name=httpd state=started enabled=yes&lt;/p&gt;
-&lt;p&gt;  - name: Install Git&lt;br /&gt;
-    yum: name=git state=installed&lt;/p&gt;
-&lt;p&gt;  - name: Install paramiko&lt;br /&gt;
-    yum: name=python-paramiko state=installed&lt;/p&gt;
-&lt;p&gt;  - name: Clone netmiko&lt;br /&gt;
-    git: repo=https://github.com/ktbyers/netmiko.git dest=/opt/netmiko&lt;/p&gt;
-&lt;p&gt;  - name: Install netmiko&lt;br /&gt;
-    command: chdir=/opt/netmiko python setup.py install&lt;/p&gt;
-&lt;p&gt;  - name: Create netmiko script&lt;br /&gt;
-    template: src=netmiko.j2 dest=/opt/remote_cmd&lt;/p&gt;
-&lt;p&gt;  - name: Generate config file&lt;br /&gt;
-    template: src=config.j2 dest=/var/www/html/.config&lt;br /&gt;
-    with_items: routers&lt;/p&gt;
-&lt;p&gt;  - name: Connect to routers and pull the config&lt;br /&gt;
-    shell: python /opt/remote_cmd    &#39;copy http:///.config running-config&#39;&lt;br /&gt;
-    with_items: routers&lt;/p&gt;
-&lt;p&gt;  vars:&lt;br /&gt;
-   routers:&lt;br /&gt;
-     - name: &quot;rtr-A&quot;&lt;br /&gt;
-       mgmt_ip: &quot;192.168.0.81&quot;&lt;br /&gt;
-       mgmt_user: &quot;admin&quot;&lt;br /&gt;
-       mgmt_pass: &quot;parola&quot;&lt;br /&gt;
-       int:&lt;br /&gt;
-         - name: &quot;GigabitEthernet0/1&quot;&lt;br /&gt;
-           address: &quot;10.0.0.1&quot;&lt;br /&gt;
-           netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
-           ospf: &quot;yes&quot;&lt;br /&gt;
-         - name: &quot;GigabitEthernet0/2&quot;&lt;br /&gt;
-           address: &quot;10.0.0.5&quot;&lt;br /&gt;
-           netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
-           ospf: &quot;yes&quot;&lt;br /&gt;
-         - name: &quot;Loopback0&quot;&lt;br /&gt;
-           address: &quot;1.1.1.1&quot;&lt;br /&gt;
-           netmask: &quot;255.255.255.0&quot;&lt;br /&gt;
-           ospf: &quot;yes&quot;&lt;/p&gt;
-&lt;p&gt;     - name: &quot;rtr-B&quot;&lt;br /&gt;
-       mgmt_ip: &quot;192.168.0.78&quot;&lt;br /&gt;
-       mgmt_user: &quot;admin&quot;&lt;br /&gt;
-       mgmt_pass: &quot;parola&quot;&lt;br /&gt;
-       int:&lt;br /&gt;
-        - name: &quot;GigabitEthernet0/1&quot;&lt;br /&gt;
-          address: &quot;10.0.0.2&quot;&lt;br /&gt;
-          netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
-          ospf: &quot;yes&quot;&lt;br /&gt;
-        - name: &quot;GigabitEthernet0/2&quot;&lt;br /&gt;
-          address: &quot;10.0.0.9&quot;&lt;br /&gt;
-          netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
-          ospf: &quot;yes&quot;&lt;br /&gt;
-        - name: &quot;Loopback0&quot;&lt;br /&gt;
-          address: &quot;2.2.2.2&quot;&lt;br /&gt;
-          netmask: &quot;255.255.255.0&quot;&lt;br /&gt;
-          ospf: &quot;yes&quot;&lt;/p&gt;
-&lt;p&gt;     - name: &quot;rtr-C&quot;&lt;br /&gt;
-       mgmt_ip: &quot;192.168.0.79&quot;&lt;br /&gt;
-       mgmt_user: &quot;admin&quot;&lt;br /&gt;
-       mgmt_pass: &quot;parola&quot;&lt;br /&gt;
-       int:&lt;br /&gt;
-         - name: &quot;GigabitEthernet0/1&quot;&lt;br /&gt;
-           address: &quot;10.0.0.6&quot;&lt;br /&gt;
-           netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
-           ospf: &quot;yes&quot;&lt;br /&gt;
-         - name: &quot;GigabitEthernet0/2&quot;&lt;br /&gt;
-           address: &quot;10.0.0.10&quot;&lt;br /&gt;
-           netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
-           ospf: &quot;yes&quot;&lt;br /&gt;
-         - name: &quot;Loopback0&quot;&lt;br /&gt;
-           address: &quot;3.3.3.3&quot;&lt;br /&gt;
-           netmask: &quot;255.255.255.0&quot;&lt;br /&gt;
-           ospf: &quot;no&quot; &lt;/p&gt;
-&lt;p&gt;Now let&#39;s go through the template files. &lt;/p&gt;
-&lt;p&gt;The config.j2 template is used to build the configuration commands that will be loaded by the routers. What this does is basically loop through the interfaces defined for each of the routers and create the ip address statements for each of them. After this, it generates an entry for the ospf process and creates a network statement if the &#39;ospf&#39; variable is set to yes for a specific interface. &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
-config.j2&lt;br /&gt;
+        <description>&lt;p&gt;In this post we’ll see how we can quickly get a basic OSPF lab deployed by using Ansible. Our setup consists of 3 x Cisco IOS routers which are connected according to the diagram below. All the routers should already have SSH set up and an interface connected to the management network that will be used for retrieving the configuration files from the server. On the server side we need a Linux machine that has Ansible installed.&lt;/p&gt;
 
-&lt;p&gt;router ospf 1&lt;br /&gt;
-&lt;/p&gt;
-&lt;p&gt;The netmiko.j2 template is just a python script that&#39;s using netmiko to connect to the router, first runs &#39;file prompt quiet&#39; configuration command to disable the save confirmation message. Then it runs the command that&#39;s passed as the 4th argument.  &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
-netmiko.j2&lt;br /&gt;
-#!/usr/bin/env python&lt;br /&gt;
-import netmiko&lt;br /&gt;
-import sys
-&lt;p&gt;cisco_881 = {&lt;br /&gt;
-	&#39;device_type&#39;: &#39;cisco_ios&#39;,&lt;br /&gt;
-	&#39;ip&#39;:   sys.argv[1],&lt;br /&gt;
-	&#39;username&#39;: sys.argv[2],&lt;br /&gt;
-	&#39;password&#39;: sys.argv[3],&lt;br /&gt;
-	&#39;secret&#39;: &#39;secret&#39;,&lt;br /&gt;
-	&#39;verbose&#39;: False,&lt;br /&gt;
-}&lt;/p&gt;
-&lt;p&gt;SSHClass = netmiko.ssh_dispatcher(device_type=cisco_881[&#39;device_type&#39;])&lt;/p&gt;
-&lt;p&gt;net_connect = SSHClass(**cisco_881)&lt;/p&gt;
-&lt;p&gt;config_commands = [ &#39;file prompt quiet&#39; ]&lt;br /&gt;
-output = net_connect.send_config_set(config_commands)&lt;/p&gt;
-&lt;p&gt;output = net_connect.send_command(sys.argv[4])&lt;br /&gt;
-&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/02/ansible_ospf-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/02/ansible_ospf-New-Page.png&quot; alt=&quot;ansible_ospf - New Page&quot; width=&quot;649&quot; height=&quot;594&quot; class=&quot;aligncenter size-full wp-image-297&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;So let’s get started by building the Ansible playbook. I’ll explain the site.yml file below:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Run the playbook on the ‘localhost’ server by using the ‘marius’ username with sudo&lt;/li&gt;
+  &lt;li&gt;Install and start Apache as the routers will pull the config files over HTTP&lt;/li&gt;
+  &lt;li&gt;Install Git - used to clone the netmiko library repo&lt;/li&gt;
+  &lt;li&gt;Install paramiko - dependency library for netmiko&lt;/li&gt;
+  &lt;li&gt;Clone the netmiko repo and install it as a system module&lt;/li&gt;
+  &lt;li&gt;Next we use the netmiko.j2 template to create a script file. The script uses netmiko and takes as arguments the ip address, username, password and command that will be run on the remote Cisco device.&lt;/li&gt;
+  &lt;li&gt;We generate the configuration files that are going to be pulled by the routers. For this we use the config.j2 template and write the configuration files on the Apache DocumentRoot. This will results in 3 files: /var/www/html/rtr-A.config, /var/www/html/rtr-B.config, /var/www/html/rtr-C.config containing the configuration commands for each of the routers.&lt;/li&gt;
+  &lt;li&gt;We run the script that we have created on step 6 by passing the ‘copy http://server_ip/config_file_name running-config’ command to each of the routers.&lt;/li&gt;
+  &lt;li&gt;Define the variables used in the template files and commands.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script src=&quot;https://gist.github.com/e7129f02662986263018.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;Now let’s go through the template files. 
+The config.j2 template is used to build the configuration commands that will be loaded by the routers. What this does is basically loop through the interfaces defined for each of the routers and create the ip address statements for each of them. After this, it generates an entry for the ospf process and creates a network statement if the ‘ospf’ variable is set to yes for a specific interface. &lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/5cd291f364ce422e5797.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The netmiko.j2 template is just a python script that’s using netmiko to connect to the router, first runs ‘file prompt quiet’ configuration command to disable the save confirmation message. Then it runs the command that’s passed as the 4th argument.  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span class=&quot;n&quot;&gt;netmiko&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;j2&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#!/usr/bin/env python&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;netmiko&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;cisco_881&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;s&quot;&gt;&amp;#39;device_type&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;cisco_ios&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;s&quot;&gt;&amp;#39;ip&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+	&lt;span class=&quot;s&quot;&gt;&amp;#39;username&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+	&lt;span class=&quot;s&quot;&gt;&amp;#39;password&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+	&lt;span class=&quot;s&quot;&gt;&amp;#39;secret&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;secret&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;s&quot;&gt;&amp;#39;verbose&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;SSHClass&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;netmiko&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ssh_dispatcher&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;device_type&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cisco_881&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;#39;device_type&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;net_connect&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SSHClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;**&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cisco_881&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;config_commands&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;file prompt quiet&amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;output&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;net_connect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_config_set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config_commands&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;output&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;net_connect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;send_command&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;In order to run this we will also need the /etc/ansible/hosts file to contain the localhost hostname. You can find all the files in this GitHub repo: &lt;a href=&quot;https://github.com/remoteur/ansible-ospflab.git&quot;&gt;https://github.com/remoteur/ansible-ospflab.git&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Once we have all the files in place we can run the playbook by the &#39;ansible-playbook site.yml&#39; command. This is how the output looks like:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
-marius@net-master:/etc/ansible&amp;gt;&amp;gt;&amp;gt; ansible-playbook site.yml 
-&lt;p&gt;PLAY [localhost] ************************************************************** &lt;/p&gt;
-&lt;p&gt;GATHERING FACTS ***************************************************************&lt;br /&gt;
-ok: [localhost]&lt;/p&gt;
-&lt;p&gt;TASK: [Install Apache] ********************************************************&lt;br /&gt;
-ok: [localhost]&lt;/p&gt;
-&lt;p&gt;TASK: [Start Apache] **********************************************************&lt;br /&gt;
-ok: [localhost]&lt;/p&gt;
-&lt;p&gt;TASK: [Install Git] ***********************************************************&lt;br /&gt;
-ok: [localhost]&lt;/p&gt;
-&lt;p&gt;TASK: [Install paramiko] ******************************************************&lt;br /&gt;
-ok: [localhost]&lt;/p&gt;
-&lt;p&gt;TASK: [Clone netmiko] *********************************************************&lt;br /&gt;
-ok: [localhost]&lt;/p&gt;
-&lt;p&gt;TASK: [Install netmiko] *******************************************************&lt;br /&gt;
-changed: [localhost]&lt;/p&gt;
-&lt;p&gt;TASK: [Create netmiko script] *************************************************&lt;br /&gt;
-ok: [localhost]&lt;/p&gt;
-&lt;p&gt;TASK: [Generate config file] **************************************************&lt;br /&gt;
-ok: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.1&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.5&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;1.1.1.1&#39;}], &#39;name&#39;: &#39;rtr-A&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.81&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;br /&gt;
-ok: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.2&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.9&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;2.2.2.2&#39;}], &#39;name&#39;: &#39;rtr-B&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.78&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;br /&gt;
-ok: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.6&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.10&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;no&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;3.3.3.3&#39;}], &#39;name&#39;: &#39;rtr-C&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.79&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;/p&gt;
-&lt;p&gt;TASK: [Connect to routers and pull the config] ********************************&lt;br /&gt;
-changed: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.1&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.5&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;1.1.1.1&#39;}], &#39;name&#39;: &#39;rtr-A&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.81&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;br /&gt;
-changed: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.2&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.9&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;2.2.2.2&#39;}], &#39;name&#39;: &#39;rtr-B&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.78&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;br /&gt;
-changed: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.6&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.10&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;no&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;3.3.3.3&#39;}], &#39;name&#39;: &#39;rtr-C&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.79&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;/p&gt;
-&lt;p&gt;PLAY RECAP ********************************************************************&lt;br /&gt;
-localhost                  : ok=10   changed=2    unreachable=0    failed=0&lt;br /&gt;
-&lt;/p&gt;
+
+&lt;p&gt;Once we have all the files in place we can run the playbook by the ‘ansible-playbook site.yml’ command. This is how the output looks like:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;ansible-playbook site.yml 
+PLAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ************************************************************** 
+GATHERING FACTS ***************************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Install Apache&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ********************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Start Apache&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; **********************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Install Git&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ***********************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Install paramiko&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ******************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Clone netmiko&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; *********************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Install netmiko&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; *******************************************************
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Create netmiko script&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; *************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Generate config file&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; **************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_pass&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;parola&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/1&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.1&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/2&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.5&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;Loopback0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;1.1.1.1&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}]&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;rtr-A&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_ip&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;192.168.0.81&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_user&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_pass&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;parola&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/1&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.2&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/2&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.9&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;Loopback0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;2.2.2.2&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}]&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;rtr-B&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_ip&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;192.168.0.78&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_user&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_pass&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;parola&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/1&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.6&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/2&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.10&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;no&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;Loopback0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;3.3.3.3&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}]&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;rtr-C&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_ip&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;192.168.0.79&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_user&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Connect to routers and pull the config&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ********************************
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_pass&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;parola&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/1&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.1&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/2&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.5&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;Loopback0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;1.1.1.1&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}]&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;rtr-A&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_ip&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;192.168.0.81&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_user&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_pass&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;parola&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/1&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.2&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/2&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.9&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;Loopback0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;2.2.2.2&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}]&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;rtr-B&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_ip&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;192.168.0.78&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_user&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;localhost&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_pass&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;parola&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;: &lt;span class=&quot;o&quot;&gt;[{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/1&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.6&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.252&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;yes&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;GigabitEthernet0/2&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.0.10&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;, &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;netmask&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;255.255.255.0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;ospf&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;no&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;Loopback0&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;address&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;3.3.3.3&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}]&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;rtr-C&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_ip&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;192.168.0.79&amp;#39;&lt;/span&gt;, &lt;span class=&quot;s1&quot;&gt;&amp;#39;mgmt_user&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;admin&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+PLAY RECAP ********************************************************************
+localhost                  : &lt;span class=&quot;nv&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;   &lt;span class=&quot;nv&quot;&gt;changed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;    &lt;span class=&quot;nv&quot;&gt;unreachable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;    &lt;span class=&quot;nv&quot;&gt;failed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;This is how one of routers configuration files looks like:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
-marius@net-master:/etc/ansible&amp;gt;&amp;gt;&amp;gt; cat /var/www/html/rtr-A.config&lt;br /&gt;
-interface GigabitEthernet0/1&lt;br /&gt;
-no shutdown&lt;br /&gt;
-ip address 10.0.0.1 255.255.255.252&lt;br /&gt;
-interface GigabitEthernet0/2&lt;br /&gt;
-no shutdown&lt;br /&gt;
-ip address 10.0.0.5 255.255.255.252&lt;br /&gt;
-interface Loopback0&lt;br /&gt;
-no shutdown&lt;br /&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;/var/www/html/rtr-A.config :
+interface GigabitEthernet0/1
+no shutdown
+ip address 10.0.0.1 255.255.255.252
+interface GigabitEthernet0/2
+no shutdown
+ip address 10.0.0.5 255.255.255.252
+interface Loopback0
+no shutdown
 ip address 1.1.1.1 255.255.255.0
-&lt;p&gt;router ospf 1&lt;br /&gt;
-network 10.0.0.1 0.0.0.0 area 0&lt;br /&gt;
-network 10.0.0.5 0.0.0.0 area 0&lt;br /&gt;
-network 1.1.1.1 0.0.0.0 area 0&lt;br /&gt;
-&lt;/p&gt;
-&lt;p&gt;So now we have the lab up and running. Why bother automating this? In the end it&#39;s a basic test environment. Here&#39;s my motivation:&lt;/p&gt;
-&lt;p&gt;1. I hate doing repetitive stuff&lt;br /&gt;
-2. Reproducibility. Manual repetitive stuff results in errored configurations, at least for me. If I do such a setup manually I usually get a terminal started for each of the routers and start writing commands. My problem is that almost all the time I end up messing up something like setting the wrong IP addresses on interfaces. By running this playbook I will always get the same result.&lt;br /&gt;
-3. I have the complete picture in one place and I can check the whole setup before running it, no need to switch through terminals, screens or other stuff.&lt;br /&gt;
-4. Time. I&#39;m running this setup on Openstack by using Cisco vIOS images so getting everything up and running from scratch takes me less than 5 minutes which is pretty awesome.&lt;/p&gt;
-&lt;p&gt;Let me know if you have any questions and I&#39;ll be more than happy to answer. &lt;/p&gt;
-&lt;p&gt;Thanks&lt;/p&gt;
-&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;
+router ospf 1
+network 10.0.0.1 0.0.0.0 area 0
+network 10.0.0.5 0.0.0.0 area 0
+network 1.1.1.1 0.0.0.0 area 0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So now we have the lab up and running. Why bother automating this? In the end it’s a basic test environment. Here’s my motivation: &lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;I hate doing repetitive stuff&lt;/li&gt;
+  &lt;li&gt;Reproducibility. Manual repetitive stuff results in errored configurations, at least for me. If I do such a setup manually I usually get a terminal started for each of the routers and start writing commands. My problem is that almost all the time I end up messing up something like setting the wrong IP addresses on interfaces. By running this playbook I will always get the same result&lt;/li&gt;
+  &lt;li&gt;I have the complete picture in one place and I can check the whole setup before running it, no need to switch through terminals, screens or other stuff&lt;/li&gt;
+  &lt;li&gt;Time. I’m running this setup on Openstack by using Cisco vIOS images so getting everything up and running from scratch takes me less than 5 minutes which is pretty awesome&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Let me know if you have any questions and I’ll be more than happy to answer. 
+Thanks&lt;/p&gt;
+
 </description>
         <pubDate>Tue, 24 Feb 2015 19:21:31 +0000</pubDate>
-        <link>http://remoteur.github.io//uncategorized/linux/routing/ios/python/2015/02/24/ospf-lab-provisioning-on-ios-with-ansible/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//uncategorized/linux/routing/ios/python/2015/02/24/ospf-lab-provisioning-on-ios-with-ansible/</guid>
+        <link>http://remoteur.github.io//opsf-on-ios-with-ansible</link>
+        <guid isPermaLink="true">http://remoteur.github.io//opsf-on-ios-with-ansible</guid>
         
-        
-        <category>uncategorized</category>
         
         <category>linux</category>
         

@@ -4,7 +4,7 @@ title: About me
 permalink: /about/
 ---
 
-![Figure 1-1]({{ prepend: site.baseurl | prepend: site.url }}/assets/static/marius.jpg?raw=true=100x20 "Marius")
+![Figure 1-1]({{ prepend: site.baseurl | prepend: site.url }}{% img /assets/static/marius.jpg 100x200%} "Marius")
 
 My name is Marius and probably like most of you who are viewing this website I am passionate about computer networks.
 

@@ -5,7 +5,7 @@ permalink: /blogroll/
 ---
 These are some of the blogs I enjoy reading:
 
-<li><a href="http://blog.ipspace.net/">ipspace.net</a></li>
+- <li><a href="http://blog.ipspace.net/">ipspace.net</a></li>
 <li><a href="http://agiletesting.blogspot.com/">agiletesting</a></li>
 <li><a href="http://blog.scottlowe.org/">blog.scottlowe.org</a></li>
 <li><a href="http://blog.thestateofme.com/">blog.thestateofme.com</a></li>

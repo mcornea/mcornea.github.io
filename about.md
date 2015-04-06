@@ -4,7 +4,7 @@ title: About me
 permalink: /about/
 ---
 
-<a href="{{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="Marius" width="600" height="800" /></a>
+<img src="{{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="Marius" width="200" height="350" /></a>
 
 My name is Marius and probably like most of you who are viewing this website I am passionate about computer networks.
 

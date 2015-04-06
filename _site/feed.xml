@@ -3,10 +3,10 @@
   <channel>
     <title></title>
     <description>learn by doing</description>
-    <link>http://remoteur.github.io//</link>
-    <atom:link href="http://remoteur.github.io//feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Apr 2015 11:11:35 +0000</pubDate>
-    <lastBuildDate>Mon, 06 Apr 2015 11:11:35 +0000</lastBuildDate>
+    <link>http://remoteur.github.io:4000//</link>
+    <atom:link href="http://remoteur.github.io:4000//feed.xml" rel="self" type="application/rss+xml" />
+    <pubDate>Mon, 06 Apr 2015 16:18:40 +0000</pubDate>
+    <lastBuildDate>Mon, 06 Apr 2015 16:18:40 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
@@ -17,7 +17,7 @@
 
 &lt;p&gt;First thing that came to mind and most handy I guess is to build a LAMP stack environment for Wordpress sites. So how do I start? Well, let’s take the LAMP environment and split it into components: we need a database to store data and a web server that can process the Wordpress PHP code. Based on this I decided to create a container for the MySQL database and a container for running Apache plus additional PHP modules. Then I would also like to run multiple Wordpress instances on the same server to make use of all the resources. In order to achieve isolation between the apps we can create separate containers for each WP instance, each with its own database on the MySQL server. Nevertheless since we want all the instances accessible by a single IP address, we also need a load balancer that routes traffic to the webserver containers according to the Host field in the HTTP header. 
 Below is a diagram that better describes the flow:
-&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot; alt=&quot;Containers start - New Page&quot; width=&quot;1167&quot; height=&quot;657&quot; class=&quot;aligncenter size-full wp-image-303&quot; /&gt;&lt;/a&gt;
+&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/Containers-start-New-Page1.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/Containers-start-New-Page1.png&quot; alt=&quot;Containers start - New Page&quot; width=&quot;1167&quot; height=&quot;657&quot; class=&quot;aligncenter size-full wp-image-303&quot; /&gt;&lt;/a&gt;
 So, let’s get started. I got a Fedora21 instance powered up and followed the documentation &lt;a href=&quot;https://docs.docker.com/installation/fedora/&quot;&gt;here&lt;/a&gt;[1] to get Docker up and running. Once I got the docker environment ready I started searching for some examples that would quickly get me started with the apps that I needed. So I started with the MySQL server. A quick search on Google pointed me to the official MySQL &lt;a href=&quot;https://registry.hub.docker.com/_/mysql/&quot;&gt;repo&lt;/a&gt;[2] on Docker Hub that contains pretty straight forward documentation on how to get a running MySQL container. &lt;/p&gt;
 
 &lt;p&gt;Here’s the command that I ran in order to get it running:&lt;/p&gt;
@@ -98,15 +98,13 @@ c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&
 
 </description>
         <pubDate>Sun, 05 Apr 2015 22:07:40 +0000</pubDate>
-        <link>http://remoteur.github.io//getting-started-with-docker</link>
-        <guid isPermaLink="true">http://remoteur.github.io//getting-started-with-docker</guid>
+        <link>http://remoteur.github.io:4000//getting-started-with-docker</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//getting-started-with-docker</guid>
         
         
         <category>linux</category>
         
         <category>containers</category>
-        
-        <category>blog</category>
         
       </item>
     
@@ -115,7 +113,7 @@ c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&
         <description>&lt;p&gt;In this post we’ll see how we can quickly get a basic OSPF lab deployed by using Ansible. Our setup consists of 3 x Cisco IOS routers which are connected according to the diagram below. All the routers should already have SSH set up and an interface connected to the management network that will be used for retrieving the configuration files from the server. On the server side we need a Linux machine that has Ansible installed.&lt;/p&gt;
 
 &lt;hr /&gt;
-&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/02/ansible_ospf-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/02/ansible_ospf-New-Page.png&quot; alt=&quot;ansible_ospf - New Page&quot; width=&quot;649&quot; height=&quot;594&quot; class=&quot;aligncenter size-full wp-image-297&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/ansible_ospf-New-Page.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/ansible_ospf-New-Page.png&quot; alt=&quot;ansible_ospf - New Page&quot; width=&quot;649&quot; height=&quot;594&quot; class=&quot;aligncenter size-full wp-image-297&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;So let’s get started by building the Ansible playbook. I’ll explain the site.yml file below:&lt;/p&gt;
 
@@ -222,8 +220,8 @@ Thanks&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 24 Feb 2015 19:21:31 +0000</pubDate>
-        <link>http://remoteur.github.io//opsf-on-ios-with-ansible</link>
-        <guid isPermaLink="true">http://remoteur.github.io//opsf-on-ios-with-ansible</guid>
+        <link>http://remoteur.github.io:4000//opsf-on-ios-with-ansible</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//opsf-on-ios-with-ansible</guid>
         
         
         <category>linux</category>
@@ -238,85 +236,103 @@ Thanks&lt;/p&gt;
     
       <item>
         <title>SDN Intro: Basic L2 connectivity by using OVS and POX</title>
-        <description>&lt;p&gt;You&#39;ve all probably heard about this fancy SDN term that&#39;s been passing around in the networking world in the recent years. I&#39;ll try to explain below what SDN means for me and what are the benefits of using such a model. &lt;/p&gt;
-&lt;p&gt;SDN or Software Defined Networking refers to decoupling the data plane from the control plane. The data plane is the process by which the packets are forwarded and it&#39;s done by the hardware silicon. The control plane is the process that instructs the data plane how to behave (routing protocols, firewall policies, etc). In a typical networking device we find those 2 planes coupled in a single box. The SDN model says we can separate them and keep the packet forwarding on a box that&#39;s got the fast hardware silicon and move the control plane on a general purpose computer. Since the 2 planes are separated they need a means of communication which is OpenFlow. &lt;/p&gt;
-&lt;p&gt;OpenFlow is a communications protocol that allows remote manipulation of the devices forwarding tables. Think of this protocol like a standard API that you can consume by running any software. This is great because you can purchase the networking device from a specific vendor and run the controller by your own code, open source project or other proprietary software. In my opinion this provides you the freedom to choose and will push the vendors to create better and better software. Personally I&#39;m a big fan of opensource software and I&#39;m dreaming about the moment when the networking world will be able to get the benefits of a big opensource project. &lt;/p&gt;
-&lt;p&gt;Another advantage that SDN brings is a central point that controls the network. Think about how we currently manage the networking devices. Even if the network is a whole that provides services to upper applications, we currently log into each separate device and write some commands that configure services. SDN would save us from doing repetitive and boring tasks such as provisioning vlans.&lt;/p&gt;
-&lt;p&gt;Enough with the talk, let&#39;s start a simple scenario by using the remote-lab.net environment. The lab topology consists of two hosts connected to an OpenvSwitch switch. The OVS switch is connected to an OpenFlow controller running Pox. The controller runs the code that enables L2 connectivity between the hosts but the actual forwarding is done by the OVS switch.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/10/sdn_lab.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/10/sdn_lab.png&quot; alt=&quot;sdn_lab&quot; width=&quot;686&quot; height=&quot;364&quot; class=&quot;aligncenter size-full wp-image-284&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Let&#39;s first enable the ports the hosts are connected to, set an openvswitch bridge where the hosts are connected, set the IP addreses on the hosts and check we have connectivity between the hosts. By default the L2 learning mechanism is done by the OpenvSwitch internals. &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ip link set dev eth1 up&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ip link set dev eth2 up&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw0&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port sw0 eth1&lt;br /&gt;
+        <description>&lt;p&gt;You’ve all probably heard about this fancy SDN term that’s been passing around in the networking world in the recent years. I’ll try to explain below what SDN means for me and what are the benefits of using such a model. &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;SDN or Software Defined Networking refers to decoupling the data plane from the control plane. The data plane is the process by which the packets are forwarded and it’s done by the hardware silicon. The control plane is the process that instructs the data plane how to behave (routing protocols, firewall policies, etc). In a typical networking device we find those 2 planes coupled in a single box. The SDN model says we can separate them and keep the packet forwarding on a box that’s got the fast hardware silicon and move the control plane on a general purpose computer. Since the 2 planes are separated they need a means of communication which is OpenFlow. &lt;/p&gt;
+
+&lt;p&gt;OpenFlow is a communications protocol that allows remote manipulation of the devices forwarding tables. Think of this protocol like a standard API that you can consume by running any software. This is great because you can purchase the networking device from a specific vendor and run the controller by your own code, open source project or other proprietary software. In my opinion this provides you the freedom to choose and will push the vendors to create better and better software. Personally I’m a big fan of opensource software and I’m dreaming about the moment when the networking world will be able to get the benefits of a big opensource project. 
+Another advantage that SDN brings is a central point that controls the network. Think about how we currently manage the networking devices. Even if the network is a whole that provides services to upper applications, we currently log into each separate device and write some commands that configure services. SDN would save us from doing repetitive and boring tasks such as provisioning vlans.
+Enough with the talk, let’s start a simple scenario by using the remote-lab.net environment. The lab topology consists of two hosts connected to an OpenvSwitch switch. The OVS switch is connected to an OpenFlow controller running Pox. The controller runs the code that enables L2 connectivity between the hosts but the actual forwarding is done by the OVS switch.
+&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/sdn_lab.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/sdn_lab.png&quot; alt=&quot;sdn_lab&quot; width=&quot;686&quot; height=&quot;364&quot; class=&quot;aligncenter size-full wp-image-284&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Let’s first enable the ports the hosts are connected to, set an openvswitch bridge where the hosts are connected, set the IP addreses on the hosts and check we have connectivity between the hosts. By default the L2 learning mechanism is done by the OpenvSwitch internals. &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ip link &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev eth1 up
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ip link &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev eth2 up
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw0
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port sw0 eth1
 root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port sw0 eth2
-&lt;p&gt;root@host01:~&amp;gt;&amp;gt;&amp;gt; ip l set dev eth1 up&lt;br /&gt;
-root@host01:~&amp;gt;&amp;gt;&amp;gt; ip addr add 192.168.0.1/24 dev eth1&lt;br /&gt;
-root@host01:~&amp;gt;&amp;gt;&amp;gt; ip a s dev eth1&lt;br /&gt;
-3: eth1: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000&lt;br /&gt;
-    link/ether 52:54:00:56:e2:b2 brd ff:ff:ff:ff:ff:ff&lt;br /&gt;
-    inet 192.168.0.1/24 scope global eth1&lt;br /&gt;
-    inet6 fe80::5054:ff:fe56:e2b2/64 scope link&lt;br /&gt;
-       valid_lft forever preferred_lft forever&lt;/p&gt;
-&lt;p&gt;root@host02:~&amp;gt;&amp;gt;&amp;gt; ip l set dev eth1 up&lt;br /&gt;
-root@host02:~&amp;gt;&amp;gt;&amp;gt; ip addr add 192.168.0.2/24 dev eth1&lt;br /&gt;
-root@host02:~&amp;gt;&amp;gt;&amp;gt; ip a s dev eth1&lt;br /&gt;
-3: eth1: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000&lt;br /&gt;
-    link/ether 52:54:00:6e:22:0b brd ff:ff:ff:ff:ff:ff&lt;br /&gt;
-    inet 192.168.0.2/24 scope global eth1&lt;br /&gt;
-    inet6 fe80::5054:ff:fe6e:220b/64 scope link&lt;br /&gt;
-       valid_lft forever preferred_lft forever&lt;/p&gt;
-&lt;p&gt;root@host02:~&amp;gt;&amp;gt;&amp;gt; ping 192.168.0.1 -c1&lt;br /&gt;
-PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.&lt;br /&gt;
-64 bytes from 192.168.0.1: icmp_req=1 ttl=64 time=0.946 ms&lt;/p&gt;
-&lt;p&gt;--- 192.168.0.1 ping statistics ---&lt;br /&gt;
-1 packets transmitted, 1 received, 0% packet loss, time 0ms&lt;br /&gt;
-rtt min/avg/max/mdev = 0.946/0.946/0.946/0.000 ms&lt;/p&gt;
-&lt;p&gt;Now let&#39;s go to the controller:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ctrl01:~&amp;gt;&amp;gt;&amp;gt; ls&lt;br /&gt;
-floodlight  pox&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;We see here that we have two directories that contain OpenFlow controller code - Floodlight and Pox. We&#39;ll choose Pox for our example. Pox is platform for the rapid development and prototyping of network control software using Python. Pox comes with some preinstalled components. One of the components is called forwarding.l2_learning and it does what its name says - make OpenFlow switches act as a type of L2 learning switch. You can find the code in the pox/forwarding/l2_learning.py file. We&#39;ll use this component for our example. Let&#39;s start it:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ctrl01:~/pox&amp;gt;&amp;gt;&amp;gt; ./pox.py --verbose forwarding.l2_learning&lt;br /&gt;
-POX 0.2.0 (carp) / Copyright 2011-2013 James McCauley, et al.&lt;br /&gt;
-DEBUG:core:POX 0.2.0 (carp) going up...&lt;br /&gt;
-DEBUG:core:Running on CPython (2.7.3/Jan 2 2013 13:56:14)&lt;br /&gt;
-DEBUG:core:Platform is Linux-3.2.0-4-amd64-x86_64-with-debian-7.4&lt;br /&gt;
-INFO:core:POX 0.2.0 (carp) is up.&lt;br /&gt;
-DEBUG:openflow.of_01:Listening on 0.0.0.0:6633&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;The next step is to configure OpenvSwitch to use the POX controller. OpenvSwitch has 2 ways of working with an OpenFlow controller - standalone and secure. In standalone mode, if the connection to the controller fails then it will fall back to using its internal logic to install the flows. While in secure mode it will not install any flows if the connection to the controller fails. We&#39;ll use the standalone mode with 172.16.18.6 being the IP address of the POX controller.&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl set-fail-mode sw0 standalone&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl set-controller sw0 tcp:172.16.18.6:6633&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl show&lt;br /&gt;
-653dfcd6-85a4-4f72-995f-9fa05b5203f9&lt;br /&gt;
-    Bridge &quot;sw0&quot;&lt;br /&gt;
-        Controller &quot;tcp:172.16.18.6:6633&quot;&lt;br /&gt;
-            is_connected: true&lt;br /&gt;
-        fail_mode: standalone&lt;br /&gt;
-        Port &quot;sw0&quot;&lt;br /&gt;
-            Interface &quot;sw0&quot;&lt;br /&gt;
-                type: internal&lt;br /&gt;
-        Port &quot;eth2&quot;&lt;br /&gt;
-            Interface &quot;eth2&quot;&lt;br /&gt;
-        Port &quot;eth1&quot;&lt;br /&gt;
-            Interface &quot;eth1&quot;&lt;br /&gt;
-    ovs_version: &quot;1.9.3&quot;&lt;/code&gt;&lt;/p&gt;
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev eth1 up
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip addr add 192.168.0.1/24 dev eth1
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip a s dev eth1
+3: eth1: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu &lt;span class=&quot;m&quot;&gt;1500&lt;/span&gt; qdisc pfifo_fast state UP qlen 1000
+    link/ether 52:54:00:56:e2:b2 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.1/24 scope global eth1
+    inet6 fe80::5054:ff:fe56:e2b2/64 scope link
+       valid_lft forever preferred_lft forever
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev eth1 up
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip addr add 192.168.0.2/24 dev eth1
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip a s dev eth1
+3: eth1: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu &lt;span class=&quot;m&quot;&gt;1500&lt;/span&gt; qdisc pfifo_fast state UP qlen 1000
+    link/ether 52:54:00:6e:22:0b brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.2/24 scope global eth1
+    inet6 fe80::5054:ff:fe6e:220b/64 scope link
+       valid_lft forever preferred_lft forever
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ping 192.168.0.1 -c1
+PING 192.168.0.1 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;192.168.0.1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 56&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;84&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 192.168.0.1: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0.946 ms
+--- 192.168.0.1 ping statistics ---
+&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; packets transmitted, &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; received, 0% packet loss, &lt;span class=&quot;nb&quot;&gt;time &lt;/span&gt;0ms
+rtt min/avg/max/mdev &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 0.946/0.946/0.946/0.000 ms&amp;lt;/code&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now let’s go to the controller:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@ctrl01:~&amp;gt;&amp;gt;&amp;gt; ls
+floodlight  pox&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We see here that we have two directories that contain OpenFlow controller code - Floodlight and Pox. We’ll choose Pox for our example. Pox is platform for the rapid development and prototyping of network control software using Python. Pox comes with some preinstalled components. One of the components is called forwarding.l2_learning and it does what its name says - make OpenFlow switches act as a type of L2 learning switch. You can find the code in the pox/forwarding/l2_learning.py file. We’ll use this component for our example. Let’s start it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@ctrl01:~/pox&amp;gt;&amp;gt;&amp;gt; ./pox.py --verbose forwarding.l2_learning
+POX 0.2.0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;carp&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; / Copyright 2011-2013 James McCauley, et al.
+DEBUG:core:POX 0.2.0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;carp&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; going up...
+DEBUG:core:Running on CPython &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.7.3/Jan &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2013&lt;/span&gt; 13:56:14&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+DEBUG:core:Platform is Linux-3.2.0-4-amd64-x86_64-with-debian-7.4
+INFO:core:POX 0.2.0 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;carp&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; is up.
+DEBUG:openflow.of_01:Listening on 0.0.0.0:6633&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The next step is to configure OpenvSwitch to use the POX controller. OpenvSwitch has 2 ways of working with an OpenFlow controller - standalone and secure. In standalone mode, if the connection to the controller fails then it will fall back to using its internal logic to install the flows. While in secure mode it will not install any flows if the connection to the controller fails. We’ll use the standalone mode with 172.16.18.6 being the IP address of the POX controller.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-fail-mode sw0 standalone
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl &lt;span class=&quot;nb&quot;&gt;set&lt;/span&gt;-controller sw0 tcp:172.16.18.6:6633
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl show
+653dfcd6-85a4-4f72-995f-9fa05b5203f9
+    Bridge &lt;span class=&quot;s2&quot;&gt;&amp;quot;sw0&amp;quot;&lt;/span&gt;
+        Controller &lt;span class=&quot;s2&quot;&gt;&amp;quot;tcp:172.16.18.6:6633&amp;quot;&lt;/span&gt;
+            is_connected: &lt;span class=&quot;nb&quot;&gt;true&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;        &lt;/span&gt;fail_mode: standalone
+        Port &lt;span class=&quot;s2&quot;&gt;&amp;quot;sw0&amp;quot;&lt;/span&gt;
+            Interface &lt;span class=&quot;s2&quot;&gt;&amp;quot;sw0&amp;quot;&lt;/span&gt;
+                &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;: internal
+        Port &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth2&amp;quot;&lt;/span&gt;
+            Interface &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth2&amp;quot;&lt;/span&gt;
+        Port &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth1&amp;quot;&lt;/span&gt;
+            Interface &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth1&amp;quot;&lt;/span&gt;
+    ovs_version: &lt;span class=&quot;s2&quot;&gt;&amp;quot;1.9.3&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;We can see the following message on the OpenFlow controller:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;INFO:openflow.of_01:[46-3e-63-ba-e5-46 1] connected&lt;br /&gt;
-DEBUG:forwarding.l2_learning:Connection [46-3e-63-ba-e5-46 1]&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Let&#39;s see what happens when we try to ping one host from the other:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;DEBUG:forwarding.l2_learning:installing flow for 52:54:00:6e:22:0b.2 -&amp;gt; 52:54:00:56:e2:b2.1&lt;br /&gt;
-DEBUG:forwarding.l2_learning:installing flow for 52:54:00:56:e2:b2.1 -&amp;gt; 52:54:00:6e:22:0b.2&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;INFO:openflow.of_01:&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;46-3e-63-ba-e5-46 1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; connected
+DEBUG:forwarding.l2_learning:Connection &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;46-3e-63-ba-e5-46 1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s see what happens when we try to ping one host from the other:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;DEBUG:forwarding.l2_learning:installing flow &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; 52:54:00:6e:22:0b.2 -&amp;gt; 52:54:00:56:e2:b2.1
+DEBUG:forwarding.l2_learning:installing flow &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; 52:54:00:56:e2:b2.1 -&amp;gt; 52:54:00:6e:22:0b.2&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Check the flows that are installed in the switch. Notice how the flows are defined:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-ofctl dump-flows sw0&lt;br /&gt;
-NXST_FLOW reply (xid=0x4):&lt;br /&gt;
- cookie=0x0, duration=7.348s, table=0, n_packets=7, n_bytes=686, idle_timeout=10, hard_timeout=30, idle_age=1, priority=65535,icmp,in_port=2,vlan_tci=0x0000,dl_src=52:54:00:6e:22:0b,dl_dst=52:54:00:56:e2:b2,nw_src=192.168.0.2,nw_dst=192.168.0.1,nw_tos=0,icmp_type=0,icmp_code=0 actions=output:1&lt;br /&gt;
- cookie=0x0, duration=6.329s, table=0, n_packets=6, n_bytes=588, idle_timeout=10, hard_timeout=30, idle_age=1, priority=65535,icmp,in_port=1,vlan_tci=0x0000,dl_src=52:54:00:56:e2:b2,dl_dst=52:54:00:6e:22:0b,nw_src=192.168.0.1,nw_dst=192.168.0.2,nw_tos=0,icmp_type=8,icmp_code=0 actions=output:2&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-ofctl dump-flows sw0
+NXST_FLOW reply &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;xid&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0x4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:
+ &lt;span class=&quot;nv&quot;&gt;cookie&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0x0, &lt;span class=&quot;nv&quot;&gt;duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;7.348s, &lt;span class=&quot;nv&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;n_packets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;7, &lt;span class=&quot;nv&quot;&gt;n_bytes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;686, &lt;span class=&quot;nv&quot;&gt;idle_timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10, &lt;span class=&quot;nv&quot;&gt;hard_timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;30, &lt;span class=&quot;nv&quot;&gt;idle_age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1, &lt;span class=&quot;nv&quot;&gt;priority&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;65535,icmp,in_port&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2,vlan_tci&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0x0000,dl_src&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;52:54:00:6e:22:0b,dl_dst&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;52:54:00:56:e2:b2,nw_src&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;192.168.0.2,nw_dst&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;192.168.0.1,nw_tos&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0,icmp_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0,icmp_code&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;actions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;output:1
+ &lt;span class=&quot;nv&quot;&gt;cookie&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0x0, &lt;span class=&quot;nv&quot;&gt;duration&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;6.329s, &lt;span class=&quot;nv&quot;&gt;table&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0, &lt;span class=&quot;nv&quot;&gt;n_packets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;6, &lt;span class=&quot;nv&quot;&gt;n_bytes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;588, &lt;span class=&quot;nv&quot;&gt;idle_timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10, &lt;span class=&quot;nv&quot;&gt;hard_timeout&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;30, &lt;span class=&quot;nv&quot;&gt;idle_age&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1, &lt;span class=&quot;nv&quot;&gt;priority&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;65535,icmp,in_port&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1,vlan_tci&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0x0000,dl_src&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;52:54:00:56:e2:b2,dl_dst&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;52:54:00:6e:22:0b,nw_src&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;192.168.0.1,nw_dst&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;192.168.0.2,nw_tos&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0,icmp_type&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;8,icmp_code&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;actions&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;output:2&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;You can take any of these headers and manipulate them as you wish. I believe the whole model provides great flexibility and freedom and it will lead to better networking software. &lt;/p&gt;
-&lt;/code&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 12 Oct 2014 21:35:48 +0000</pubDate>
-        <link>http://remoteur.github.io//linux/switching/routing/virtualization/ios/python/2014/10/12/sdn-intro-basic-l2-connectivity-by-using-ovs-and-pox/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//linux/switching/routing/virtualization/ios/python/2014/10/12/sdn-intro-basic-l2-connectivity-by-using-ovs-and-pox/</guid>
+        <link>http://remoteur.github.io:4000//sdn-intro-basic-with-ovs-and-pox</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//sdn-intro-basic-with-ovs-and-pox</guid>
         
         
         <category>linux</category>
@@ -326,341 +342,245 @@ NXST_FLOW reply (xid=0x4):&lt;br /&gt;
         <category>routing</category>
         
         <category>virtualization</category>
-        
-        <category>ios</category>
-        
-        <category>python</category>
         
       </item>
     
       <item>
         <title>Ansible playbook: postfix with Mandrill relay</title>
         <description>&lt;p&gt;In this post I will show how you can use Ansible to automatically install postfix mail server and configure it to relay through Mandrill. Mandrill is a transactional email platform that allows you to send up to 12.000 emails for free. I use it for my servers to avoid situations where the IP addresses assigned by my ISP are blacklisted on some RBL lists. &lt;/p&gt;
-&lt;p&gt;Ansible is a config manamegement software that runs agentless over SSH. You only need python installed on the remote nodes. Ansible&#39;s configuration files are called playbooks. Playbooks are written as YAML files and they are used to manage configurations of and deployments to remote machines.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Ansible is a config manamegement software that runs agentless over SSH. You only need python installed on the remote nodes. Ansible’s configuration files are called playbooks. Playbooks are written as YAML files and they are used to manage configurations of and deployments to remote machines.&lt;/p&gt;
+
 &lt;p&gt;Below is the playbook that I use to install postfix, add the required configuration to use Mandrill and reload the service in order to use the new configuration. I will explain the playbook below:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
----&lt;br /&gt;
-- hosts: basenodes&lt;br /&gt;
-  tasks:&lt;br /&gt;
-    - name: Installs postfix mail server&lt;br /&gt;
-      apt: pkg=postfix state=installed update_cache=true&lt;br /&gt;
-      notify:&lt;br /&gt;
-        - start postfix&lt;br /&gt;
-    - name: Upload mandril authentication info&lt;br /&gt;
-      copy: src=/opt/files/postfix/mandril_passwd dest=/etc/postfix/mandril_passwd mode=0600&lt;br /&gt;
-      register: mandril&lt;br /&gt;
-      notify:&lt;br /&gt;
-        - postmap mandril_passwd&lt;br /&gt;
-    - name: Append mandril relay config&lt;br /&gt;
-      lineinfile:&lt;br /&gt;
-        dest=/etc/postfix/main.cf&lt;br /&gt;
-        line=&quot;&quot;&lt;br /&gt;
-      with_items:&lt;br /&gt;
-        - { line: &#39;smtp_sasl_auth_enable = yes&#39; }&lt;br /&gt;
-        - { line: &#39;smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd&#39; }&lt;br /&gt;
-        - { line: &#39;smtp_sasl_security_options = noanonymous&#39; }&lt;br /&gt;
-        - { line: &#39;smtp_use_tls = yes&#39; }&lt;br /&gt;
-        - { line: &#39;relayhost = [smtp.mandrillapp.com]&#39; }&lt;br /&gt;
-      notify:&lt;br /&gt;
-        - restart postfix
-&lt;p&gt;  handlers:&lt;br /&gt;
-    - name: start postfix&lt;br /&gt;
-      service: name=postfix state=started&lt;br /&gt;
-    - name: postmap mandril_passwd&lt;br /&gt;
-      command: postmap /etc/postfix/mandril_passwd&lt;br /&gt;
-      when: mandril|success&lt;br /&gt;
-    - name: restart postfix&lt;br /&gt;
-      service: name=postfix state=restarted&lt;br /&gt;
-&lt;/p&gt;
-&lt;p&gt;The hosts line contains the hosts group that this playbook will be applied to.&lt;br /&gt;
-Each play contains a list of tasks, which are actually calls to Ansible modules. We see that the first task is called &#39;Installs postfix mail server&#39; and it uses the apt module to get the postfix package in the installed stated. update_cache=true ensures that &#39;apt-get update&#39; will be run before installing the postfix package. The notify section contains the handlers. Handlers are lists of tasks, not really any different from regular tasks, that are referenced by name. You can find them in the handlers sections. Looking at our example - the &#39;start postfix&#39; handler ensures that the postfix server is started. &lt;/p&gt;
-&lt;p&gt;The &#39;Upload mandril authentication info&#39; task copies the /opt/files/postfix/mandril_passwd file on the ansible server to the remote node with /etc/postfix/mandril_passwd as a destination location. The mandril_passwd file contains the authentication details for the Mandril platform. The mode key contains the permissions the destination file will have. The register line gets the result of the copy operation stored in the mandril variable. After getting the file copied we need to create the postfix lookup table based on that file. In order to do this we run the &#39;postmap mandril_passwd&#39; handler which runs the &#39;postmap /etc/postfix/mandril_passwd&#39; command only if the copy task was run successfully.&lt;/p&gt;
-&lt;p&gt;The &#39;Append mandril relay config&#39; task will add the config lines to the postfix main.cf files. We&#39;ll store the lines in a dictionary. A dictionary is represented in a simple key: and value form:. Each new line will be the value stored in the &#39;line&#39; key of each dictionary element. After adding the lines to main.cf we&#39;ll restart postfix by running the &#39;restart postfix&#39; handler. &lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/aa3d27a6fc948ed6e857.js&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The hosts line contains the hosts group that this playbook will be applied to.
+Each play contains a list of tasks, which are actually calls to Ansible modules. We see that the first task is called ‘Installs postfix mail server’ and it uses the apt module to get the postfix package in the installed stated. update_cache=true ensures that ‘apt-get update’ will be run before installing the postfix package. The notify section contains the handlers. Handlers are lists of tasks, not really any different from regular tasks, that are referenced by name. You can find them in the handlers sections. Looking at our example - the ‘start postfix’ handler ensures that the postfix server is started. &lt;/p&gt;
+
+&lt;p&gt;The ‘Upload mandril authentication info’ task copies the /opt/files/postfix/mandril_passwd file on the ansible server to the remote node with /etc/postfix/mandril_passwd as a destination. The mandril_passwd file contains the authentication details for the Mandril platform. The mode key contains the permissions the destination file will have. The register line gets the result of the copy operation stored in the mandril variable. After getting the file copied we need to create the postfix lookup table based on that file. In order to do this we run the ‘postmap mandril_passwd’ handler which runs the ‘postmap /etc/postfix/mandril_passwd’ command only if the copy task was run successfully.&lt;/p&gt;
+
+&lt;p&gt;The ‘Append mandril relay config’ task will add the config lines to the postfix main.cf files. We’ll store the lines in a dictionary. A dictionary is represented in a simple key: and value form:. Each new line will be the value stored in the ‘line’ key of each dictionary element. After adding the lines to main.cf we’ll restart postfix by running the ‘restart postfix’ handler. &lt;/p&gt;
+
 &lt;p&gt;You may find below the output of running the playbook : &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
-root@ansible:/etc/ansible/playbooks&amp;gt;&amp;gt;&amp;gt; ansible-playbook /etc/ansible/playbooks/playbook.yml
-&lt;p&gt;PLAY [basenodes] ************************************************************** &lt;/p&gt;
-&lt;p&gt;GATHERING FACTS *************************************************************** &lt;/p&gt;
-&lt;p&gt;TASK: [Installs postfix mail server] ******************************************&lt;br /&gt;
-changed: [node01.remote-lab.net]&lt;/p&gt;
-&lt;p&gt;TASK: [Upload mandril authentication info] ************************************&lt;br /&gt;
-changed: [node01.remote-lab.net]&lt;/p&gt;
-&lt;p&gt;TASK: [Append mandril relay config] *******************************************&lt;br /&gt;
-changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;smtp_sasl_auth_enable = yes&#39;})&lt;br /&gt;
-changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd&#39;})&lt;br /&gt;
-changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;smtp_sasl_security_options = noanonymous&#39;})&lt;br /&gt;
-changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;smtp_use_tls = yes&#39;})&lt;br /&gt;
-changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;relayhost = [smtp.mandrillapp.com]&#39;})&lt;/p&gt;
-&lt;p&gt;NOTIFIED: [start postfix] *****************************************************&lt;br /&gt;
-ok: [node01.remote-lab.net]&lt;/p&gt;
-&lt;p&gt;NOTIFIED: [postmap mandril_passwd] ********************************************&lt;br /&gt;
-changed: [node01.remote-lab.net]&lt;/p&gt;
-&lt;p&gt;NOTIFIED: [restart postfix] ***************************************************&lt;br /&gt;
-changed: [node01.remote-lab.net]&lt;/p&gt;
-&lt;p&gt;PLAY RECAP ********************************************************************&lt;br /&gt;
-node01.remote-lab.net      : ok=7    changed=5    unreachable=0    failed=0&lt;br /&gt;
-&lt;/p&gt;
-&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@ansible:/etc/ansible/playbooks&amp;gt;&amp;gt;&amp;gt; ansible-playbook /etc/ansible/playbooks/playbook.yml
+PLAY &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;basenodes&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ************************************************************** 
+GATHERING FACTS *************************************************************** 
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Installs postfix mail server&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ******************************************
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Upload mandril authentication info&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ************************************
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+TASK: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;Append mandril relay config&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; *******************************************
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;line&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;smtp_sasl_auth_enable = yes&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;line&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;line&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;smtp_sasl_security_options = noanonymous&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;line&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;smtp_use_tls = yes&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;={&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;line&amp;#39;&lt;/span&gt;: &lt;span class=&quot;s1&quot;&gt;&amp;#39;relayhost = [smtp.mandrillapp.com]&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+NOTIFIED: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;start postfix&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; *****************************************************
+ok: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+NOTIFIED: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;postmap mandril_passwd&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ********************************************
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+NOTIFIED: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;restart postfix&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; ***************************************************
+changed: &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;node01.remote-lab.net&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+PLAY RECAP ********************************************************************
+node01.remote-lab.net      : &lt;span class=&quot;nv&quot;&gt;ok&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;7&lt;/span&gt;    &lt;span class=&quot;nv&quot;&gt;changed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;    &lt;span class=&quot;nv&quot;&gt;unreachable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;    &lt;span class=&quot;nv&quot;&gt;failed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 </description>
         <pubDate>Sun, 14 Sep 2014 12:52:15 +0000</pubDate>
-        <link>http://remoteur.github.io//linux/virtualization/2014/09/14/ansible-playbook-postfix-with-mandrill-relay/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//linux/virtualization/2014/09/14/ansible-playbook-postfix-with-mandrill-relay/</guid>
+        <link>http://remoteur.github.io:4000//ansible-postfix-with-mandrill</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//ansible-postfix-with-mandrill</guid>
         
         
         <category>linux</category>
         
         <category>virtualization</category>
         
-      </item>
-    
-      <item>
-        <title>Sample post from harmony</title>
-        <description>&lt;p&gt;Just a sample post to show some of the &lt;em&gt;typography&lt;/em&gt; elements supported from 
-&lt;strong&gt;harmony&lt;/strong&gt; theme.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;A blockquote:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Donec in mollis eros, nec rutrum turpis. &lt;strong&gt;Curabitur&lt;/strong&gt; sem elit, semper nec volutpat quis, laoreet et sapien. In felis erat, rhoncus sed pellentesque mollis, tincidunt quis elit.
-- By Someone&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;header-2&quot;&gt;Header 2&lt;/h2&gt;
-
-&lt;p&gt;Duis lacinia commodo dui, vel aliquam metus hendrerit eu. Integer et scelerisque dui. Sed nec molestie quam. Donec sit amet nisl a massa commodo ultrices nec quis nunc. Aenean aliquet eu arcu adipiscing dignissim. Nunc dictum elit vitae dolor molestie aliquet.&lt;/p&gt;
-
-&lt;p&gt;Example code: &lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-  &lt;span class=&quot;nb&quot;&gt;puts&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;Hi, &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;#{&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;print_hi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Tom&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;#=&amp;gt; prints &amp;#39;Hi, Tom&amp;#39; to STDOUT.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;A list: &lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Praesent nisi elit, bibendum ut consectetur ac, aliquet in nunc&lt;/li&gt;
-  &lt;li&gt;Donec ante est, volutpat in mi et, pulvinar congue dolor.&lt;/li&gt;
-  &lt;li&gt;Quisque ultrices pulvinar sollicitudin.&lt;/li&gt;
-  &lt;li&gt;Duis elementum odio eu euismod suscipit.&lt;/li&gt;
-  &lt;li&gt;Integer enim lorem, interdum sit amet consectetur non, bibendum eget neque.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;A numbered list: &lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Praesent nisi elit, bibendum ut consectetur ac, aliquet in nunc. &lt;/li&gt;
-  &lt;li&gt;Donec ante est, volutpat in mi et, pulvinar congue dolor.&lt;/li&gt;
-  &lt;li&gt;Quisque ultrices pulvinar sollicitudin.&lt;/li&gt;
-  &lt;li&gt;Duis elementum odio eu euismod suscipit.&lt;/li&gt;
-  &lt;li&gt;Integer enim lorem, interdum sit amet consectetur non, bibendum eget neque.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;Definition list:&lt;/p&gt;
-
-&lt;dl&gt;
-  &lt;dt&gt;Curabitur cursus magna eu sem cursus&lt;/dt&gt;
-  &lt;dd&gt;ac ultrices urna pharetra.&lt;/dd&gt;
-  &lt;dd&gt;Duis scelerisque ipsum eu luctus elementum. &lt;/dd&gt;
-  &lt;dt&gt;Pellentesque habitant morbi tristique senectus&lt;/dt&gt;
-  &lt;dd&gt;Curabitur malesuada lacus ac gravida porttitor&lt;/dd&gt;
-  &lt;dd&gt;Duis sodales feugiat lorem et mollis. &lt;/dd&gt;
-&lt;/dl&gt;
-
-&lt;p&gt;Want me to suggest something? Please &lt;a href=&quot;https://github.com/web-create/harmony/issues/new&quot;&gt;Send me a request&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Tue, 19 Aug 2014 23:56:45 +0000</pubDate>
-        <link>http://remoteur.github.io//sample-post</link>
-        <guid isPermaLink="true">http://remoteur.github.io//sample-post</guid>
-        
-        
-        <category>blog</category>
-        
-      </item>
-    
-      <item>
-        <title>What is Jekyll!</title>
-        <description>&lt;p&gt;&lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll&lt;/a&gt; is a static site generator, an open-source tool for creating simple yet powerful websites of all shapes and sizes. Here is a little quote from the official website:&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;It takes a template directory containing raw text files in various formats, runs it through &lt;a href=&quot;http://daringfireball.net/projects/markdown/&quot;&gt;Markdown&lt;/a&gt; (or &lt;a href=&quot;http://redcloth.org/textile&quot;&gt;Textile&lt;/a&gt;) and Liquid converters, and spits out a complete, ready-to-publish static website suitable for serving with your favorite web server. Jekyll also happens to be the engine behind &lt;a href=&quot;http://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt;, which means you can use Jekyll to host your project’s page, blog, or website from GitHub’s servers for free.
-- jekyllrb.com&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;Check out the &lt;a href=&quot;http://jekyllrb.com&quot;&gt;Jekyll docs&lt;/a&gt; for more info on how to get the most out of Jekyll. File all bugs/feature requests at &lt;a href=&quot;https://github.com/mojombo/jekyll&quot;&gt;Jekyll’s GitHub repo&lt;/a&gt;.&lt;/p&gt;
-
-</description>
-        <pubDate>Mon, 28 Jul 2014 22:48:45 +0000</pubDate>
-        <link>http://remoteur.github.io//blog/jekyll/2014/07/28/welcome-to-jekyll/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//blog/jekyll/2014/07/28/welcome-to-jekyll/</guid>
-        
-        
-        <category>blog</category>
-        
-        <category>jekyll</category>
+        <category>ansible</category>
         
       </item>
     
       <item>
         <title>Lab - basic OSPF routing scenario</title>
-        <description>&lt;p&gt;Hello guys,&lt;/p&gt;
-&lt;p&gt;In the following post we&#39;ll see how we can do a basic routing scenario by using the remote-lab.net virtual appliances. Below is the logical diagram of the scenario. Our objective is to esatblish connectivity between the 2 clients: host01 - 10.0.0.10 and host02 - 10.0.1.10. Each of the hosts will be connected to a router that  will be the first hop router for the hosts subnet. The 2 routers will be connected by 2 redundant links. We&#39;ll set up OSPF as a routing protocol between the 2 routers that will be used to advertise the clients subnets. &lt;/p&gt;
-&lt;p&gt;rtr01 is an Arista vEOS and rtr02 is running Vyatta core. host01 and host02 are running Debian.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/05/routing-lab-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/05/routing-lab-New-Page.png&quot; alt=&quot;ospf routing lab logical&quot; width=&quot;821&quot; height=&quot;729&quot; class=&quot;aligncenter size-full wp-image-260&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;Now let&#39;s get to the physical setup (which is actually virtual as all the components are VMs ). Each system (clients and routers) will be connected to the layer 2 switch (openvswitch running on Linux). We&#39;ll need to set up the links that connect the routers to the switch as trunks in order to allow multiple vlans to get through. The ports that connect the clients to the switch will be set as access ports. Please note that in a real world scenario you&#39;ll need to connect the routers by 2 different physical links across separate geographical paths to ensure rendundancy. Below is the physical diagram of the setup.&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/05/routing-physical-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/05/routing-physical-New-Page.png&quot; alt=&quot;routing lab physical&quot; width=&quot;745&quot; height=&quot;625&quot; class=&quot;aligncenter size-full wp-image-259&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;First thing we need to do is to configure the openvswitch. We&#39;ll create a bridge that contains all the ports and set up the client ports in access mode. By default all the openvswitch ports are trunks.&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; ovs01&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; for i in {1..4}; do ip l set dev eth$i up;done&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br l2switch&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth1 tag=10&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth2 tag=20&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth3&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth4&lt;br /&gt;
-root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl show&lt;br /&gt;
-653dfcd6-85a4-4f72-995f-9fa05b5203f9&lt;br /&gt;
-    Bridge &quot;l2switch&quot;&lt;br /&gt;
-        Port &quot;l2switch&quot;&lt;br /&gt;
-            Interface &quot;l2switch&quot;&lt;br /&gt;
-                type: internal&lt;br /&gt;
-        Port &quot;eth3&quot;&lt;br /&gt;
-            Interface &quot;eth3&quot;&lt;br /&gt;
-        Port &quot;eth2&quot;&lt;br /&gt;
-            tag: 20&lt;br /&gt;
-            Interface &quot;eth2&quot;&lt;br /&gt;
-        Port &quot;eth4&quot;&lt;br /&gt;
-            Interface &quot;eth4&quot;&lt;br /&gt;
-        Port &quot;eth1&quot;&lt;br /&gt;
-            tag: 10&lt;br /&gt;
-            Interface &quot;eth1&quot;&lt;br /&gt;
-    ovs_version: &quot;1.9.3&quot;&lt;/code&gt;       &lt;/p&gt;
+        <description>&lt;p&gt;In this post post we’ll see how we can do a basic routing scenario by using the remote-lab.net virtual appliances. Below is the logical diagram of the scenario. Our objective is to esatblish connectivity between the 2 clients: host01 - 10.0.0.10 and host02 - 10.0.1.10. &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Each of the hosts will be connected to a router that  will be the first hop router for the hosts subnet. The 2 routers will be connected by 2 redundant links. We’ll set up OSPF as a routing protocol between the 2 routers that will be used to advertise the clients subnets. 
+rtr01 is an Arista vEOS and rtr02 is running Vyatta core. host01 and host02 are running Debian.
+&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/routing-lab-New-Page.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/routing-lab-New-Page.png&quot; alt=&quot;ospf routing lab logical&quot; width=&quot;821&quot; height=&quot;729&quot; class=&quot;aligncenter size-full wp-image-260&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let’s get to the physical setup (which is actually virtual as all the components are VMs ). Each system (clients and routers) will be connected to the layer 2 switch (openvswitch running on Linux). We’ll need to set up the links that connect the routers to the switch as trunks in order to allow multiple vlans to get through. The ports that connect the clients to the switch will be set as access ports. Please note that in a real world scenario you’ll need to connect the routers by 2 different physical links across separate geographical paths to ensure rendundancy. Below is the physical diagram of the setup.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/routing-physical-New-Page.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/routing-physical-New-Page.png&quot; alt=&quot;routing lab physical&quot; width=&quot;745&quot; height=&quot;625&quot; class=&quot;aligncenter size-full wp-image-259&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;First thing we need to do is to configure the openvswitch. We’ll create a bridge that contains all the ports and set up the client ports in access mode. By default all the openvswitch ports are trunks.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; ovs01
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; i in &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;1..4&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev eth&lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; up&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br l2switch
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth1 &lt;span class=&quot;nv&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;10
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth2 &lt;span class=&quot;nv&quot;&gt;tag&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;20
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth3
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth4
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl show
+653dfcd6-85a4-4f72-995f-9fa05b5203f9
+    Bridge &lt;span class=&quot;s2&quot;&gt;&amp;quot;l2switch&amp;quot;&lt;/span&gt;
+        Port &lt;span class=&quot;s2&quot;&gt;&amp;quot;l2switch&amp;quot;&lt;/span&gt;
+            Interface &lt;span class=&quot;s2&quot;&gt;&amp;quot;l2switch&amp;quot;&lt;/span&gt;
+                &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;: internal
+        Port &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth3&amp;quot;&lt;/span&gt;
+            Interface &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth3&amp;quot;&lt;/span&gt;
+        Port &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth2&amp;quot;&lt;/span&gt;
+            tag: 20
+            Interface &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth2&amp;quot;&lt;/span&gt;
+        Port &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth4&amp;quot;&lt;/span&gt;
+            Interface &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth4&amp;quot;&lt;/span&gt;
+        Port &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth1&amp;quot;&lt;/span&gt;
+            tag: 10
+            Interface &lt;span class=&quot;s2&quot;&gt;&amp;quot;eth1&amp;quot;&lt;/span&gt;
+    ovs_version: &lt;span class=&quot;s2&quot;&gt;&amp;quot;1.9.3&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Set up the client interfaces IP addresses and default routes:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; host01&lt;br /&gt;
-root@host01:~&amp;gt;&amp;gt;&amp;gt; ip l set dev eth1 up&lt;br /&gt;
-root@host01:~&amp;gt;&amp;gt;&amp;gt; ip addr add 10.0.0.10/24 dev eth1&lt;br /&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; host01
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev eth1 up
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip addr add 10.0.0.10/24 dev eth1
 root@host01:~&amp;gt;&amp;gt;&amp;gt; ip route add default via 10.0.0.1
-&lt;p&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; host02&lt;br /&gt;
-root@host02:~&amp;gt;&amp;gt;&amp;gt; ip l set dev eth1 up&lt;br /&gt;
-root@host02:~&amp;gt;&amp;gt;&amp;gt; ip addr add 10.0.1.10/24 dev eth1&lt;br /&gt;
-root@host01:~&amp;gt;&amp;gt;&amp;gt; ip route add default via 10.0.1.1        &lt;/p&gt;
+lab@console01:~&amp;gt;&amp;gt;&amp;gt; host02
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev eth1 up
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip addr add 10.0.1.10/24 dev eth1
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip route add default via 10.0.1.1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Configure the vlans and SVI IP addresses on the routers:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr01&lt;br /&gt;
-rtr01&amp;gt;en&lt;br /&gt;
-rtr01#configure&lt;br /&gt;
-rtr01(config)#vlan 10&lt;br /&gt;
-rtr01(config-vlan-10)#name host01-vlan&lt;br /&gt;
-rtr01(config-vlan-10)#vlan 100&lt;br /&gt;
-rtr01(config-vlan-100)#name path1-vlan&lt;br /&gt;
-rtr01(config-vlan-100)#vlan 200&lt;br /&gt;
-rtr01(config-vlan-200)#name path2-vlan&lt;br /&gt;
-rtr01(config)#int ethernet 1&lt;br /&gt;
-rtr01(config-if-Et1)#switchport mode trunk&lt;br /&gt;
-rtr01(config-if-Et1)#switchport trunk allowed vlan 10,100,200&lt;br /&gt;
-rtr01(config-vlan-200)#int vlan 10&lt;br /&gt;
-rtr01(config-if-Vl10)#ip address 10.0.0.1/24&lt;br /&gt;
-rtr01(config-if-Et1)#int vlan 100&lt;br /&gt;
-rtr01(config-if-Vl100)#ip address 192.168.0.1/30&lt;br /&gt;
-rtr01(config-if-Vl100)#int vlan 200&lt;br /&gt;
-rtr01(config-if-Vl200)#ip address 192.168.0.5/30                                                         
-&lt;p&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr02&lt;br /&gt;
-admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; configure&lt;br /&gt;
-[edit]&lt;br /&gt;
-admin@rtr02# set interfaces ethernet eth1 vif 20 address 10.0.1.1/24&lt;br /&gt;
-[edit]&lt;br /&gt;
-admin@rtr02# set interfaces ethernet eth1 vif 100 address 192.168.0.2/30&lt;br /&gt;
-[edit]&lt;br /&gt;
-admin@rtr02# set interfaces ethernet eth1 vif 200 address 192.168.0.6/30&lt;br /&gt;
-admin@rtr02# commit&lt;br /&gt;
-[edit]&lt;br /&gt;
-admin@rtr02# save&lt;br /&gt;
-Saving configuration to &#39;/config/config.boot&#39;...&lt;br /&gt;
-Done&lt;/p&gt;
-&lt;p&gt;Let&#39;s do some connectivity tests:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;rtr01&amp;gt;ping 10.0.0.10&lt;br /&gt;
-PING 10.0.0.10 (10.0.0.10) 72(100) bytes of data.&lt;br /&gt;
-80 bytes from 10.0.0.10: icmp_req=1 ttl=64 time=12.9 ms    
-&lt;p&gt;rtr01&amp;gt;ping 192.168.0.2&lt;br /&gt;
-PING 192.168.0.2 (192.168.0.2) 72(100) bytes of data.&lt;br /&gt;
-80 bytes from 192.168.0.2: icmp_req=1 ttl=64 time=16.7 ms                &lt;/p&gt;
-&lt;p&gt;rtr01&amp;gt;ping 192.168.0.6&lt;br /&gt;
-PING 192.168.0.6 (192.168.0.6) 72(100) bytes of data.&lt;br /&gt;
-80 bytes from 192.168.0.6: icmp_req=1 ttl=64 time=13.2 ms       &lt;/p&gt;
-&lt;p&gt;admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; ping 10.0.1.10&lt;br /&gt;
-PING 10.0.1.10 (10.0.1.10) 56(84) bytes of data.&lt;br /&gt;
-64 bytes from 10.0.1.10: icmp_req=1 ttl=64 time=3.74 ms         &lt;/p&gt;
-&lt;p&gt;Now that we have the connectivity established on the connected links let&#39;s move forward and set up OSPF :&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr01&lt;br /&gt;
-rtr01&amp;gt;en&lt;br /&gt;
-rtr01#configure&lt;br /&gt;
-rtr01(config)#ip routing&lt;br /&gt;
-rtr01(config)#router ospf 10&lt;br /&gt;
-rtr01(config-router-ospf)#network 10.0.0.1 0.0.0.0 area 0&lt;br /&gt;
-rtr01(config-router-ospf)#network 192.168.0.1 0.0.0.0 area 0&lt;br /&gt;
-rtr01(config-router-ospf)#network 192.168.0.5 0.0.0.0 area 0 
-&lt;p&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr02&lt;br /&gt;
-admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; configure&lt;br /&gt;
-[edit]&lt;br /&gt;
-admin@rtr02#&lt;br /&gt;
-admin@rtr02# set protocols ospf area 0 network 10.0.1.0/24&lt;br /&gt;
-[edit]&lt;br /&gt;
-admin@rtr02# set protocols ospf area 0 network 192.168.0.0/30&lt;br /&gt;
-[edit]&lt;br /&gt;
-admin@rtr02# set protocols ospf area 0 network 192.168.0.4/30&lt;br /&gt;
-admin@rtr02# commit&lt;/p&gt;
-&lt;p&gt;Once that we have the ospf configuration done we can proceed and check the OSPF neighbor status on the 2 routers. We&#39;ll see that we have 2 equal cost paths to the hosts subnets. This means that the routers will load balance the packets through the 2 links.      &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;rtr01#show ip ospf neighbor&lt;br /&gt;
-Neighbor ID     VRF    Pri   State            Dead Time   Address         Interface&lt;br /&gt;
-172.16.18.5     default    1   FULL/BDR         00:00:31    192.168.0.6     Vlan200&lt;br /&gt;
-172.16.18.5     default    1   FULL/DR          00:00:31    192.168.0.2     Vlan100    
-&lt;p&gt;rtr01#show ip route 10.0.1.0/24&lt;br /&gt;
-Codes: C - connected, S - static, K - kernel,&lt;br /&gt;
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,&lt;br /&gt;
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,&lt;br /&gt;
-       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,&lt;br /&gt;
-       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             &lt;/p&gt;
-&lt;p&gt; O      10.0.1.0/24 [110/20] via 192.168.0.2, Vlan100&lt;br /&gt;
-                             via 192.168.0.6, Vlan200                     &lt;/p&gt;
-&lt;p&gt;admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; show ip ospf neighbor &lt;/p&gt;
-&lt;p&gt;    Neighbor ID Pri State           Dead Time Address         Interface            RXmtL RqstL DBsmL&lt;br /&gt;
-192.168.0.5       1 Full/Backup       36.750s 192.168.0.1     eth1.100:192.168.0.2     0     0     0&lt;br /&gt;
-192.168.0.5       1 Full/DR           36.960s 192.168.0.5     eth1.200:192.168.0.6     0     0     0 &lt;/p&gt;
-&lt;p&gt;admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; show ip route 10.0.0.0/24&lt;br /&gt;
-Routing entry for 10.0.0.0/24&lt;br /&gt;
-  Known via &quot;ospf&quot;, distance 110, metric 20, best&lt;br /&gt;
-  Last update 00:04:42 ago&lt;br /&gt;
-  * 192.168.0.1, via eth1.100&lt;br /&gt;
-  * 192.168.0.5, via eth1.200                 &lt;/p&gt;
-&lt;p&gt;What if we want to set one of the links as primary ? We need to set a higher cost for the secondary link. At this time both of the paths have a cost of 20 (10 for the network segment that connects the 2 routers + 10 for the host network segment). Let&#39;schoose the vlan 200 as secondary and increase the cost for the secondary link to 11.&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;rtr01#configure&lt;br /&gt;
-rtr01(config)#int vlan 200&lt;br /&gt;
-rtr01(config-if-Vl200)#ip ospf cost 11&lt;br /&gt;
-rtr01(config-if-Vl200)#show ip route 10.0.1.0/24&lt;br /&gt;
-Codes: C - connected, S - static, K - kernel,&lt;br /&gt;
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,&lt;br /&gt;
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,&lt;br /&gt;
-       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,&lt;br /&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr01
+rtr01&amp;gt;en
+rtr01#configure
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#vlan 10&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-vlan-10&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#name host01-vlan&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-vlan-10&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#vlan 100&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-vlan-100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#name path1-vlan&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-vlan-100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#vlan 200&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-vlan-200&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#name path2-vlan&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#int ethernet 1&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Et1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#switchport mode trunk&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Et1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#switchport trunk allowed vlan 10,100,200&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-vlan-200&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#int vlan 10&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Vl10&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#ip address 10.0.0.1/24&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Et1&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#int vlan 100&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Vl100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#ip address 192.168.0.1/30&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Vl100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#int vlan 200&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Vl200&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#ip address 192.168.0.5/30                                                         &lt;/span&gt;
+lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr02
+admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; configure
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;edit&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+admin@rtr02# &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces ethernet eth1 vif &lt;span class=&quot;m&quot;&gt;20&lt;/span&gt; address 10.0.1.1/24
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;edit&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+admin@rtr02# &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces ethernet eth1 vif &lt;span class=&quot;m&quot;&gt;100&lt;/span&gt; address 192.168.0.2/30
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;edit&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+admin@rtr02# &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces ethernet eth1 vif &lt;span class=&quot;m&quot;&gt;200&lt;/span&gt; address 192.168.0.6/30
+admin@rtr02# commit
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;edit&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+admin@rtr02# save
+Saving configuration to &lt;span class=&quot;s1&quot;&gt;&amp;#39;/config/config.boot&amp;#39;&lt;/span&gt;...
+Done&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s do some connectivity tests:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;rtr01&amp;gt;ping 10.0.0.10
+PING 10.0.0.10 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10.0.0.10&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 72&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+&lt;span class=&quot;m&quot;&gt;80&lt;/span&gt; bytes from 10.0.0.10: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;12.9 ms    
+rtr01&amp;gt;ping 192.168.0.2
+PING 192.168.0.2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;192.168.0.2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 72&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+&lt;span class=&quot;m&quot;&gt;80&lt;/span&gt; bytes from 192.168.0.2: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;16.7 ms                
+rtr01&amp;gt;ping 192.168.0.6
+PING 192.168.0.6 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;192.168.0.6&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 72&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+&lt;span class=&quot;m&quot;&gt;80&lt;/span&gt; bytes from 192.168.0.6: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;13.2 ms       
+admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; ping 10.0.1.10
+PING 10.0.1.10 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;10.0.1.10&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 56&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;84&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 10.0.1.10: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3.74 ms&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now that we have the connectivity established on the connected links let’s move forward and set up OSPF :&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr01
+rtr01&amp;gt;en
+rtr01#configure
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#ip routing&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#router ospf 10&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-router-ospf&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#network 10.0.0.1 0.0.0.0 area 0&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-router-ospf&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#network 192.168.0.1 0.0.0.0 area 0&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-router-ospf&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#network 192.168.0.5 0.0.0.0 area 0 &lt;/span&gt;
+lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr02
+admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; configure
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;edit&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+admin@rtr02#
+admin@rtr02# &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;protocols ospf area &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; network 10.0.1.0/24
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;edit&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+admin@rtr02# &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;protocols ospf area &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; network 192.168.0.0/30
+&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;edit&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+admin@rtr02# &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;protocols ospf area &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; network 192.168.0.4/30
+admin@rtr02# commit&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Once that we have the ospf configuration done we can proceed and check the OSPF neighbor status on the 2 routers. We’ll see that we have 2 equal cost paths to the hosts subnets. This means that the routers will load balance the packets through the 2 links.      &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;rtr01#show ip ospf neighbor
+Neighbor ID     VRF    Pri   State            Dead Time   Address         Interface
+172.16.18.5     default    &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;   FULL/BDR         00:00:31    192.168.0.6     Vlan200
+172.16.18.5     default    &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;   FULL/DR          00:00:31    192.168.0.2     Vlan100    
+rtr01#show ip route 10.0.1.0/24
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;1,
+       E2 - OSPF external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;2, N1 - OSPF NSSA external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;1,
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,
        R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
-&lt;p&gt; O      10.0.1.0/24 [110/20] via 192.168.0.2, Vlan100      &lt;/p&gt;
+ O      10.0.1.0/24 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;110/20&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; via 192.168.0.2, Vlan100
+                             via 192.168.0.6, Vlan200                     
+admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; show ip ospf neighbor 
+    Neighbor ID Pri State           Dead Time Address         Interface            RXmtL RqstL DBsmL
+192.168.0.5       &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; Full/Backup       36.750s 192.168.0.1     eth1.100:192.168.0.2     &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;     0
+192.168.0.5       &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; Full/DR           36.960s 192.168.0.5     eth1.200:192.168.0.6     &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;     &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; 
+admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; show ip route 10.0.0.0/24
+Routing entry &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; 10.0.0.0/24
+  Known via &lt;span class=&quot;s2&quot;&gt;&amp;quot;ospf&amp;quot;&lt;/span&gt;, distance 110, metric 20, best
+  Last update 00:04:42 ago
+  * 192.168.0.1, via eth1.100
+  * 192.168.0.5, via eth1.200&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;What if we want to set one of the links as primary ? We need to set a higher cost for the secondary link. At this time both of the paths have a cost of 20 (10 for the network segment that connects the 2 routers + 10 for the host network segment). Let’schoose the vlan 200 as secondary and increase the cost for the secondary link to 11.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;rtr01#configure
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#int vlan 200&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Vl200&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#ip ospf cost 11&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Vl200&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#show ip route 10.0.1.0/24&lt;/span&gt;
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;1,
+       E2 - OSPF external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;2, N1 - OSPF NSSA external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;1,
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,
+       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
+ O      10.0.1.0/24 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;110/20&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; via 192.168.0.2, Vlan100&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;We can see that the routing table only contains the vlan 100 path. What happens if vlan 100 goes down ? &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;rtr01(config)#int vlan 100&lt;br /&gt;
-rtr01(config-if-Vl100)#shut&lt;br /&gt;
-rtr01(config-if-Vl100)#show ip route 10.0.1.0/24&lt;br /&gt;
-Codes: C - connected, S - static, K - kernel,&lt;br /&gt;
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,&lt;br /&gt;
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,&lt;br /&gt;
-       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,&lt;br /&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#int vlan 100&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Vl100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#shut&lt;/span&gt;
+rtr01&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;config-if-Vl100&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;c&quot;&gt;#show ip route 10.0.1.0/24&lt;/span&gt;
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;1,
+       E2 - OSPF external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;2, N1 - OSPF NSSA external &lt;span class=&quot;nb&quot;&gt;type &lt;/span&gt;1,
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,
        R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
-&lt;p&gt; O      10.0.1.0/24 [110/21] via 192.168.0.6, Vlan200          &lt;/p&gt;
+ O      10.0.1.0/24 &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;110/21&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; via 192.168.0.6, Vlan200&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;We can see that the vlan 200 path is installed in the routing table with a cost of 21 ( 11 + 10).&lt;/p&gt;
+
 &lt;p&gt;I hope this post is useful for getting an idea of how you can use the virtual lab. Please let me know if you any questions.                                                             &lt;/p&gt;
-&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 21 May 2014 20:25:28 +0000</pubDate>
-        <link>http://remoteur.github.io//linux/switching/routing/ios/2014/05/21/lab-basic-ospf-routing-scenario/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//linux/switching/routing/ios/2014/05/21/lab-basic-ospf-routing-scenario/</guid>
+        <link>http://remoteur.github.io:4000//basic-ospf-routing-lab</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//basic-ospf-routing-lab</guid>
         
         
         <category>linux</category>
@@ -669,205 +589,251 @@ Codes: C - connected, S - static, K - kernel,&lt;br /&gt;
         
         <category>routing</category>
         
-        <category>ios</category>
+        <category>veos</category>
         
       </item>
     
       <item>
         <title>Virtualized application infrastructure</title>
-        <description>&lt;p&gt;In this post I&#39;ll show how you can build a secure virtualized infrastructure for a basic webapp. We will break the setup into VMs that provide isolated services. You can find below the infrastructure diagram. The followings steps will show how you can set up a bare-metal server running Debian Wheezy to act as a KVM hypervisor and the process of deploying and configuring the VMs and the services they are running. &lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/05/rlug-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/05/rlug-New-Page.png&quot; alt=&quot;rlug - New Page&quot; width=&quot;832&quot; height=&quot;814&quot; class=&quot;aligncenter size-full wp-image-255&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+        <description>&lt;p&gt;In this post I’ll show how you can build a secure virtualized infrastructure for a basic webapp. We will break the setup into VMs that provide isolated services. You can find below the infrastructure diagram. The followings steps will show how you can set up a bare-metal server running Debian Wheezy to act as a KVM hypervisor and the process of deploying and configuring the VMs and the services they are running. &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://remoteur.github.io:4000/assets/static//rlug-New-Page.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static//rlug-New-Page.png&quot; alt=&quot;rlug - New Page&quot; width=&quot;832&quot; height=&quot;814&quot; class=&quot;aligncenter size-full wp-image-255&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;Install kvm and tools:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; aptitude install qemu-kvm libvirt-bin virt-manager virt-viewer&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; aptitude install qemu-kvm libvirt-bin virt-manager virt-viewer&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Install openvswitch :&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; aptitude install openvswitch-switch openvswitch-datapath-source&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; aptitude install openvswitch-switch openvswitch-datapath-source&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Build Open vSwitch datapath kernel module:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; module-assistant auto-install openvswitch-datapath&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;The management IP address of the hypervisor and the other public IP addresses are assigned on the same interface by the hosting provider. In order to provide Internet connectivity for the VMs we need to create a bridge containing the physical interface where the public IPs are routed and add the VMs ports to this bridge. The trouble is that since this is also the management link we&#39;ll lose connectivity after adding the physical interface to the bridge. After this operation we need to assign the management IP address to the bridge interface. For doing this we edit the /etc/network/interfaces file.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; module-assistant auto-install openvswitch-datapath&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The management IP address of the hypervisor and the other public IP addresses are assigned on the same interface by the hosting provider. In order to provide Internet connectivity for the VMs we need to create a bridge containing the physical interface where the public IPs are routed and add the VMs ports to this bridge. The trouble is that since this is also the management link we’ll lose connectivity after adding the physical interface to the bridge. After this operation we need to assign the management IP address to the bridge interface. For doing this we’ll edit the /etc/network/interfaces file.&lt;/p&gt;
+
 &lt;p&gt;Add openvswitch bridges:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw-net&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw-net&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Edit the /etc/network/interfaces file:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; cat /etc/network/interfaces&lt;br /&gt;
-auto sw-net&lt;br /&gt;
-iface sw-net inet static&lt;br /&gt;
-  address   46.4.71.66&lt;br /&gt;
-  broadcast 46.4.71.95&lt;br /&gt;
-  netmask   255.255.255.224&lt;br /&gt;
-  gateway   46.4.71.65&lt;br /&gt;
-pre-up ip link set dev eth0 up&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;At boot time the openvswitch daemon is started after the network init script so when the network init script is run it won&#39;t find the sw-net interface defined in /etc/network/interfaces file. A dirty workaround for this is to re-run the network init script after all the services are loaded. In order to do this we need to edit the /etc/rc.local file:  &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; cat /etc/rc.local&lt;br /&gt;
-/etc/init.d/networking restart&lt;br /&gt;
-exit 0 &lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Now let&#39;s add the physical interface to the bridge. After this we should either restart the network service from the console or do a hard reset:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port sw-net eth0&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; cat /etc/network/interfaces
+auto sw-net
+iface sw-net inet static
+  address   46.4.71.66
+  broadcast 46.4.71.95
+  netmask   255.255.255.224
+  gateway   46.4.71.65
+pre-up ip link &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev eth0 up&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;At boot time the openvswitch daemon is started after the network init script so when the network init script is run it won’t find the sw-net interface defined in /etc/network/interfaces file. A dirty workaround for this is to re-run the network init script after all the services are loaded. In order to do this we need to edit the /etc/rc.local file:  &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; cat /etc/rc.local
+/etc/init.d/networking restart
+&lt;span class=&quot;nb&quot;&gt;exit &lt;/span&gt;0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now let’s add the physical interface to the bridge. After this we should either restart the network service from the console or do a hard reset:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port sw-net eth0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;The next step is to add the second bridge, where the internal network ports will be connected &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw-lan&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;I prefer using virt-install for new VMs provisioning. The problem with it is that it currently doesn&#39;t support Open vSwitch bridges so we&#39;ll need to adjust it a little by adding the following line to the /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py file. This will add the virtualport tag to the VM xml definition:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; diff -u /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py.orig&lt;br /&gt;
---- /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py	2014-05-06 22:06:21.396072330 +0200&lt;br /&gt;
-+++ /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py.orig	2014-05-06 22:13:17.121958858 +0200&lt;br /&gt;
-@@ -384,7 +384,6 @@&lt;br /&gt;
-         xml += &quot;      &lt;mac address=&quot;%s&quot; /&gt;\n&quot; % self.macaddr&lt;br /&gt;
-         xml += target_xml&lt;br /&gt;
-         xml += model_xml&lt;br /&gt;
--        xml += &quot;      &lt;virtualport type=&quot;openvswitch&quot; /&gt;\n&quot;&lt;br /&gt;
-         xml += &quot;    &quot;&lt;br /&gt;
-         return xml&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Now that we have the networking ready the last thing that we need are the storage files that the VMs will use. For creating the files we use the qemu-img utility. I prefer qcow2 files as they provide thin provision and snapshot capabilities. /var/lib/libvirt/images is the default directory used by libvirt-bin so let&#39;s create the storage files here:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-img create -f qcow2 rtr01.qcow2 10G&lt;br /&gt;
-Formatting &#39;rtr01.qcow2&#39;, fmt=qcow2 size=10737418240 encryption=off cluster_size=65536 &lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;We can now create the VM and start the OS installation. We&#39;ll first install the rtr01 VM as it will provide Internet connectivity for the rest of the VMs in the internal network. The following command will generate a VM called rtr01 with 4 vCPUs, 4GB of ram, storage file located at /var/lib/libvirt/images/rtr01.qcow2 and 2 network interfaces - one in the bridge connected to the Internet and another connected to the internal network, the console is presented over VNC and it will first boot from the cdrom device loaded from the /var/lib/libvirt/images/vyatta-livecd_VC6.6R1_amd64.iso file. The disk and network interface will use paravirtualized drivers to obtain increased I/O performance.&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name rtr01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/rtr01.qcow2,bus=virtio --network bridge=sw-net,model=virtio --network bridge=sw-lan,model=virtio --graphics vnc --cdrom /var/lib/libvirt/images/vyatta-livecd_VC6.6R1_amd64.iso --boot cdrom&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw-lan&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I prefer using virt-install for new VMs provisioning. The problem with it is that it currently doesn’t support Open vSwitch bridges so we’ll need to adjust it a little by adding the following line to the /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py file. This will add the virtualport tag to the VM xml definition:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; diff -u /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py.orig
+--- /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py	2014-05-06 22:06:21.396072330 +0200
++++ /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py.orig	2014-05-06 22:13:17.121958858 +0200
+@@ -384,7 +384,6 @@
+         xml +&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;      &amp;lt;mac address=&amp;#39;%s&amp;#39;/&amp;gt;\n&amp;quot;&lt;/span&gt; % self.macaddr
+         xml +&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; target_xml
+         xml +&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; model_xml
+-        xml +&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;      &amp;lt;virtualport type=&amp;#39;openvswitch&amp;#39;/&amp;gt;\n&amp;quot;&lt;/span&gt;
+         xml +&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;    &amp;lt;/interface&amp;gt;&amp;quot;&lt;/span&gt;
+         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; xml&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now that we have the networking ready the last thing that we need are the storage files that the VMs will use. For creating the files we use the qemu-img utility. I prefer qcow2 files as they provide thin provision and snapshot capabilities. /var/lib/libvirt/images is the default directory used by libvirt so let’s create the storage files here:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-img create -f qcow2 rtr01.qcow2 10G
+Formatting &lt;span class=&quot;s1&quot;&gt;&amp;#39;rtr01.qcow2&amp;#39;&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;qcow2 &lt;span class=&quot;nv&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10737418240&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;encryption&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;off &lt;span class=&quot;nv&quot;&gt;cluster_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;65536&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We can now create the VM and start the OS installation. We’ll first install the rtr01 VM as it will provide Internet connectivity for the rest of the VMs in the internal network. The following command will generate a VM called rtr01 with 4 vCPUs, 4GB of ram, storage file located at /var/lib/libvirt/images/rtr01.qcow2 and 2 network interfaces - one in the bridge connected to the Internet and another connected to the internal network, the console is presented over VNC and it will first boot from the cdrom device loaded from the /var/lib/libvirt/images/vyatta-livecd_VC6.6R1_amd64.iso file. The disk and network interface will use paravirtualized drivers to obtain increased I/O performance.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name rtr01 --vcpus&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt; --ram&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4096&lt;/span&gt; --disk &lt;span class=&quot;nv&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/var/lib/libvirt/images/rtr01.qcow2,bus&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio --network &lt;span class=&quot;nv&quot;&gt;bridge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;sw-net,model&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio --network &lt;span class=&quot;nv&quot;&gt;bridge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;sw-lan,model&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio --graphics vnc --cdrom /var/lib/libvirt/images/vyatta-livecd_VC6.6R1_amd64.iso --boot cdrom&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;After this command is issued a console windows will pop up and it will prompt the cdrom installation. After finishing the installation we can proceed to configuring the device:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
-# set interfaces IP addresses&lt;br /&gt;
-set interfaces ethernet eth0 mac 00:50:56:00:5e:97&lt;br /&gt;
-set interfaces ethernet eth0 address 46.4.71.77/27&lt;br /&gt;
-set protocols static route 0.0.0.0/0 next-hop 46.4.71.65&lt;br /&gt;
-set system host-name rtr01&lt;br /&gt;
-set system domain-name nullzero.me&lt;br /&gt;
-set interfaces ethernet eth1 10.0.1.1/24&lt;br /&gt;
-set interfaces ethernet eth1 address 10.0.1.1/24
-&lt;p&gt;# set SNAT for internal network&lt;br /&gt;
-set nat source rule 10 source address 10.0.1.0/24&lt;br /&gt;
-set nat source rule 10 outbound-interface eth0&lt;br /&gt;
-set nat source rule 10 translation address masquerade&lt;/p&gt;
-&lt;p&gt;# set DNAT for the request coming on port tcp 80 on the public IP&lt;br /&gt;
-set nat destination rule 10 destination address 46.4.71.77&lt;br /&gt;
-set nat destination rule 10 inbound-interface eth0&lt;br /&gt;
-set nat destination rule 10 destination port 80&lt;br /&gt;
-set nat destination rule 10 translation address 10.0.1.2&lt;br /&gt;
-set nat destination rule 10 translation port 80&lt;br /&gt;
-set nat destination rule 10 protocol tcp&lt;/p&gt;
-&lt;p&gt;# generate server and client certificates and keys&lt;br /&gt;
-vyatta@rtr01:~$ sudo -s&lt;br /&gt;
-vbash-4.1# cp -R /usr/share/doc/openvpn/examples/easy-rsa/2.0/* /etc/openvpn/&lt;br /&gt;
-edit KEY_COUNTRY, KEY_PROVINCE, KEY_CITY, KEY_ORG, KEY_EMAIL variables&lt;br /&gt;
-vbash-4.1# vi /etc/openvpn/vars&lt;br /&gt;
-vbash-4.1# cd /etc/openvpn&lt;br /&gt;
-vbash-4.1# source vars&lt;br /&gt;
-vbash-4.1# ./clean-all&lt;br /&gt;
-vbash-4.1# ./build-ca&lt;br /&gt;
-vbash-4.1# ./build-dh&lt;br /&gt;
-vbash-4.1# ./build-key-server rtr01&lt;br /&gt;
-vbash-4.1# ./build-key client&lt;br /&gt;
-vbash-4.1# mkdir /config/auth&lt;br /&gt;
-vbash-4.1# cp -R /etc/openvpn/keys/* /config/auth&lt;/p&gt;
-&lt;p&gt;# configure the server certificates and key location&lt;br /&gt;
-set interfaces openvpn vtun0 tls ca-cert-file /config/auth/ca.crt&lt;br /&gt;
-set interfaces openvpn vtun0 tls cert-file /config/auth/rtr01.crt&lt;br /&gt;
-set interfaces openvpn vtun0 tls dh-file /config/auth/dh1024.pem&lt;br /&gt;
-set interfaces openvpn vtun0 tls key-file /config/auth/rtr01.key&lt;/p&gt;
-&lt;p&gt;# configure the openvpn server&lt;br /&gt;
-set interfaces openvpn vtun0 mode server&lt;br /&gt;
-set interfaces openvpn vtun0 server subnet 172.16.17.0/24&lt;br /&gt;
-set interfaces openvpn vtun0 server push-route 10.0.1.0/24&lt;br /&gt;
-set interfaces openvpn vtun0 openvpn-option &quot;--comp-lzo --mssfix --tun-mtu 1488&quot;&lt;/p&gt;
-&lt;p&gt;# openvpn client config file&lt;/p&gt;
-&lt;p&gt;marius@remoteur:~&amp;gt;&amp;gt;&amp;gt; cat /etc/openvpn/nullzero.conf&lt;br /&gt;
-client&lt;br /&gt;
-dev tun&lt;br /&gt;
-proto udp&lt;br /&gt;
-remote 46.4.71.77 1194&lt;br /&gt;
-resolv-retry infinite&lt;br /&gt;
-nobind&lt;br /&gt;
-persist-key&lt;br /&gt;
-persist-tun&lt;br /&gt;
-ca /etc/openvpn/nullzero/ca.crt&lt;br /&gt;
-cert /etc/openvpn/nullzero/client.crt&lt;br /&gt;
-key /etc/openvpn/nullzero/client.key&lt;br /&gt;
-ns-cert-type server&lt;br /&gt;
-comp-lzo&lt;br /&gt;
-verb 3&lt;/p&gt;
-&lt;p&gt;#configure firewall&lt;br /&gt;
-set firewall state-policy established action &#39;accept&#39;&lt;br /&gt;
-set firewall state-policy related action &#39;accept&#39;&lt;br /&gt;
-set firewall all-ping &#39;enable&#39;&lt;br /&gt;
-edit firewall name rtr01&lt;br /&gt;
-set default-action &#39;drop&#39;&lt;br /&gt;
-set rule 10 action accept&lt;br /&gt;
-set rule 10 destination port 22&lt;br /&gt;
-set rule 10 protocol tcp&lt;br /&gt;
-set rule 11 action accept&lt;br /&gt;
-set rule 11 destination port 80&lt;br /&gt;
-set rule 11 protocol tcp&lt;br /&gt;
-set rule 12 action accept&lt;br /&gt;
-set rule 12 destination port 1194&lt;br /&gt;
-set rule 12 protocol udp&lt;br /&gt;
-exit&lt;br /&gt;
-set interfaces ethernet eth0 firewall in name rtr01&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;# set interfaces IP addresses&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces ethernet eth0 mac 00:50:56:00:5e:97
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces ethernet eth0 address 46.4.71.77/27
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;protocols static route 0.0.0.0/0 next-hop 46.4.71.65
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;system host-name rtr01
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;system domain-name nullzero.me
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces ethernet eth1 10.0.1.1/24
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces ethernet eth1 address 10.0.1.1/24
+&lt;span class=&quot;c&quot;&gt;# set SNAT for internal network&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;address 10.0.1.0/24
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; outbound-interface eth0
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; translation address masquerade
+&lt;span class=&quot;c&quot;&gt;# set DNAT for the request coming on port tcp 80 on the public IP&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat destination rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; destination address 46.4.71.77
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat destination rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; inbound-interface eth0
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat destination rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; destination port 80
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat destination rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; translation address 10.0.1.2
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat destination rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; translation port 80
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;nat destination rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; protocol tcp
+&lt;span class=&quot;c&quot;&gt;# generate server and client certificates and keys&lt;/span&gt;
+vyatta@rtr01:~&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;sudo -s
+vbash-4.1# cp -R /usr/share/doc/openvpn/examples/easy-rsa/2.0/* /etc/openvpn/
+edit KEY_COUNTRY, KEY_PROVINCE, KEY_CITY, KEY_ORG, KEY_EMAIL variables
+vbash-4.1# vi /etc/openvpn/vars
+vbash-4.1# &lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; /etc/openvpn
+vbash-4.1# &lt;span class=&quot;nb&quot;&gt;source &lt;/span&gt;vars
+vbash-4.1# ./clean-all
+vbash-4.1# ./build-ca
+vbash-4.1# ./build-dh
+vbash-4.1# ./build-key-server rtr01
+vbash-4.1# ./build-key client
+vbash-4.1# mkdir /config/auth
+vbash-4.1# cp -R /etc/openvpn/keys/* /config/auth
+&lt;span class=&quot;c&quot;&gt;# configure the server certificates and key location&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces openvpn vtun0 tls ca-cert-file /config/auth/ca.crt
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces openvpn vtun0 tls cert-file /config/auth/rtr01.crt
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces openvpn vtun0 tls dh-file /config/auth/dh1024.pem
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces openvpn vtun0 tls key-file /config/auth/rtr01.key
+&lt;span class=&quot;c&quot;&gt;# configure the openvpn server&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces openvpn vtun0 mode server
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces openvpn vtun0 server subnet 172.16.17.0/24
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces openvpn vtun0 server push-route 10.0.1.0/24
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces openvpn vtun0 openvpn-option &lt;span class=&quot;s2&quot;&gt;&amp;quot;--comp-lzo --mssfix --tun-mtu 1488&amp;quot;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# openvpn client config file&lt;/span&gt;
+marius@remoteur:~&amp;gt;&amp;gt;&amp;gt; cat /etc/openvpn/nullzero.conf
+client
+dev tun
+proto udp
+remote 46.4.71.77 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+ca /etc/openvpn/nullzero/ca.crt
+cert /etc/openvpn/nullzero/client.crt
+key /etc/openvpn/nullzero/client.key
+ns-cert-type server
+comp-lzo
+verb 3
+&lt;span class=&quot;c&quot;&gt;#configure firewall&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;firewall state-policy established action &lt;span class=&quot;s1&quot;&gt;&amp;#39;accept&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;firewall state-policy related action &lt;span class=&quot;s1&quot;&gt;&amp;#39;accept&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;firewall all-ping &lt;span class=&quot;s1&quot;&gt;&amp;#39;enable&amp;#39;&lt;/span&gt;
+edit firewall name rtr01
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;default-action &lt;span class=&quot;s1&quot;&gt;&amp;#39;drop&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; action accept
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; destination port 22
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; protocol tcp
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;11&lt;/span&gt; action accept
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;11&lt;/span&gt; destination port 80
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;11&lt;/span&gt; protocol tcp
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;12&lt;/span&gt; action accept
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;12&lt;/span&gt; destination port 1194
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;rule &lt;span class=&quot;m&quot;&gt;12&lt;/span&gt; protocol udp
+&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;interfaces ethernet eth0 firewall in name rtr01&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;After completing these steps we should have a working router, firewall and VPN server.&lt;/p&gt;
-&lt;p&gt;Now let&#39;s continue with creating the second VM. We&#39;ll do a network install from minimal CD. First create the storage file:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; qemu-img create -f qcow2 /var/lib/libvirt/images/lb01.qcow2 10G&lt;br /&gt;
-Formatting &#39;/var/lib/libvirt/images/lb01.qcow2&#39;, fmt=qcow2 size=10737418240 encryption=off cluster_size=65536&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now let’s continue with creating the second VM. We’ll do a network install from minimal CD. First create the storage file:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; qemu-img create -f qcow2 /var/lib/libvirt/images/lb01.qcow2 10G
+Formatting &lt;span class=&quot;s1&quot;&gt;&amp;#39;/var/lib/libvirt/images/lb01.qcow2&amp;#39;&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;qcow2 &lt;span class=&quot;nv&quot;&gt;size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;10737418240&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;encryption&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;off &lt;span class=&quot;nv&quot;&gt;cluster_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;65536&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Next we can start the installation process by using the cdrom file located at /var/lib/libvirt/images/debian-7.5.0-amd64-netinst.iso &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name lb01 --vcpus=2 --ram=4096 --disk path=/var/lib/libvirt/images/lb01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --cdrom /var/lib/libvirt/images/debian-7.5.0-amd64-netinst.iso --boot cdrom&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;After completing the OS installation we have a fresh running Debian Wheezy system. We don&#39;t want to repeat the install process for the other files so we&#39;ll just copy the existing image of the Debian system and modify the IP settings and hostnames. We first copy the base image, then attach it by using qemu-nbd, mount the partition where the file system resides and then edit the files that we need.&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; cp lb01.qcow2 db01.qcow2; cp lb01.qcow2 web01.qcow2&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; modprobe nbd max_part=8&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-nbd -c /dev/nbd0 web01.qcow2&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; kpartx -a /dev/nbd0&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; mount /dev/mapper/nbd0p1 /mnt&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/network/interfaces&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/hosts&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/hostname&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; umount /mnt&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; kpartx -d /dev/nbd0&lt;br /&gt;
-root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-nbd -d /dev/nbd0&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;We repeat the steps above for the db01.qcow2 file.&lt;/p&gt;
-&lt;p&gt;Let&#39;s now create the web01 and db01 VMs. Since we already have the base storage files we don&#39;t need to run the OS installation:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name web01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/web01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --import&lt;br /&gt;
-root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name db01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/db01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --import&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;Once we have booted al the VMs let&#39;s start configuring the services.&lt;/p&gt;
-&lt;p&gt;On the http load balancer we&#39;ll install varnish and configure the web server as backend: &lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@lb01:~&amp;gt;&amp;gt;&amp;gt; aptitude install varnish&lt;br /&gt;
-root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &#39;s/6081/80/&#39; /etc/default/varnish&lt;br /&gt;
-root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &#39;s/127.0.0.1/10.0.1.3/&#39; /etc/varnish/default.vcl&lt;br /&gt;
-root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &#39;s/8080/80/&#39; /etc/varnish/default.vcl&lt;br /&gt;
-root@lb01:~&amp;gt;&amp;gt;&amp;gt; /etc/init.d/varnish restart&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;On the web server we&#39;ll install nginx and php-fpm and configure the default vhost:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@web01:~&amp;gt;&amp;gt;&amp;gt; aptitude install nginx php5-fpm php5-mysql&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name lb01 --vcpus&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; --ram&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4096&lt;/span&gt; --disk &lt;span class=&quot;nv&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/var/lib/libvirt/images/lb01.qcow2,bus&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio --network &lt;span class=&quot;nv&quot;&gt;bridge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;sw-lan,model&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio  --graphics vnc --cdrom /var/lib/libvirt/images/debian-7.5.0-amd64-netinst.iso --boot cdrom&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After completing the OS installation we have a fresh running Debian Wheezy system. We don’t want to repeat the install process for the other files so we’ll just copy the existing image of the Debian system and modify the IP settings and hostnames. We first copy the base image, then attach it by using qemu-nbd, mount the partition where the file system resides and then edit the files that we need.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; cp lb01.qcow2 db01.qcow2&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; cp lb01.qcow2 web01.qcow2
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; modprobe nbd &lt;span class=&quot;nv&quot;&gt;max_part&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;8
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-nbd -c /dev/nbd0 web01.qcow2
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; kpartx -a /dev/nbd0
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; mount /dev/mapper/nbd0p1 /mnt
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/network/interfaces
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/hosts
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/hostname
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; umount /mnt
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; kpartx -d /dev/nbd0
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-nbd -d /dev/nbd0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We repeat the steps above for the db01.qcow2 file.
+Let’s now create the web01 and db01 VMs. Since we already have the base storage files we don’t need to run the OS installation:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name web01 --vcpus&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt; --ram&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4096&lt;/span&gt; --disk &lt;span class=&quot;nv&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/var/lib/libvirt/images/web01.qcow2,bus&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio --network &lt;span class=&quot;nv&quot;&gt;bridge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;sw-lan,model&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio  --graphics vnc --import
+root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name db01 --vcpus&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt; --ram&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4096&lt;/span&gt; --disk &lt;span class=&quot;nv&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/var/lib/libvirt/images/db01.qcow2,bus&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio --network &lt;span class=&quot;nv&quot;&gt;bridge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;sw-lan,model&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;virtio  --graphics vnc --import&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Once we have booted al the VMs let’s start configuring the services.
+On the http load balancer we’ll install varnish and configure the web server as backend: &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@lb01:~&amp;gt;&amp;gt;&amp;gt; aptitude install varnish
+root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/6081/80/&amp;#39;&lt;/span&gt; /etc/default/varnish
+root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/127.0.0.1/10.0.1.3/&amp;#39;&lt;/span&gt; /etc/varnish/default.vcl
+root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &lt;span class=&quot;s1&quot;&gt;&amp;#39;s/8080/80/&amp;#39;&lt;/span&gt; /etc/varnish/default.vcl
+root@lb01:~&amp;gt;&amp;gt;&amp;gt; /etc/init.d/varnish restart&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;On the web server we’ll install nginx and php-fpm and configure the default vhost:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@web01:~&amp;gt;&amp;gt;&amp;gt; aptitude install nginx php5-fpm php5-mysql&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Add the following location block to the first server block:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;location ~ \.php$ {&lt;br /&gt;
-        fastcgi_pass   unix:/var/run/php5-fpm.sock;&lt;br /&gt;
-        fastcgi_index  index.php;&lt;br /&gt;
-        include        fastcgi_params;&lt;br /&gt;
-}&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;location ~ &lt;span class=&quot;se&quot;&gt;\.&lt;/span&gt;php&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        fastcgi_pass   unix:/var/run/php5-fpm.sock&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        fastcgi_index  index.php&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        include        fastcgi_params&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;Create an index file in the document root that will query the database server:&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@web01:/srv/www&amp;gt;&amp;gt;&amp;gt; cat index.php&lt;br /&gt;
-&lt;?php&lt;br /&gt;
-$con=mysqli_connect(&quot;10.0.1.4&quot;,&quot;user&quot;,&quot;parola&quot;,&quot;test&quot;);&lt;/p&gt;
-&lt;p&gt;$result = mysqli_query($con,&quot;SELECT * FROM testable&quot;);&lt;/p&gt;
-&lt;p&gt;$row = mysqli_fetch_array($result);&lt;br /&gt;
-echo $row[&#39;hello&#39;];&lt;/p&gt;
-&lt;p&gt;mysqli_close($con);&lt;br /&gt;
-?&gt;&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;On the database server we&#39;ll install mysql server and create a dummy database and table;&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@db01:~&amp;gt;&amp;gt;&amp;gt; aptitude install mysql-server&lt;br /&gt;
-root@db01:~&amp;gt;&amp;gt;&amp;gt; mysql&lt;br /&gt;
-Welcome to the MySQL monitor.  Commands end with ; or \g.&lt;br /&gt;
-Your MySQL connection id is 43&lt;br /&gt;
-Server version: 5.5.37-0+wheezy1 (Debian)
-&lt;p&gt;Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.&lt;/p&gt;
-&lt;p&gt;Oracle is a registered trademark of Oracle Corporation and/or its&lt;br /&gt;
-affiliates. Other names may be trademarks of their respective&lt;br /&gt;
-owners.&lt;/p&gt;
-&lt;p&gt;Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.&lt;/p&gt;
-&lt;p&gt;mysql&amp;gt; create database test;&lt;br /&gt;
-mysql&amp;gt; use test;&lt;br /&gt;
-mysql&amp;gt; CREATE TABLE testable (hello VARCHAR(20));&lt;br /&gt;
-mysql&amp;gt; INSERT INTO testable (hello) VALUES(&quot;Hello World!&quot;);&lt;br /&gt;
-mysql&amp;gt; CREATE USER &#39;user&#39;@&#39;10.0.1.3&#39; IDENTIFIED BY &#39;parola&#39;;&lt;br /&gt;
-mysql&amp;gt; GRANT ALL PRIVILEGES ON * . * TO &#39;user&#39;@&#39;10.0.1.3&#39;;&lt;br /&gt;
-mysql&amp;gt; FLUSH PRIVILEGES;&lt;br /&gt;
-mysql&amp;gt; exit&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@web01:/srv/www&amp;gt;&amp;gt;&amp;gt; cat index.php
+&amp;lt;?php
+&lt;span class=&quot;nv&quot;&gt;$con&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;mysqli_connect&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;10.0.1.4&amp;quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&amp;quot;user&amp;quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&amp;quot;parola&amp;quot;&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&amp;quot;test&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; mysqli_query&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$con&lt;/span&gt;,&lt;span class=&quot;s2&quot;&gt;&amp;quot;SELECT * FROM testable&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; mysqli_fetch_array&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$result&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$row&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;hello&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+mysqli_close&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$con&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+?&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;On the database server we’ll install mysql server and create a dummy database and table;&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@db01:~&amp;gt;&amp;gt;&amp;gt; aptitude install mysql-server
+root@db01:~&amp;gt;&amp;gt;&amp;gt; mysql
+Welcome to the MySQL monitor.  Commands end with &lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; or &lt;span class=&quot;se&quot;&gt;\g&lt;/span&gt;.
+Your MySQL connection id is 43
+Server version: 5.5.37-0+wheezy1 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;Debian&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+Copyright &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;c&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 2000, 2014, Oracle and/or its affiliates. All rights reserved.
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+Type &lt;span class=&quot;s1&quot;&gt;&amp;#39;help;&amp;#39;&lt;/span&gt; or &lt;span class=&quot;s1&quot;&gt;&amp;#39;\h&amp;#39;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; help. Type &lt;span class=&quot;s1&quot;&gt;&amp;#39;\c&amp;#39;&lt;/span&gt; to clear the current input statement.
+mysql&amp;gt; create database &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+mysql&amp;gt; use &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+mysql&amp;gt; CREATE TABLE testable &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;hello VARCHAR&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;20&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+mysql&amp;gt; INSERT INTO testable &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;hello&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; VALUES&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Hello World!&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+mysql&amp;gt; CREATE USER &lt;span class=&quot;s1&quot;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;@&lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.1.3&amp;#39;&lt;/span&gt; IDENTIFIED BY &lt;span class=&quot;s1&quot;&gt;&amp;#39;parola&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+mysql&amp;gt; GRANT ALL PRIVILEGES ON * . * TO &lt;span class=&quot;s1&quot;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;@&lt;span class=&quot;s1&quot;&gt;&amp;#39;10.0.1.3&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+mysql&amp;gt; FLUSH PRIVILEGES&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+mysql&amp;gt; &lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 &lt;p&gt;After this final step we have our setup ready and http://app.nullzero.me/ should show the Hello World!&lt;/p&gt;
-&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;
 </description>
         <pubDate>Wed, 07 May 2014 12:32:41 +0000</pubDate>
-        <link>http://remoteur.github.io//linux/virtualization/storage/2014/05/07/virtualized-application-infrastructure/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//linux/virtualization/storage/2014/05/07/virtualized-application-infrastructure/</guid>
+        <link>http://remoteur.github.io:4000//virtualized-application-infrastructure</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//virtualized-application-infrastructure</guid>
         
         
         <category>linux</category>
@@ -881,189 +847,370 @@ mysql&amp;gt; exit&lt;/p&gt;
       <item>
         <title>JunOS interfaces IP addresses DNS records generator</title>
         <description>&lt;p&gt;This post is closely related to the previous one where I showed how you can parse the interfaces IP addresses from a curly bracket JunOS config file. The following script will be used to generate A and PTR records for a BIND zone file. Please note that the script needs to be run within the same directory as the Perl parser script and the config file.&lt;/p&gt;
-&lt;p&gt;The entries will have the following format:&lt;br /&gt;
-type-fpc-pic-port 300 IN A $value&lt;br /&gt;
-$value IN PTR type-fpc-pic-port.hostname.domain&lt;/p&gt;
-&lt;p&gt; &lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
-#/bin/bash&lt;br /&gt;
-PERL=&#39;/usr/bin/perl&#39;&lt;br /&gt;
-PARSER=&#39;./parser.pl&#39;&lt;br /&gt;
-CONFIG_FILE=&#39;config.txt&#39;&lt;br /&gt;
-CONFIG_SYS=&#39;sys&#39;&lt;br /&gt;
-CONFIG_INT=&#39;int&#39;&lt;br /&gt;
-hostname=`$PERL $PARSER $CONFIG_SYS | grep host-name | sed -e s/host-name// -e s/\;// | tr &#39;\r&#39; &#39; &#39; | sed -e s/\ //g`&lt;br /&gt;
-domain=`$PERL $PARSER $CONFIG_SYS | grep domain-name | sed -e s/domain-name// -e s/\;// | tr &#39;\r&#39; &#39; &#39; | sed -e s/\ //g`&lt;br /&gt;
-for i in `grep &quot;ge-[0-9]\/[0-9]\/[0-9] {\|ae[0-9] {\|lo[0-9] {&quot; $CONFIG_FILE | sed -e s/\ //g  -e s/\{// | tr &#39;\r&#39; &#39; &#39;`&lt;br /&gt;
-    do&lt;br /&gt;
-        intname=`echo $i | sed s/\\\//-/g`&lt;br /&gt;
-        for j in `$PERL $PARSER $CONFIG_INT $i | grep unit | sed -e s/\ unit//g  -e s/\{// -e s/\ //g | tr &#39;\r&#39; &#39; &#39;`&lt;br /&gt;
-            do&lt;br /&gt;
-                inetaddr=`$PERL $PARSER $CONFIG_INT $i $j | tr &#39;\r&#39; &#39; &#39;`&lt;br /&gt;
-                lastoct=`echo $inetaddr | awk -F &#39;.&#39; {&#39;print $4&#39;}`&lt;br /&gt;
-                if [ $j -eq 0 ]&lt;br /&gt;
-                then&lt;br /&gt;
-                    echo &quot;$intname 300 IN A  $inetaddr&quot;&lt;br /&gt;
-                    echo &quot;$lastoct  IN  PTR $intname.$hostname.$domain.&quot;&lt;br /&gt;
-                    echo
-&lt;p&gt;                else&lt;br /&gt;
-                    if [ $j -eq 10 ]&lt;br /&gt;
-                    then&lt;br /&gt;
-                        echo &quot;$intname 300 IN A  $inetaddr&quot;&lt;br /&gt;
-                        echo &quot;$lastoct  IN  PTR $intname.$hostname.$domain.&quot;&lt;br /&gt;
-                        echo&lt;br /&gt;
-                    else&lt;br /&gt;
-                        echo &quot;$intname-u$j 300 IN A  $inetaddr&quot;&lt;br /&gt;
-                        echo &quot;$lastoct  IN  PTR $intname-u$j.$hostname.$domain.&quot;&lt;br /&gt;
-                        echo&lt;br /&gt;
-                    fi&lt;br /&gt;
-                fi&lt;br /&gt;
-            done&lt;br /&gt;
-    done&lt;br /&gt;
-&lt;/p&gt;
-&lt;/code&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;The entries will have the following format:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;-fpc-pic-port &lt;span class=&quot;m&quot;&gt;300&lt;/span&gt; IN A &lt;span class=&quot;nv&quot;&gt;$value&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$value&lt;/span&gt; IN PTR &lt;span class=&quot;nb&quot;&gt;type&lt;/span&gt;-fpc-pic-port.hostname.domain&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;c&quot;&gt;#/bin/bash&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;PERL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/usr/bin/perl&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;PARSER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;./parser.pl&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;CONFIG_FILE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;config.txt&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;CONFIG_SYS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;sys&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;CONFIG_INT&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;hostname&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PERL&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PARSER&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CONFIG_SYS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep host-name &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed -e s/host-name// -e s/&lt;span class=&quot;se&quot;&gt;\;&lt;/span&gt;// &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s1&quot;&gt;&amp;#39;\r&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed -e s/&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;//g&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;domain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PERL&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PARSER&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CONFIG_SYS&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep domain-name &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed -e s/domain-name// -e s/&lt;span class=&quot;se&quot;&gt;\;&lt;/span&gt;// &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s1&quot;&gt;&amp;#39;\r&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed -e s/&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;//g&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; i in &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;grep &lt;span class=&quot;s2&quot;&gt;&amp;quot;ge-[0-9]\/[0-9]\/[0-9] {\|ae[0-9] {\|lo[0-9] {&amp;quot;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CONFIG_FILE&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed -e s/&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;//g  -e s/&lt;span class=&quot;se&quot;&gt;\{&lt;/span&gt;// &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s1&quot;&gt;&amp;#39;\r&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;intname&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed s/&lt;span class=&quot;se&quot;&gt;\\\/&lt;/span&gt;/-/g&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; j in &lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PERL&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PARSER&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CONFIG_INT&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; grep unit &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; sed -e s/&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;unit//g  -e s/&lt;span class=&quot;se&quot;&gt;\{&lt;/span&gt;// -e s/&lt;span class=&quot;se&quot;&gt;\ &lt;/span&gt;//g &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s1&quot;&gt;&amp;#39;\r&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;inetaddr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$PERL&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$PARSER&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$CONFIG_INT&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$i&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$j&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; tr &lt;span class=&quot;s1&quot;&gt;&amp;#39;\r&amp;#39;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+                &lt;span class=&quot;nv&quot;&gt;lastoct&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inetaddr&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F &lt;span class=&quot;s1&quot;&gt;&amp;#39;.&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;print $4&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$j&lt;/span&gt; -eq &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+                    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$intname 300 IN A  $inetaddr&amp;quot;&lt;/span&gt;
+                    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$lastoct  IN  PTR $intname.$hostname.$domain.&amp;quot;&lt;/span&gt;
+                    &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt;&amp;lt;/p&amp;gt;
+                &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;[&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$j&lt;/span&gt; -eq &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
+                    &lt;span class=&quot;k&quot;&gt;then&lt;/span&gt;
+                        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$intname 300 IN A  $inetaddr&amp;quot;&lt;/span&gt;
+                        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$lastoct  IN  PTR $intname.$hostname.$domain.&amp;quot;&lt;/span&gt;
+                        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;                    &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+                        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$intname-u$j 300 IN A  $inetaddr&amp;quot;&lt;/span&gt;
+                        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;$lastoct  IN  PTR $intname-u$j.$hostname.$domain.&amp;quot;&lt;/span&gt;
+                        &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;                    &lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+                &lt;span class=&quot;k&quot;&gt;fi&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 </description>
         <pubDate>Sun, 23 Feb 2014 21:28:17 +0000</pubDate>
-        <link>http://remoteur.github.io//linux/2014/02/23/junos-interfaces-ip-addresses-a-and-ptr-records-generator/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//linux/2014/02/23/junos-interfaces-ip-addresses-a-and-ptr-records-generator/</guid>
+        <link>http://remoteur.github.io:4000//junos-interfaces-ip-addresses-dns-records-generator</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//junos-interfaces-ip-addresses-dns-records-generator</guid>
         
         
         <category>linux</category>
+        
+        <category>automation</category>
         
       </item>
     
       <item>
         <title>JunOS config interfaces IP address parser</title>
-        <description>&lt;p&gt;Hello guys,&lt;/p&gt;
-&lt;p&gt;In todays post I will show how you can obtain an interface IP address out of a JunOS curly brackets configuration file. You may find below the script and also the source configuration file. Please note that in order to run the script both files need to be placed in the same directory. &lt;/p&gt;
-&lt;p&gt;Please check it and let me know what you think, it&#39;s my first Perl script so it could definitely be improved.&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;perl[notools]&quot;&gt;#!/usr/bin/perl&lt;br /&gt;
-open (CONFIG, &#39;config.txt&#39;);&lt;br /&gt;
-my $data = do { local $/; &lt;config&gt;;};&lt;br /&gt;
-close (CONFIG);
-&lt;p&gt;my $system = $data =~ m{(\bsystem\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
-    ? $1&lt;br /&gt;
-    : die &quot;system not found&quot;;&lt;/p&gt;
-&lt;p&gt;my $intconfig = $data =~ m{(\binterfaces\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
-    ? $1&lt;br /&gt;
-    : die &quot;interfaces not found&quot;;&lt;/p&gt;
-&lt;p&gt;if ($ARGV[0] eq &#39;sys&#39;) {&lt;br /&gt;
-    print $system;&lt;br /&gt;
-}&lt;/p&gt;
-&lt;p&gt;if ($ARGV[0] eq &#39;int&#39;) {&lt;br /&gt;
-    if (!defined $ARGV[1]) {&lt;br /&gt;
-        print $intconfig, &quot;\n&quot;;&lt;br /&gt;
-    }&lt;br /&gt;
-    if (defined $ARGV[1]) {&lt;br /&gt;
-        my $int = $intconfig =~ m{(\b$ARGV[1]\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
-            ? $1&lt;br /&gt;
-            : die &quot;$ARGV[1] not found&quot;;&lt;/p&gt;
-&lt;p&gt;        if (!defined $ARGV[2]) {&lt;br /&gt;
-            print $int. &quot;\n&quot;;&lt;br /&gt;
-        }&lt;/p&gt;
-&lt;p&gt;        if (defined $ARGV[2]) {&lt;br /&gt;
-            my $unit = $int =~m{(\bunit $ARGV[2]\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
-                ? $1&lt;br /&gt;
-                : die &quot;$ARGV[2] not found&quot;;&lt;/p&gt;
-&lt;p&gt;            my $inet = $unit =~ m{(\bfamily inet\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
-                ? $1&lt;br /&gt;
-                : die &quot;family inet not found in section&quot;;&lt;/p&gt;
-&lt;p&gt;            my $inetaddr = $inet =~ m{\baddress\s(\d{1,3}(?:\.\d{1,3}){3})}&lt;br /&gt;
-                ? $1&lt;br /&gt;
-                : die &quot;no IP address&quot;;&lt;br /&gt;
-            print $inetaddr, &quot;\n&quot;;&lt;br /&gt;
-        }&lt;br /&gt;
-    }&lt;br /&gt;
-}&lt;/p&gt;
-&lt;p&gt;if ($ARGV[0] eq &#39;--help&#39; or !defined $ARGV[0]) {&lt;br /&gt;
-    print &quot;Usage : ./parser.pl sys                              # outputs system section config&quot;, &quot;\n&quot;;&lt;br /&gt;
-    print &quot;        ./parser.pl int                              # outputs interfaces section config&quot;, &quot;\n&quot;;&lt;br /&gt;
-    print &quot;        ./parser.pl int [int-name]                   # outputs specific interface section config&quot;, &quot;\n&quot;;&lt;br /&gt;
-    print &quot;        ./parser.pl int ge-1/1/7                     # outputs ge-1/1/7 interface section config&quot;, &quot;\n&quot;;&lt;br /&gt;
-    print &quot;        ./parser.pl int [int-name] [unit-id]         # outputs specific interface unit IP address&quot;, &quot;\n&quot;;&lt;br /&gt;
-    print &quot;        ./parser.pl int ge-1/1/7 1001                # outputs ge-1/1/7 interface unit 1001 IP address&quot;, &quot;\n&quot;;&lt;br /&gt;
-}&lt;br /&gt;
-&lt;/p&gt;
-&lt;p&gt;&lt;code lang=&quot;perl[notools]&quot;&gt;&lt;br /&gt;
-marius@remoteur:~&amp;gt;&amp;gt;&amp;gt; cat config.txt&lt;br /&gt;
-system {&lt;br /&gt;
-    host-name junos-device;&lt;br /&gt;
-    domain-name corporate.net&lt;br /&gt;
-    time-zone Europe/Bucharest;&lt;br /&gt;
-    default-address-selection;&lt;br /&gt;
-    no-redirects;&lt;br /&gt;
-    location country-code RO;&lt;br /&gt;
-}&lt;br /&gt;
-interfaces {&lt;br /&gt;
-    ge-1/0/0 {&lt;br /&gt;
-        description &quot;Core: R:core1 RP:ge-0/1/4 (ptp, isis)&quot;;&lt;br /&gt;
-        mtu 9192;&lt;br /&gt;
-        unit 0 {&lt;br /&gt;
-            family inet {&lt;br /&gt;
-                address 192.168.140.29/31;&lt;br /&gt;
-            }&lt;br /&gt;
-        }&lt;br /&gt;
-    }&lt;br /&gt;
-    ge-1/0/1 {&lt;br /&gt;
-        description &quot;Cust: R:cust-a RP:ge-1/0/0 (srx240H)&quot;;&lt;br /&gt;
-        unit 0 {&lt;br /&gt;
-            family inet {&lt;br /&gt;
-                address 172.16.166.196/30;&lt;br /&gt;
-            }&lt;br /&gt;
-        }&lt;br /&gt;
-    }&lt;br /&gt;
-    ge-1/0/2 {&lt;br /&gt;
-        flexible-vlan-tagging;&lt;br /&gt;
-        native-vlan-id 10;&lt;br /&gt;
-        mtu 9192;&lt;br /&gt;
-        unit 10 {&lt;br /&gt;
-            description &quot;Cust: R:cust-b (data, feed A)&quot;;&lt;br /&gt;
-            vlan-id 10;&lt;br /&gt;
-            family inet {&lt;br /&gt;
-                address 192.168.136.184/31;&lt;br /&gt;
-            }&lt;br /&gt;
-        }&lt;br /&gt;
-        unit 1001 {&lt;br /&gt;
-            description &quot;Core: R:cust-b (cpe management)&quot;;&lt;br /&gt;
-            vlan-id 1001;&lt;br /&gt;
-            family inet {&lt;br /&gt;
-                filter {&lt;br /&gt;
-                    output Protect-cpe;&lt;br /&gt;
-                }&lt;br /&gt;
-                address 10.15.4.6/30;&lt;br /&gt;
-            }&lt;br /&gt;
-        }&lt;br /&gt;
-    }&lt;br /&gt;
-    ae0 {&lt;br /&gt;
-        description &quot;Core: R:colo-vc2 RI:ae5&quot;;&lt;br /&gt;
-        aggregated-ether-options {&lt;br /&gt;
-            minimum-links 1;&lt;br /&gt;
-            link-speed 1g;&lt;br /&gt;
-        }&lt;br /&gt;
-        unit 0 {&lt;br /&gt;
-            family inet {&lt;br /&gt;
-                address 192.168.140.126/31;&lt;br /&gt;
-            }&lt;br /&gt;
-        }&lt;br /&gt;
-    }&lt;br /&gt;
-    lo0 {&lt;br /&gt;
-        unit 0 {&lt;br /&gt;
-            description &quot;Core: R:primary routing loopback&quot;;&lt;br /&gt;
-            family inet {&lt;br /&gt;
-                address 192.168.128.166/32;&lt;br /&gt;
-            }
-&lt;p&gt;            }&lt;br /&gt;
-        }&lt;br /&gt;
-    }&lt;br /&gt;
-}&lt;br /&gt;
-&lt;/p&gt;
-&lt;/code&gt;&lt;/p&gt;&lt;/config&gt;&lt;/code&gt;&lt;/p&gt;
+        <description>&lt;p&gt;In this post I will show how you can obtain an interface IP address out of a JunOS curly brackets configuration file. You may find below the script and also the source configuration file. Please note that in order to run the script both files need to be placed in the same directory. &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Please check it and let me know what you think, it’s my first Perl script so it could definitely be improved.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-perl&quot; data-lang=&quot;perl&quot;&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/perl&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;config.txt&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;local&lt;/span&gt; &lt;span class=&quot;vg&quot;&gt;$/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;&amp;lt;CONFIG&amp;gt;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;};&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;close&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CONFIG&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$system&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;m{(\bsystem\s*({(?:(?&amp;gt;[^{}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}))}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;die&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;system not found&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$intconfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;m{(\binterfaces\s*({(?:(?&amp;gt;[^{}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}))}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;die&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;interfaces not found&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ARGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;eq&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;sys&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$system&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ARGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;eq&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;int&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;defined&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ARGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$intconfig&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;defined&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ARGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$int&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$intconfig&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;m{(\b$ARGV[1]\s*({(?:(?&amp;gt;[^{}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}))}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;die&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;$ARGV[1] not found&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;defined&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ARGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;defined&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ARGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$unit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$int&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;m{(\bunit $ARGV[2]\s*({(?:(?&amp;gt;[^{}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}))}&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;die&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;$ARGV[2] not found&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$unit&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;m{(\bfamily inet\s*({(?:(?&amp;gt;[^{}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(?&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}))}&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;die&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;family inet not found in section&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;my&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inetaddr&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inet&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=~&lt;/span&gt; &lt;span class=&quot;sr&quot;&gt;m{\baddress\s(\d{1,3}&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(?:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;\.\&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}){&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;})}&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$1&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;die&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;no IP address&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$inetaddr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$ARGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;eq&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;#39;--help&amp;#39;&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;defined&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$ARGV&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Usage : ./parser.pl sys                              # outputs system section config&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;        ./parser.pl int                              # outputs interfaces section config&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;        ./parser.pl int [int-name]                   # outputs specific interface section config&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;        ./parser.pl int ge-1/1/7                     # outputs ge-1/1/7 interface section config&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;        ./parser.pl int [int-name] [unit-id]         # outputs specific interface unit IP address&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;        ./parser.pl int ge-1/1/7 1001                # outputs ge-1/1/7 interface unit 1001 IP address&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;\n&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;sr&quot;&gt;&amp;lt;/code&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;code&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lang&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;perl[notools]&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;marius&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;@remoteur:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;~&amp;gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;txt&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;system&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;host&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;junos&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;device&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;domain&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;corporate&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;net&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;zone&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Europe&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Bucharest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;selection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;nb&quot;&gt;no&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;redirects&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;location&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;country&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;code&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RO&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;interfaces&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;ow&quot;&gt;ge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/0/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Core: R:core1 RP:ge-0/1/4 (ptp, isis)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mtu&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9192&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;unit&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;family&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inet&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;192.168.140.29&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;ow&quot;&gt;ge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/0/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Cust: R:cust-a RP:ge-1/0/0 (srx240H)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;unit&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;family&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inet&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;172.16.166.196&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;ow&quot;&gt;ge&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/0/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;flexible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vlan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tagging&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;native&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;vlan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;mtu&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;9192&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;unit&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Cust: R:cust-b (data, feed A)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;vlan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;family&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inet&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;192.168.136.184&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;unit&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1001&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Core: R:cust-b (cpe management)&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;vlan&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1001&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;family&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inet&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;filter&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                    &lt;span class=&quot;n&quot;&gt;output&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Protect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cpe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+                &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;10.15.4.6&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;30&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ae0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Core: R:colo-vc2 RI:ae5&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;aggregated&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ether&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;options&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;minimum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;links&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;nb&quot;&gt;link&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;speed&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;g&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;unit&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;family&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inet&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;192.168.140.126&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;lo0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;unit&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;quot;Core: R:primary routing loopback&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;family&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;inet&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+                &lt;span class=&quot;n&quot;&gt;address&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;192.168.128.166&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+            &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
 </description>
         <pubDate>Sun, 23 Feb 2014 20:58:36 +0000</pubDate>
-        <link>http://remoteur.github.io//linux/2014/02/23/junos-curly-brackets-configuration-parser/</link>
-        <guid isPermaLink="true">http://remoteur.github.io//linux/2014/02/23/junos-curly-brackets-configuration-parser/</guid>
+        <link>http://remoteur.github.io:4000//junos-curly-brackets-config-parser</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//junos-curly-brackets-config-parser</guid>
         
         
         <category>linux</category>
+        
+        <category>automation</category>
+        
+      </item>
+    
+      <item>
+        <title>Linux L2TP ethernet pseudowires</title>
+        <description>&lt;p&gt;This post describes how you can create L2TP ethernet pseudowires by using Linux kernel’s L2TP drivers and the “ip” utility of iproute2.  L2TP is a protocol that tunnels one or more sessions over an IP tunnel. It is commonly used for VPNs (L2TP/IPSec) and by ISPs to tunnel subscriber PPP sessions over an IP network infrastructure. With L2TPv3, it is also useful as a Layer-2 tunneling infrastructure. &lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Our topology consists of 5 virtual machines running Debian Wheezy with Linux Kernel 3.2.0. Our scenario objective is to ensure L2 connectivity between HOST01 and HOST02. In order to accomplish this we’ll create a tunnel between TUNNEL01 and TUNNEL02 that will encapsulate packets coming from the 192.168.0.0/24 network. The INTERNET box just acts as a router for the packets exchanged by TUNNEL01 and TUNNEL02. 
+&lt;a href=&quot;http://remoteur.github.io:4000/assets/static/L2TP.png&quot;&gt;&lt;img src=&quot;http://remoteur.github.io:4000/assets/static/L2TP.png&quot; alt=&quot;L2TP&quot; width=&quot;851&quot; height=&quot;408&quot; class=&quot;aligncenter size-full wp-image-238&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;First thing let’s make sure IP forwarding is enabled on all the machines that’ll forward packets : TUNNEL0[1-2], INTERNET:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@tun01:~# &lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &amp;gt; /proc/sys/net/ipv4/ip_forward
+root@tun02:~# &lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &amp;gt; /proc/sys/net/ipv4/ip_forward
+root@tun-inet:~# &lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &amp;gt; /proc/sys/net/ipv4/ip_forward&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next thing to do is to establish L3 connectivity between TUNNEL01 and TUNNEL02 by setting static routes:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@tun01:~# ip route add 2.2.2.0/30 via 1.1.1.1
+root@tun02:~# ip route add 1.1.1.0/30 via 2.2.2.1
+root@tun01:~# ping -c1 2.2.2.2
+PING 2.2.2.2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;2.2.2.2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 56&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;84&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 2.2.2.2: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;63&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.03 ms
+root@tun02:~# ping -c1 1.1.1.2
+PING 1.1.1.2 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;1.1.1.2&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 56&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;84&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 1.1.1.2: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;63&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.20 ms&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Once we’ve established L3 connectivity between the tunnel endpoints we can proceed to creating the tunnels. Before configuring the tunnels we need to load the L2TPv3 ethernet pseudowire kernel module:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@tun01:~# modprobe l2tp_eth
+root@tun01:~# ip l2tp add tunnel tunnel_id &lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt; peer_tunnel_id &lt;span class=&quot;m&quot;&gt;2000&lt;/span&gt; encap udp &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;1.1.1.2 remote 2.2.2.2 udp_sport &lt;span class=&quot;m&quot;&gt;6000&lt;/span&gt; udp_dport 5000
+root@tun01:~# ip l2tp add session tunnel_id &lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt; session_id &lt;span class=&quot;m&quot;&gt;3000&lt;/span&gt; peer_session_id 4000
+root@tun01:~# ip l2tp show tunnel
+Tunnel 1000, encap UDP
+  From 1.1.1.2 to 2.2.2.2
+  Peer tunnel 2000
+  UDP &lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; / dest ports: 6000/5000
+root@tun01:~# ip l2tp show session
+Session &lt;span class=&quot;m&quot;&gt;3000&lt;/span&gt; in tunnel 1000
+  Peer session 4000, tunnel 2000
+  interface name: l2tpeth0
+  offset 0, peer offset 0
+root@tun02:~# modprobe l2tp_eth
+root@tun02:~# ip l2tp add tunnel tunnel_id &lt;span class=&quot;m&quot;&gt;2000&lt;/span&gt; peer_tunnel_id &lt;span class=&quot;m&quot;&gt;1000&lt;/span&gt; encap udp &lt;span class=&quot;nb&quot;&gt;local &lt;/span&gt;2.2.2.2 remote 1.1.1.2 udp_sport &lt;span class=&quot;m&quot;&gt;5000&lt;/span&gt; udp_dport 6000
+root@tun02:~# ip l2tp add session tunnel_id &lt;span class=&quot;m&quot;&gt;2000&lt;/span&gt; session_id &lt;span class=&quot;m&quot;&gt;4000&lt;/span&gt; peer_session_id 3000
+root@tun02:~# ip l2tp show tunnel
+Tunnel 2000, encap UDP
+  From 2.2.2.2 to 1.1.1.2
+  Peer tunnel 1000
+  UDP &lt;span class=&quot;nb&quot;&gt;source&lt;/span&gt; / dest ports: 5000/6000
+root@tun02:~# ip l2tp show session
+Session &lt;span class=&quot;m&quot;&gt;4000&lt;/span&gt; in tunnel 2000
+  Peer session 3000, tunnel 1000
+  interface name: l2tpeth0
+  offset 0, peer offset 0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We’ll notice a new interface has been created with a MTU of 1488 (1500bytes Ethernet MTU - 12bytes L2TP header): &lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@tun01:~# ip a s dev l2tpeth0
+5: l2tpeth0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu &lt;span class=&quot;m&quot;&gt;1488&lt;/span&gt; qdisc noop state DOWN qlen 1000
+    link/ether 1a:8f:6e:04:3f:a3 brd ff:ff:ff:ff:ff:ff
+root@tun02:~# ip a s dev l2tpeth0
+5: l2tpeth0: &amp;lt;BROADCAST,MULTICAST&amp;gt; mtu &lt;span class=&quot;m&quot;&gt;1488&lt;/span&gt; qdisc noop state DOWN qlen 1000
+    link/ether 3e:d8:00:8c:d0:a2 brd ff:ff:ff:ff:ff:ff&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next thing to do is install bridge-utils and bridge the l2tp interface with the network interface that’s attached to the LAN segment we want to extend over the tunnel, in our case it’s called eth1:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@tun01:~# aptitude install bridge-utils
+root@tun02:~# aptitude install bridge-utils
+root@tun01:~# brctl addbr l2tp
+root@tun02:~# brctl addbr l2tp
+root@tun01:~# brctl addif l2tp eth1 l2tpeth0
+root@tun02:~# brctl addif l2tp eth1 l2tpeth0
+root@tun01:~# brctl show
+bridge name	        bridge id	    STP enabled	     interfaces
+l2tp		  8000.1a8f6e043fa3           no		            eth1 l2tpeth0
+root@tun01:~# ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev l2tpeth0 up
+root@tun01:~# ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev l2tp up
+root@tun02:~# ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev l2tpeth0 up
+root@tun02:~# ip l &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;dev l2tp up&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now we should be up and running and have L2 connectivity over the L2TP pseudowire:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@host01:~# ping -c5 192.168.0.4
+PING 192.168.0.4 &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;192.168.0.4&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 56&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;84&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; bytes of data.
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 192.168.0.4: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;3.85 ms
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 192.168.0.4: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.93 ms
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 192.168.0.4: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.91 ms
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 192.168.0.4: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.87 ms
+&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; bytes from 192.168.0.4: &lt;span class=&quot;nv&quot;&gt;icmp_req&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;ttl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;64&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1.89 ms&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now let’s go further to the transport layer and do a TCP throughput test:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;root@host02:~# nuttcp -S
+root@host01:~# nuttcp 192.168.0.4
+nuttcp-t: v6.1.2: Error: server not ACKing data&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Looks that we’ve got a problem. It appears that the TCP session was established with a MSS of 1460bytes. This would cause packets fragmentation through the tunnel interface as the packets would exceed the maximum MTU on the Ethernet link of 1500bytes. Even though the connection should establish correctly and the transfer should run just fine fragmentation could case performance issues due to encapsulation overhead. &lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/02/mss.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/02/mss-1024x438.png&quot; alt=&quot;mss&quot; width=&quot;960&quot; height=&quot;410&quot; class=&quot;aligncenter size-large wp-image-239&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;I thought of lowering the MTU of the internal interfaces and enforcing the MSS for the TCP connections so that all the packets that are transmitted across the tunnel interfaces do not exceed 1500bytes.
+Now let’s do some basic maths and find out what’s the maximum TCP payload, also known as the maximum segment size in the TCP header:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;1500B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;20B&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;IP_HEADER&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;+8B&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;UDP_HEADER&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;+12B&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;L2TP_HEADER&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;+14B&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;ETH_HEADER&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;+20B&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;IP_HEADER&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;+20B&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;TCP_HEADER&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;+PAYLOAD &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&amp;gt; &lt;span class=&quot;nv&quot;&gt;PAYLOAD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1406B
+
+root@tun01:~# ip link &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;eth1 mtu 1446
+root@tun01:~# iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1406:1536 -j TCPMSS --set-mss 1406
+root@tun02:~# ip link &lt;span class=&quot;nb&quot;&gt;set &lt;/span&gt;eth1 mtu 1446
+root@tun02:~# iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1406:1536 -j TCPMSS --set-mss 1406
+root@host01:~# nuttcp 192.168.0.4
+   45.7992 MB /  10.05 &lt;span class=&quot;nv&quot;&gt;sec&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;   38.2292 Mbps &lt;span class=&quot;m&quot;&gt;15&lt;/span&gt; %TX &lt;span class=&quot;m&quot;&gt;30&lt;/span&gt; %RX &lt;span class=&quot;m&quot;&gt;0&lt;/span&gt; retrans 1.89 msRTT&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;All the virtual machines are running on my laptop so I guess it’s a decent throughput as the CPU seems to be the bottleneck. &lt;/p&gt;
+
+&lt;p&gt;I hope you find this post useful. I am going to continue it in a future post by configuring L2TP over IPsec. &lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 16 Feb 2014 23:29:21 +0000</pubDate>
+        <link>http://remoteur.github.io:4000//linux-l2tp-ethernet-pseudowires</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//linux-l2tp-ethernet-pseudowires</guid>
+        
+        
+        <category>linux</category>
+        
+        <category>switching</category>
+        
+        <category>routing</category>
+        
+        <category>virtualization</category>
+        
+      </item>
+    
+      <item>
+        <title>CPU benchmark using sysbench</title>
+        <description>&lt;p&gt;Sysbench allows you to do a quick performance benchmark of several system parameters such as file I/O, CPU, scheduler and others.
+Below are the results for running a 100000 prime numbers calculation using 4 threads on my Intel Core i5-3427U CPU:&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;marius@remoteur:~&amp;gt;&amp;gt;&amp;gt; sysbench --num-threads&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;4&lt;/span&gt; --test&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;cpu --cpu-max-prime&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;100000&lt;/span&gt; run
+sysbench 0.4.12:  multi-threaded system evaluation benchmark
+Running the &lt;span class=&quot;nb&quot;&gt;test &lt;/span&gt;with following options:
+Number of threads: 4
+Doing CPU performance benchmark
+Threads started!
+Done.
+Maximum prime number checked in CPU &lt;span class=&quot;nb&quot;&gt;test&lt;/span&gt;: 100000
+Test execution summary:
+    total &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt;:                          86.6428s
+    total number of events:              10000
+    total &lt;span class=&quot;nb&quot;&gt;time &lt;/span&gt;taken by event execution: 346.5374
+    per-request statistics:
+         min:                                 33.06ms
+         avg:                                 34.65ms
+         max:                                158.58ms
+         approx.  &lt;span class=&quot;m&quot;&gt;95&lt;/span&gt; percentile:              37.12ms
+Threads fairness:
+    events &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;avg/stddev&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:           2500.0000/14.25
+    execution &lt;span class=&quot;nb&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;avg/stddev&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;:   86.6344/0.01&amp;lt;/code&amp;gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Sun, 09 Feb 2014 12:00:22 +0000</pubDate>
+        <link>http://remoteur.github.io:4000//cpu-benchmark-using-sysbench</link>
+        <guid isPermaLink="true">http://remoteur.github.io:4000//cpu-benchmark-using-sysbench</guid>
+        
+        
+        <category>linux</category>
+        
+        <category>benchmark</category>
         
       </item>
     

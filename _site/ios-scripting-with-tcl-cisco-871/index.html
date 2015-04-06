@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Cisco IOS Scripting with TCL - Cisco 871 example</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">        
+        <meta name="description" content="Harmony is a free responsive jekyll theme by Gayan Virajith and Maheshika Lakmali. Sourced on Github -  https://github.com/gayanvirajith/harmony
+">
+        <link rel="canonical" 
+        href="http://remoteur.github.io:4000//ios-scripting-with-tcl-cisco-871">
+        
+        <!-- Harmony styles -->
+        <link rel="stylesheet" type="text/css" href="http://remoteur.github.io:4000/assets/css/main.css">
+
+        <!-- Modernizr js -->
+        <script async src="http://remoteur.github.io:4000/assets/js/modernizr.js"></script>    
+
+        <!-- IE Fixes -->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->        
+    </head>
+    <body class="theme-base-01">
+        <header class="main-header">
+            <div class="wc-container">
+                <h1><a href="http://remoteur.github.io:4000/">remote-lab.net</a></h1>
+                <h2>learn by doing</h2>
+                <ul>
+	<li>
+		<a href="http://remoteur.github.io:4000">Home</a><span>/</span>
+	</li>
+	<li>
+		<a href="http://remoteur.github.io:4000//about">About</a><span>/</span>
+	</li>
+	<li>
+		<a href="http://remoteur.github.io:4000//blog">Blog</a><span>/</span>
+	</li>
+	<li>
+		<a href="https://compute.remote-lab.net" target="_blank">Compute</a><span>/</span>
+	</li>
+</ul>
+                
+            </div>
+        </header>
+        <div class="page-content wc-container">
+	
+	<div class="post">
+		<h1>Cisco IOS Scripting with TCL - Cisco 871 example</h1>
+		<p class="post-meta">
+			
+      <span class="categories">
+      ios and automation
+      </span> |
+	    
+	    <span class="post-date">
+    	Mar 5, 2012 
+	    </span>
+		</p>		
+		<div class="post">
+			<p>In today’s post I will briefly introduce with a simple example how TCL scripting language can be used with the Cisco IOS. Starting with IOS version 12.3(2)T the TCL shell was integrated into Cisco’s IOS. Basically it provides a TCL shell environment where you can make use of all the TCL functions, process variables and configure your Cisco device with the help of these. </p>
+
+<hr />
+
+<p>To make an idea of what you can do here’s a simple script that would ping all the hosts in a subnet - with the TCL shell it’s as simple as defining a counter which will be the host part of the IP address and creating a loop where you are repeating the ping command and incrementing the counter. Even more with the help of Cisco Embedded Event Manager you can do even more fancy things. The EEM can trigger TCL scripts based on several policies such as SNMP MIB values or MIB variable thresholds or the matching the output of a local syslog message. You can even set your device to send you email messages based on these events which is pretty awesome.</p>
+
+<p>My example consists of a script which will configure a Cisco 871 router by interactive prompts asking for the hostname, IP addresses, usernames, timezone and setting up basic services like DHCP, NAT and SSH.
+The Cisco 871 has 1 x FastEthernet external WAN port a 1 x 4 FastEthernet port switch. In order to run the script you will have to load it into the router’s flash memory or run it from a TFTP/HTTP server. This script will automatically set up overload NAT on the external FE interface for all the LAN IP addresses and it also set DHCP providing LAN IP addresses except the ones which are on the excluded list. Below you may find below the output of the script I’ve written, the resulted running config and also the actual code.</p>
+
+<p>Please let me know what you think about this, in my opinion it’s a very powerful tool.</p>
+
+<p>Download script file here: <a href="http://remoteur.github.io:4000/assets/static/871.txt">871.tcl</a></p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">Router<span class="o">(</span>tcl<span class="o">)</span><span class="c">#source flash:871.tcl</span>
+Please enter the hostname of this box: 871_SOHO
+Please enter the domain name of this box: HOME.NET
+Please enter the username you would like to configure <span class="k">for</span> this system: user
+Please enter the password <span class="k">for</span> user: pass
+Please enter the <span class="nb">enable </span>password: cisco
+Please enter the WAN IP address: 1.1.1.1
+Please enter the WAN netmask: 255.255.255.0
+Please enter the default gateway IP address: 1.1.1.2
+Please enter the LAN IP address: 192.168.0.1
+Please enter the LAN netmask: 255.255.255.240
+Configuring the DHCP service...
+Please enter the DNS Server IP address: 8.8.8.8
+Please enter the excluded IP address from DHCP assignments - separated by spaces 192.168.0.1 192.168.0.2
+Configuring NAT ...
+Activating SSH ...
+Please enter your timezone <span class="o">[</span> eg. UTC +2 <span class="o">]</span>: UTC -5
+Done...Your box is waiting <span class="k">for</span> some packets!</code></pre></div>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">871_SOHO#sh run
+Building configuration...
+!
+version 12.4
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname 871_SOHO
+!
+boot-start-marker
+boot-end-marker
+!
+logging message-counter syslog
+logging buffered 25000
+<span class="nb">enable </span>secret <span class="m">5</span> <span class="nv">$1$9xIG$BwuXzBtmLsl6acCURFny31</span>
+!
+aaa new-model
+!
+!
+aaa authentication login default <span class="nb">local</span>
+!
+!
+aaa session-id common
+clock timezone UTC -5
+!
+!
+dot11 syslog
+ip <span class="nb">source</span>-route
+!
+!
+ip dhcp excluded-address 192.168.0.1
+ip dhcp excluded-address 192.168.0.2
+!
+ip dhcp pool DHCP
+   network 192.168.0.0 255.255.255.240
+   default-router 192.168.0.1
+   dns-server 8.8.8.8
+!
+!
+ip cef
+no ip domain lookup
+ip domain name HOME.NET
+no ipv6 cef
+ntp server 64.6.144.6
+!
+multilink bundle-name authenticated
+!
+!
+!
+username user privilege <span class="m">15</span> password <span class="m">7</span> 15020A1F17
+!
+!
+!
+archive
+ log config
+  hidekeys
+!
+!
+ip ssh version 2
+!
+!
+!
+interface FastEthernet0
+ switchport access vlan 55
+!
+interface FastEthernet1
+ switchport access vlan 55
+!
+interface FastEthernet2
+ switchport access vlan 55
+!
+interface FastEthernet3
+ switchport access vlan 55
+!
+interface FastEthernet4
+ ip address 1.1.1.1 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan55
+ ip address 192.168.0.1 255.255.255.240
+ ip nat inside
+ ip virtual-reassembly
+!
+ip forward-protocol nd
+ip route 0.0.0.0 0.0.0.0 1.1.1.2
+no ip http server
+no ip http secure-server
+!
+!
+ip nat inside <span class="nb">source </span>list <span class="m">1</span> interface FastEthernet4 overload
+!
+access-list <span class="m">1</span> permit 192.168.0.0 0.0.0.15
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+ no modem <span class="nb">enable</span>
+line aux 0
+line vty <span class="m">0</span> 4
+ length 0
+ transport input ssh
+!
+scheduler max-task-time 5000
+end</code></pre></div>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">ios_config <span class="s2">&quot;service password-encryption&quot;</span>
+ios_config <span class="s2">&quot;no service config&quot;</span>
+ios_config <span class="s2">&quot;line con 0&quot;</span> <span class="s2">&quot;logging synchronous&quot;</span>
+puts -nonewline <span class="s2">&quot;Please enter the hostname of this box: &quot;</span>
+flush stdout
+<span class="nb">set </span>hostname <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">&quot;Please enter the domain name of this box: &quot;</span>
+flush stdout
+<span class="nb">set </span>domain <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">&quot;ip domain name $domain&quot;</span>
+ios_config <span class="s2">&quot;hostname $hostname&quot;</span>
+ios_config <span class="s2">&quot;logging buffered 25000&quot;</span>
+ios_config <span class="s2">&quot;ip cef&quot;</span>
+ios_config <span class="s2">&quot;no ip domain lookup&quot;</span>
+ios_config <span class="s2">&quot;no ip http server&quot;</span>
+ios_config <span class="s2">&quot;aaa new-model&quot;</span>
+ios_config <span class="s2">&quot;aaa authentication login default local&quot;</span>
+puts -nonewline <span class="s2">&quot;Please enter the username you would like to configure for this system: &quot;</span>
+flush stdout
+<span class="nb">set </span>username <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">&quot;Please enter the password for $username: &quot;</span>
+flush stdout
+<span class="nb">set </span>password <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">&quot;username $username privilege 15 password $password&quot;</span>
+puts -nonewline <span class="s2">&quot;Please enter the enable password: &quot;</span>
+flush stdout
+<span class="nb">set enable</span> <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">&quot;enable secret $enable&quot;</span>
+puts -nonewline <span class="s2">&quot;Please enter the WAN IP address: &quot;</span>
+flush stdout
+<span class="nb">set </span>wan_ip <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">&quot;Please enter the WAN netmask: &quot;</span>
+flush stdout
+<span class="nb">set </span>wan_netmask <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">&quot;interface FastEthernet4&quot;</span> <span class="s2">&quot;ip address $wan_ip $wan_netmask&quot;</span>
+ios_config <span class="s2">&quot;interface FastEthernet4&quot;</span> <span class="s2">&quot;no shutdown&quot;</span>
+puts -nonewline <span class="s2">&quot;Please enter the default gateway IP address: &quot;</span>
+flush stdout
+<span class="nb">set </span>def_gw <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">&quot;ip route 0.0.0.0 0.0.0.0 $def_gw&quot;</span>
+puts -nonewline <span class="s2">&quot;Please enter the LAN IP address: &quot;</span>
+flush stdout
+<span class="nb">set </span>lan_ip <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">&quot;Please enter the LAN netmask: &quot;</span>
+flush stdout
+<span class="nb">set </span>lan_netmask <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">&quot;interface vlan 1&quot;</span> <span class="s2">&quot;shutdown&quot;</span>
+ios_config <span class="s2">&quot;vlan 55&quot;</span> <span class="s2">&quot;name Local&quot;</span>
+ios_config <span class="s2">&quot;interface vlan 55&quot;</span> <span class="s2">&quot;ip address $lan_ip $lan_netmask&quot;</span>
+ios_config <span class="s2">&quot;interface vlan 55&quot;</span> <span class="s2">&quot;no shutdown&quot;</span>
+ios_config <span class="s2">&quot;interface range FastEthernet 0 - 3&quot;</span> <span class="s2">&quot;switchport mode access&quot;</span>
+ios_config <span class="s2">&quot;interface range FastEthernet 0 - 3&quot;</span> <span class="s2">&quot;switchport access vlan 55&quot;</span>
+puts <span class="s2">&quot;Configuring the DHCP service...&quot;</span>
+puts -nonewline <span class="s2">&quot;Please enter the DNS Server IP address:&quot;</span>
+flush stdout
+<span class="nb">set </span>dns_ip <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">&quot;Please enter the excluded IP address from DHCP assignments - separated by spaces &quot;</span>
+flush stdout
+<span class="nb">set </span>excluded <span class="o">[</span> gets stdin <span class="o">]</span>
+foreach i <span class="nv">$excluded</span> <span class="o">{</span>
+        ios_config <span class="s2">&quot;ip dhcp excluded-address $i&quot;</span>
+<span class="o">}</span>
+ios_config <span class="s2">&quot;ip dhcp pool DHCP&quot;</span> <span class="s2">&quot;network $lan_ip $lan_netmask&quot;</span>
+ios_config <span class="s2">&quot;ip dhcp pool DHCP&quot;</span> <span class="s2">&quot;default-route $lan_ip&quot;</span>
+ios_config <span class="s2">&quot;ip dhcp pool DHCP&quot;</span> <span class="s2">&quot;dns-server $dns_ip&quot;</span>
+puts <span class="s2">&quot;Configuring NAT ...&quot;</span>
+<span class="nb">set </span>netmask_oct <span class="o">[</span>split <span class="nv">$lan_netmask</span> <span class="s2">&quot;.&quot;</span><span class="o">]</span>
+foreach j <span class="nv">$netmask_oct</span> <span class="o">{</span>
+        <span class="nb">set </span>wildcard_o <span class="o">[</span>expr <span class="o">{</span><span class="m">255</span> - <span class="nv">$j</span><span class="o">}]</span>
+        lappend wildcard <span class="nv">$wildcard_o</span>
+        <span class="o">}</span>
+<span class="nb">set </span>wildcard_o <span class="o">[</span>split <span class="nv">$wildcard</span> <span class="s2">&quot; &quot;</span><span class="o">]</span>
+<span class="nb">set </span>wildcard_o1 <span class="o">[</span>lindex <span class="nv">$wildcard_o</span> 0<span class="o">]</span>
+<span class="nb">set </span>wildcard_o2 <span class="o">[</span>lindex <span class="nv">$wildcard_o</span> 1<span class="o">]</span>
+<span class="nb">set </span>wildcard_o3 <span class="o">[</span>lindex <span class="nv">$wildcard_o</span> 2<span class="o">]</span>
+<span class="nb">set </span>wildcard_o4 <span class="o">[</span>lindex <span class="nv">$wildcard_o</span> 3<span class="o">]</span>
+<span class="nb">set </span>wildcard_mask <span class="s2">&quot;$wildcard_o1.$wildcard_o2.$wildcard_o3.$wildcard_o4&quot;</span>
+ios_config <span class="s2">&quot;access-list 1 permit $lan_ip $wildcard_mask&quot;</span>
+ios_config <span class="s2">&quot;ip nat inside source list 1 interface FastEthernet4 overload&quot;</span>
+ios_config <span class="s2">&quot;interface FastEthernet4&quot;</span> <span class="s2">&quot;ip nat outside&quot;</span>
+ios_config <span class="s2">&quot;interface Vlan 55&quot;</span> <span class="s2">&quot;ip nat inside&quot;</span>
+puts <span class="s2">&quot;Activating SSH ...&quot;</span>
+ios_config <span class="s2">&quot;line vty 0 4&quot;</span> <span class="s2">&quot;transport input ssh&quot;</span>
+ios_config <span class="s2">&quot;crypto key generate rsa general-keys modulus 1024&quot;</span>
+ios_config <span class="s2">&quot;ip ssh version 2&quot;</span>
+ios_config <span class="s2">&quot;ntp server 64.6.144.6&quot;</span>
+puts -nonewline <span class="o">{</span>Please enter your timezone <span class="o">[</span> eg. UTC +2 <span class="o">]</span>:<span class="o">}</span>
+flush stdout
+<span class="nb">set </span>tzone <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">&quot;clock timezone $tzone&quot;</span>
+puts <span class="s2">&quot;Done...Your box is waiting for some packets!&quot;</span></code></pre></div>
+
+
+		</div>
+	</div>
+
+
+	
+	<div class="related">
+		<h4>Related Posts</h2>
+		<ul class="posts">
+		    
+		    <li>
+			  <span>05 Apr 2015 &raquo;</span>
+			  <a href="http://remoteur.github.io:4000//getting-started-with-docker">Getting started with Docker and the wonders of Open Source</a>
+		    </li>
+		    
+		    <li>
+			  <span>24 Feb 2015 &raquo;</span>
+			  <a href="http://remoteur.github.io:4000//opsf-on-ios-with-ansible">OSPF lab provisioning on IOS with Ansible</a>
+		    </li>
+		    
+		    <li>
+			  <span>12 Oct 2014 &raquo;</span>
+			  <a href="http://remoteur.github.io:4000//sdn-intro-basic-with-ovs-and-pox">SDN Intro: Basic L2 connectivity by using OVS and POX</a>
+		    </li>
+		    
+		</ul>
+	</div>
+	
+
+	<div class="post-footer">
+		<div class="column-1">
+			
+				<a href="http://remoteur.github.io:4000//ios-disable-paging"><< Older</a>
+			
+		</div>
+		<div class="column-2"><a href="http://remoteur.github.io:4000// ">Home</a></div>
+		<div class="column-3">
+			
+				<a href="http://remoteur.github.io:4000//append-and-prepend-using-sed">Newer >></a>
+			
+		</div>
+	</div>
+</div>
+ 
+
+        <footer class="main-footer">
+            <div class="wc-container">
+                <div class="column one">
+                    <h6>Few more links</h6>
+<ul class="menu">
+    <li><a href="http://remoteur.github.io:4000//about">About</a></li>
+    <li><a href="http://remoteur.github.io:4000//blogroll">Blogroll</a></li>
+</ul>		
+                    
+                </div>
+                <div class="column two">
+                    <h6>Follow me</h6>
+
+<ul class="social-media">
+
+
+    
+    <li>
+        <a title="remoteur on Twitter" 
+            href="https://twitter.com/remoteur" 
+            class="twitter wc-img-replace" target="_blank">Twitter</a>
+    </li>   
+    
+
+    
+    <li>
+        <a title="remoteur on Github" 
+            href="https://github.com/remoteur" 
+            class="github wc-img-replace" target="_blank">Github</a>
+    </li>
+     
+
+    
+    <li>
+        <a title="marius.catalin.31542 on Facebook" 
+            href="https://facebook.com/marius.catalin.31542" 
+            class="facebook wc-img-replace" target="_blank">Facebook</a>
+    </li>
+    
+
+    
+
+    
+
+    
+
+</ul>
+                </div>
+            </div>
+            <p class="wc-container disclaimer">
+                
+Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>
+            </p>
+        </footer>
+        <script type="text/javascript">
+          /* To avoid render blocking css */
+          var cb = function() {
+            var l = document.createElement('link'); l.rel = 'stylesheet';
+            l.href = 'http://fonts.googleapis.com/css?family=Ubuntu+Mono&subset=latin';
+            var h = document.getElementsByTagName('head')[0]; h.parentNode.insertBefore(l, h);
+          };
+          var raf = requestAnimationFrame || mozRequestAnimationFrame ||
+              webkitRequestAnimationFrame || msRequestAnimationFrame;
+          if (raf) raf(cb);
+          else window.addEventListener('load', cb);
+        </script>
+        <!-- jQuery -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <!-- When no internet load JQuery from local -->
+        <script>window.jQuery || document.write('<script src="http://remoteur.github.io:4000//assets/js/jquery.min.js"><\/script>')</script>
+        <!-- Site js -->
+        <script src="http://remoteur.github.io:4000/assets/js/all.js"></script>
+        <!-- Google analytics  -->
+        
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-xxxx-x']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+    </body>        
+</html>

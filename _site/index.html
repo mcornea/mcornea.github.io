@@ -8,13 +8,13 @@
         <meta name="description" content="Harmony is a free responsive jekyll theme by Gayan Virajith and Maheshika Lakmali. Sourced on Github -  https://github.com/gayanvirajith/harmony
 ">
         <link rel="canonical" 
-        href="http://remoteur.github.io//">
+        href="http://remoteur.github.io:4000//">
         
         <!-- Harmony styles -->
-        <link rel="stylesheet" type="text/css" href="http://remoteur.github.io/assets/css/main.css">
+        <link rel="stylesheet" type="text/css" href="http://remoteur.github.io:4000/assets/css/main.css">
 
         <!-- Modernizr js -->
-        <script async src="http://remoteur.github.io/assets/js/modernizr.js"></script>    
+        <script async src="http://remoteur.github.io:4000/assets/js/modernizr.js"></script>    
 
         <!-- IE Fixes -->
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -27,17 +27,17 @@
     <body class="theme-base-01">
         <header class="main-header">
             <div class="wc-container">
-                <h1><a href="http://remoteur.github.io/">remote-lab.net</a></h1>
+                <h1><a href="http://remoteur.github.io:4000/">remote-lab.net</a></h1>
                 <h2>learn by doing</h2>
                 <ul>
 	<li>
-		<a href="http://remoteur.github.io">Home</a><span>/</span>
+		<a href="http://remoteur.github.io:4000">Home</a><span>/</span>
 	</li>
 	<li>
-		<a href="http://remoteur.github.io//about">About</a><span>/</span>
+		<a href="http://remoteur.github.io:4000//about">About</a><span>/</span>
 	</li>
 	<li>
-		<a href="http://remoteur.github.io//blog">Blog</a><span>/</span>
+		<a href="http://remoteur.github.io:4000//blog">Blog</a><span>/</span>
 	</li>
 	<li>
 		<a href="https://compute.remote-lab.net" target="_blank">Compute</a><span>/</span>
@@ -51,7 +51,7 @@
   		
   			<div class="post">
     			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//getting-started-with-docker">
+			      <a href="http://remoteur.github.io:4000//getting-started-with-docker">
 			        Getting started with Docker and the wonders of Open Source
 			      </a>
     			</h3>
@@ -59,7 +59,7 @@
           <p class="post-meta">
             
             <span class="categories">
-            linux, containers, and blog
+            linux and containers
             </span> |
             
             <span class="post-date">
@@ -73,7 +73,7 @@
 	
   				</p>
   				<p>
-  					<a href="http://remoteur.github.io//getting-started-with-docker" title="Getting started with Docker and the wonders of Open Source">
+  					<a href="http://remoteur.github.io:4000//getting-started-with-docker" title="Getting started with Docker and the wonders of Open Source">
   						Read More
 					</a>
   				</p>
@@ -81,7 +81,7 @@
   		
   			<div class="post">
     			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//opsf-on-ios-with-ansible">
+			      <a href="http://remoteur.github.io:4000//opsf-on-ios-with-ansible">
 			        OSPF lab provisioning on IOS with Ansible
 			      </a>
     			</h3>
@@ -103,7 +103,7 @@
 	
   				</p>
   				<p>
-  					<a href="http://remoteur.github.io//opsf-on-ios-with-ansible" title="OSPF lab provisioning on IOS with Ansible">
+  					<a href="http://remoteur.github.io:4000//opsf-on-ios-with-ansible" title="OSPF lab provisioning on IOS with Ansible">
   						Read More
 					</a>
   				</p>
@@ -111,7 +111,7 @@
   		
   			<div class="post">
     			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//linux/switching/routing/virtualization/ios/python/2014/10/12/sdn-intro-basic-l2-connectivity-by-using-ovs-and-pox/">
+			      <a href="http://remoteur.github.io:4000//sdn-intro-basic-with-ovs-and-pox">
 			        SDN Intro: Basic L2 connectivity by using OVS and POX
 			      </a>
     			</h3>
@@ -119,7 +119,7 @@
           <p class="post-meta">
             
             <span class="categories">
-            linux, switching, routing, virtualization, ios, and python
+            linux, switching, routing, and virtualization
             </span> |
             
             <span class="post-date">
@@ -128,87 +128,12 @@
           </p>          
     			    			
   				<p>
-	  				<p>You've all probably heard about this fancy SDN term that's been passing around in the networking world in the recent years. I'll try to explain below what SDN means for me and what are the benefits of using such a model. </p>
-<p>SDN or Software Defined Networking refers to decoupling the data plane from the control plane. The data plane is the process by which the packets are forwarded and it's done by the hardware silicon. The control plane is the process that instructs the data plane how to behave (routing protocols, firewall policies, etc). In a typical networking device we find those 2 planes coupled in a single box. The SDN model says we can separate them and keep the packet forwarding on a box that's got the fast hardware silicon and move the control plane on a general purpose computer. Since the 2 planes are separated they need a means of communication which is OpenFlow. </p>
-<p>OpenFlow is a communications protocol that allows remote manipulation of the devices forwarding tables. Think of this protocol like a standard API that you can consume by running any software. This is great because you can purchase the networking device from a specific vendor and run the controller by your own code, open source project or other proprietary software. In my opinion this provides you the freedom to choose and will push the vendors to create better and better software. Personally I'm a big fan of opensource software and I'm dreaming about the moment when the networking world will be able to get the benefits of a big opensource project. </p>
-<p>Another advantage that SDN brings is a central point that controls the network. Think about how we currently manage the networking devices. Even if the network is a whole that provides services to upper applications, we currently log into each separate device and write some commands that configure services. SDN would save us from doing repetitive and boring tasks such as provisioning vlans.</p>
-<p>Enough with the talk, let's start a simple scenario by using the remote-lab.net environment. The lab topology consists of two hosts connected to an OpenvSwitch switch. The OVS switch is connected to an OpenFlow controller running Pox. The controller runs the code that enables L2 connectivity between the hosts but the actual forwarding is done by the OVS switch.</p>
-<p><a href="https://remote-lab.net/wp-content/uploads/2014/10/sdn_lab.png"><img src="https://remote-lab.net/wp-content/uploads/2014/10/sdn_lab.png" alt="sdn_lab" width="686" height="364" class="aligncenter size-full wp-image-284" /></a></p>
-<p>Let's first enable the ports the hosts are connected to, set an openvswitch bridge where the hosts are connected, set the IP addreses on the hosts and check we have connectivity between the hosts. By default the L2 learning mechanism is done by the OpenvSwitch internals. </p>
-<p><code lang="bash[notools]">root@ovs01:~&gt;&gt;&gt; ip link set dev eth1 up<br />
-root@ovs01:~&gt;&gt;&gt; ip link set dev eth2 up<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl add-br sw0<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl add-port sw0 eth1<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl add-port sw0 eth2
-<p>root@host01:~&gt;&gt;&gt; ip l set dev eth1 up<br />
-root@host01:~&gt;&gt;&gt; ip addr add 192.168.0.1/24 dev eth1<br />
-root@host01:~&gt;&gt;&gt; ip a s dev eth1<br />
-3: eth1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000<br />
-    link/ether 52:54:00:56:e2:b2 brd ff:ff:ff:ff:ff:ff<br />
-    inet 192.168.0.1/24 scope global eth1<br />
-    inet6 fe80::5054:ff:fe56:e2b2/64 scope link<br />
-       valid_lft forever preferred_lft forever</p>
-<p>root@host02:~&gt;&gt;&gt; ip l set dev eth1 up<br />
-root@host02:~&gt;&gt;&gt; ip addr add 192.168.0.2/24 dev eth1<br />
-root@host02:~&gt;&gt;&gt; ip a s dev eth1<br />
-3: eth1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000<br />
-    link/ether 52:54:00:6e:22:0b brd ff:ff:ff:ff:ff:ff<br />
-    inet 192.168.0.2/24 scope global eth1<br />
-    inet6 fe80::5054:ff:fe6e:220b/64 scope link<br />
-       valid_lft forever preferred_lft forever</p>
-<p>root@host02:~&gt;&gt;&gt; ping 192.168.0.1 -c1<br />
-PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.<br />
-64 bytes from 192.168.0.1: icmp_req=1 ttl=64 time=0.946 ms</p>
-<p>--- 192.168.0.1 ping statistics ---<br />
-1 packets transmitted, 1 received, 0% packet loss, time 0ms<br />
-rtt min/avg/max/mdev = 0.946/0.946/0.946/0.000 ms</p>
-<p>Now let's go to the controller:</p>
-<p><code lang="bash[notools]">root@ctrl01:~&gt;&gt;&gt; ls<br />
-floodlight  pox</code></p>
-<p>We see here that we have two directories that contain OpenFlow controller code - Floodlight and Pox. We'll choose Pox for our example. Pox is platform for the rapid development and prototyping of network control software using Python. Pox comes with some preinstalled components. One of the components is called forwarding.l2_learning and it does what its name says - make OpenFlow switches act as a type of L2 learning switch. You can find the code in the pox/forwarding/l2_learning.py file. We'll use this component for our example. Let's start it:</p>
-<p><code lang="bash[notools]">root@ctrl01:~/pox&gt;&gt;&gt; ./pox.py --verbose forwarding.l2_learning<br />
-POX 0.2.0 (carp) / Copyright 2011-2013 James McCauley, et al.<br />
-DEBUG:core:POX 0.2.0 (carp) going up...<br />
-DEBUG:core:Running on CPython (2.7.3/Jan 2 2013 13:56:14)<br />
-DEBUG:core:Platform is Linux-3.2.0-4-amd64-x86_64-with-debian-7.4<br />
-INFO:core:POX 0.2.0 (carp) is up.<br />
-DEBUG:openflow.of_01:Listening on 0.0.0.0:6633</code></p>
-<p>The next step is to configure OpenvSwitch to use the POX controller. OpenvSwitch has 2 ways of working with an OpenFlow controller - standalone and secure. In standalone mode, if the connection to the controller fails then it will fall back to using its internal logic to install the flows. While in secure mode it will not install any flows if the connection to the controller fails. We'll use the standalone mode with 172.16.18.6 being the IP address of the POX controller.</p>
-<p><code lang="bash[notools]">root@ovs01:~&gt;&gt;&gt; ovs-vsctl set-fail-mode sw0 standalone<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl set-controller sw0 tcp:172.16.18.6:6633<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl show<br />
-653dfcd6-85a4-4f72-995f-9fa05b5203f9<br />
-    Bridge "sw0"<br />
-        Controller "tcp:172.16.18.6:6633"<br />
-            is_connected: true<br />
-        fail_mode: standalone<br />
-        Port "sw0"<br />
-            Interface "sw0"<br />
-                type: internal<br />
-        Port "eth2"<br />
-            Interface "eth2"<br />
-        Port "eth1"<br />
-            Interface "eth1"<br />
-    ovs_version: "1.9.3"</code></p>
-<p>We can see the following message on the OpenFlow controller:</p>
-<p><code lang="bash[notools]">INFO:openflow.of_01:[46-3e-63-ba-e5-46 1] connected<br />
-DEBUG:forwarding.l2_learning:Connection [46-3e-63-ba-e5-46 1]</code></p>
-<p>Let's see what happens when we try to ping one host from the other:</p>
-<p><code lang="bash[notools]">DEBUG:forwarding.l2_learning:installing flow for 52:54:00:6e:22:0b.2 -&gt; 52:54:00:56:e2:b2.1<br />
-DEBUG:forwarding.l2_learning:installing flow for 52:54:00:56:e2:b2.1 -&gt; 52:54:00:6e:22:0b.2</code></p>
-<p>Check the flows that are installed in the switch. Notice how the flows are defined:</p>
-<p><code lang="bash[notools]">root@ovs01:~&gt;&gt;&gt; ovs-ofctl dump-flows sw0<br />
-NXST_FLOW reply (xid=0x4):<br />
- cookie=0x0, duration=7.348s, table=0, n_packets=7, n_bytes=686, idle_timeout=10, hard_timeout=30, idle_age=1, priority=65535,icmp,in_port=2,vlan_tci=0x0000,dl_src=52:54:00:6e:22:0b,dl_dst=52:54:00:56:e2:b2,nw_src=192.168.0.2,nw_dst=192.168.0.1,nw_tos=0,icmp_type=0,icmp_code=0 actions=output:1<br />
- cookie=0x0, duration=6.329s, table=0, n_packets=6, n_bytes=588, idle_timeout=10, hard_timeout=30, idle_age=1, priority=65535,icmp,in_port=1,vlan_tci=0x0000,dl_src=52:54:00:56:e2:b2,dl_dst=52:54:00:6e:22:0b,nw_src=192.168.0.1,nw_dst=192.168.0.2,nw_tos=0,icmp_type=8,icmp_code=0 actions=output:2</code></p>
-<p>You can take any of these headers and manipulate them as you wish. I believe the whole model provides great flexibility and freedom and it will lead to better networking software. </p>
+	  				<p>You’ve all probably heard about this fancy SDN term that’s been passing around in the networking world in the recent years. I’ll try to explain below what SDN means for me and what are the benefits of using such a model. </p>
 
-
-</code></p>
 	
   				</p>
   				<p>
-  					<a href="http://remoteur.github.io//linux/switching/routing/virtualization/ios/python/2014/10/12/sdn-intro-basic-l2-connectivity-by-using-ovs-and-pox/" title="SDN Intro: Basic L2 connectivity by using OVS and POX">
+  					<a href="http://remoteur.github.io:4000//sdn-intro-basic-with-ovs-and-pox" title="SDN Intro: Basic L2 connectivity by using OVS and POX">
   						Read More
 					</a>
   				</p>
@@ -216,7 +141,7 @@ NXST_FLOW reply (xid=0x4):<br />
   		
   			<div class="post">
     			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//linux/virtualization/2014/09/14/ansible-playbook-postfix-with-mandrill-relay/">
+			      <a href="http://remoteur.github.io:4000//ansible-postfix-with-mandrill">
 			        Ansible playbook: postfix with Mandrill relay
 			      </a>
     			</h3>
@@ -224,7 +149,7 @@ NXST_FLOW reply (xid=0x4):<br />
           <p class="post-meta">
             
             <span class="categories">
-            linux and virtualization
+            linux, virtualization, and ansible
             </span> |
             
             <span class="post-date">
@@ -234,77 +159,11 @@ NXST_FLOW reply (xid=0x4):<br />
     			    			
   				<p>
 	  				<p>In this post I will show how you can use Ansible to automatically install postfix mail server and configure it to relay through Mandrill. Mandrill is a transactional email platform that allows you to send up to 12.000 emails for free. I use it for my servers to avoid situations where the IP addresses assigned by my ISP are blacklisted on some RBL lists. </p>
-<p>Ansible is a config manamegement software that runs agentless over SSH. You only need python installed on the remote nodes. Ansible's configuration files are called playbooks. Playbooks are written as YAML files and they are used to manage configurations of and deployments to remote machines.</p>
-<p>Below is the playbook that I use to install postfix, add the required configuration to use Mandrill and reload the service in order to use the new configuration. I will explain the playbook below:</p>
-<p><code lang="bash[notools]"><br />
----<br />
-- hosts: basenodes<br />
-  tasks:<br />
-    - name: Installs postfix mail server<br />
-      apt: pkg=postfix state=installed update_cache=true<br />
-      notify:<br />
-        - start postfix<br />
-    - name: Upload mandril authentication info<br />
-      copy: src=/opt/files/postfix/mandril_passwd dest=/etc/postfix/mandril_passwd mode=0600<br />
-      register: mandril<br />
-      notify:<br />
-        - postmap mandril_passwd<br />
-    - name: Append mandril relay config<br />
-      lineinfile:<br />
-        dest=/etc/postfix/main.cf<br />
-        line=""<br />
-      with_items:<br />
-        - { line: 'smtp_sasl_auth_enable = yes' }<br />
-        - { line: 'smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd' }<br />
-        - { line: 'smtp_sasl_security_options = noanonymous' }<br />
-        - { line: 'smtp_use_tls = yes' }<br />
-        - { line: 'relayhost = [smtp.mandrillapp.com]' }<br />
-      notify:<br />
-        - restart postfix
-<p>  handlers:<br />
-    - name: start postfix<br />
-      service: name=postfix state=started<br />
-    - name: postmap mandril_passwd<br />
-      command: postmap /etc/postfix/mandril_passwd<br />
-      when: mandril|success<br />
-    - name: restart postfix<br />
-      service: name=postfix state=restarted<br />
-</p>
-<p>The hosts line contains the hosts group that this playbook will be applied to.<br />
-Each play contains a list of tasks, which are actually calls to Ansible modules. We see that the first task is called 'Installs postfix mail server' and it uses the apt module to get the postfix package in the installed stated. update_cache=true ensures that 'apt-get update' will be run before installing the postfix package. The notify section contains the handlers. Handlers are lists of tasks, not really any different from regular tasks, that are referenced by name. You can find them in the handlers sections. Looking at our example - the 'start postfix' handler ensures that the postfix server is started. </p>
-<p>The 'Upload mandril authentication info' task copies the /opt/files/postfix/mandril_passwd file on the ansible server to the remote node with /etc/postfix/mandril_passwd as a destination location. The mandril_passwd file contains the authentication details for the Mandril platform. The mode key contains the permissions the destination file will have. The register line gets the result of the copy operation stored in the mandril variable. After getting the file copied we need to create the postfix lookup table based on that file. In order to do this we run the 'postmap mandril_passwd' handler which runs the 'postmap /etc/postfix/mandril_passwd' command only if the copy task was run successfully.</p>
-<p>The 'Append mandril relay config' task will add the config lines to the postfix main.cf files. We'll store the lines in a dictionary. A dictionary is represented in a simple key: and value form:. Each new line will be the value stored in the 'line' key of each dictionary element. After adding the lines to main.cf we'll restart postfix by running the 'restart postfix' handler. </p>
-<p>You may find below the output of running the playbook : </p>
-<p><code lang="bash[notools]"><br />
-root@ansible:/etc/ansible/playbooks&gt;&gt;&gt; ansible-playbook /etc/ansible/playbooks/playbook.yml
-<p>PLAY [basenodes] ************************************************************** </p>
-<p>GATHERING FACTS *************************************************************** </p>
-<p>TASK: [Installs postfix mail server] ******************************************<br />
-changed: [node01.remote-lab.net]</p>
-<p>TASK: [Upload mandril authentication info] ************************************<br />
-changed: [node01.remote-lab.net]</p>
-<p>TASK: [Append mandril relay config] *******************************************<br />
-changed: [node01.remote-lab.net] =&gt; (item={'line': 'smtp_sasl_auth_enable = yes'})<br />
-changed: [node01.remote-lab.net] =&gt; (item={'line': 'smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd'})<br />
-changed: [node01.remote-lab.net] =&gt; (item={'line': 'smtp_sasl_security_options = noanonymous'})<br />
-changed: [node01.remote-lab.net] =&gt; (item={'line': 'smtp_use_tls = yes'})<br />
-changed: [node01.remote-lab.net] =&gt; (item={'line': 'relayhost = [smtp.mandrillapp.com]'})</p>
-<p>NOTIFIED: [start postfix] *****************************************************<br />
-ok: [node01.remote-lab.net]</p>
-<p>NOTIFIED: [postmap mandril_passwd] ********************************************<br />
-changed: [node01.remote-lab.net]</p>
-<p>NOTIFIED: [restart postfix] ***************************************************<br />
-changed: [node01.remote-lab.net]</p>
-<p>PLAY RECAP ********************************************************************<br />
-node01.remote-lab.net      : ok=7    changed=5    unreachable=0    failed=0<br />
-</p>
 
-
-</code></p></code></p>
 	
   				</p>
   				<p>
-  					<a href="http://remoteur.github.io//linux/virtualization/2014/09/14/ansible-playbook-postfix-with-mandrill-relay/" title="Ansible playbook: postfix with Mandrill relay">
+  					<a href="http://remoteur.github.io:4000//ansible-postfix-with-mandrill" title="Ansible playbook: postfix with Mandrill relay">
   						Read More
 					</a>
   				</p>
@@ -312,68 +171,7 @@ node01.remote-lab.net      : ok=7    changed=5    unreachable=0    failed=0<br /
   		
   			<div class="post">
     			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//sample-post">
-			        Sample post from harmony
-			      </a>
-    			</h3>
-
-          <p class="post-meta">
-            
-            <span class="categories">
-            blog
-            </span> |
-            
-            <span class="post-date">
-            Aug 19, 2014 
-            </span>
-          </p>          
-    			    			
-  				<p>
-	  				<p>Just a sample post to show some of the <em>typography</em> elements supported from 
-<strong>harmony</strong> theme.</p>
-
-	
-  				</p>
-  				<p>
-  					<a href="http://remoteur.github.io//sample-post" title="Sample post from harmony">
-  						Read More
-					</a>
-  				</p>
-  			</div>
-  		
-  			<div class="post">
-    			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//blog/jekyll/2014/07/28/welcome-to-jekyll/">
-			        What is Jekyll!
-			      </a>
-    			</h3>
-
-          <p class="post-meta">
-            
-            <span class="categories">
-            blog and jekyll
-            </span> |
-            
-            <span class="post-date">
-            Jul 28, 2014 
-            </span>
-          </p>          
-    			    			
-  				<p>
-	  				<p><a href="http://jekyllrb.com">Jekyll</a> is a static site generator, an open-source tool for creating simple yet powerful websites of all shapes and sizes. Here is a little quote from the official website:</p>
-
-	
-  				</p>
-  				<p>
-  					<a href="http://remoteur.github.io//blog/jekyll/2014/07/28/welcome-to-jekyll/" title="What is Jekyll!">
-  						Read More
-					</a>
-  				</p>
-  			</div>
-  		
-  			<div class="post">
-    			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//linux/switching/routing/ios/2014/05/21/lab-basic-ospf-routing-scenario/">
+			      <a href="http://remoteur.github.io:4000//basic-ospf-routing-lab">
 			        Lab - basic OSPF routing scenario
 			      </a>
     			</h3>
@@ -381,7 +179,7 @@ node01.remote-lab.net      : ok=7    changed=5    unreachable=0    failed=0<br /
           <p class="post-meta">
             
             <span class="categories">
-            linux, switching, routing, and ios
+            linux, switching, routing, and veos
             </span> |
             
             <span class="post-date">
@@ -390,163 +188,12 @@ node01.remote-lab.net      : ok=7    changed=5    unreachable=0    failed=0<br /
           </p>          
     			    			
   				<p>
-	  				<p>Hello guys,</p>
-<p>In the following post we'll see how we can do a basic routing scenario by using the remote-lab.net virtual appliances. Below is the logical diagram of the scenario. Our objective is to esatblish connectivity between the 2 clients: host01 - 10.0.0.10 and host02 - 10.0.1.10. Each of the hosts will be connected to a router that  will be the first hop router for the hosts subnet. The 2 routers will be connected by 2 redundant links. We'll set up OSPF as a routing protocol between the 2 routers that will be used to advertise the clients subnets. </p>
-<p>rtr01 is an Arista vEOS and rtr02 is running Vyatta core. host01 and host02 are running Debian.</p>
-<p><a href="https://remote-lab.net/wp-content/uploads/2014/05/routing-lab-New-Page.png"><img src="https://remote-lab.net/wp-content/uploads/2014/05/routing-lab-New-Page.png" alt="ospf routing lab logical" width="821" height="729" class="aligncenter size-full wp-image-260" /></a></p>
-<p>Now let's get to the physical setup (which is actually virtual as all the components are VMs ). Each system (clients and routers) will be connected to the layer 2 switch (openvswitch running on Linux). We'll need to set up the links that connect the routers to the switch as trunks in order to allow multiple vlans to get through. The ports that connect the clients to the switch will be set as access ports. Please note that in a real world scenario you'll need to connect the routers by 2 different physical links across separate geographical paths to ensure rendundancy. Below is the physical diagram of the setup.</p>
-<p><a href="https://remote-lab.net/wp-content/uploads/2014/05/routing-physical-New-Page.png"><img src="https://remote-lab.net/wp-content/uploads/2014/05/routing-physical-New-Page.png" alt="routing lab physical" width="745" height="625" class="aligncenter size-full wp-image-259" /></a></p>
-<p>First thing we need to do is to configure the openvswitch. We'll create a bridge that contains all the ports and set up the client ports in access mode. By default all the openvswitch ports are trunks.</p>
-<p><code lang="bash[notools]">lab@console01:~&gt;&gt;&gt; ovs01<br />
-root@ovs01:~&gt;&gt;&gt; for i in {1..4}; do ip l set dev eth$i up;done<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl add-br l2switch<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl add-port l2switch eth1 tag=10<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl add-port l2switch eth2 tag=20<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl add-port l2switch eth3<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl add-port l2switch eth4<br />
-root@ovs01:~&gt;&gt;&gt; ovs-vsctl show<br />
-653dfcd6-85a4-4f72-995f-9fa05b5203f9<br />
-    Bridge "l2switch"<br />
-        Port "l2switch"<br />
-            Interface "l2switch"<br />
-                type: internal<br />
-        Port "eth3"<br />
-            Interface "eth3"<br />
-        Port "eth2"<br />
-            tag: 20<br />
-            Interface "eth2"<br />
-        Port "eth4"<br />
-            Interface "eth4"<br />
-        Port "eth1"<br />
-            tag: 10<br />
-            Interface "eth1"<br />
-    ovs_version: "1.9.3"</code>       </p>
-<p>Set up the client interfaces IP addresses and default routes:</p>
-<p><code lang="bash[notools]">lab@console01:~&gt;&gt;&gt; host01<br />
-root@host01:~&gt;&gt;&gt; ip l set dev eth1 up<br />
-root@host01:~&gt;&gt;&gt; ip addr add 10.0.0.10/24 dev eth1<br />
-root@host01:~&gt;&gt;&gt; ip route add default via 10.0.0.1
-<p>lab@console01:~&gt;&gt;&gt; host02<br />
-root@host02:~&gt;&gt;&gt; ip l set dev eth1 up<br />
-root@host02:~&gt;&gt;&gt; ip addr add 10.0.1.10/24 dev eth1<br />
-root@host01:~&gt;&gt;&gt; ip route add default via 10.0.1.1        </p>
-<p>Configure the vlans and SVI IP addresses on the routers:</p>
-<p><code lang="c[notools]">lab@console01:~&gt;&gt;&gt; rtr01<br />
-rtr01&gt;en<br />
-rtr01#configure<br />
-rtr01(config)#vlan 10<br />
-rtr01(config-vlan-10)#name host01-vlan<br />
-rtr01(config-vlan-10)#vlan 100<br />
-rtr01(config-vlan-100)#name path1-vlan<br />
-rtr01(config-vlan-100)#vlan 200<br />
-rtr01(config-vlan-200)#name path2-vlan<br />
-rtr01(config)#int ethernet 1<br />
-rtr01(config-if-Et1)#switchport mode trunk<br />
-rtr01(config-if-Et1)#switchport trunk allowed vlan 10,100,200<br />
-rtr01(config-vlan-200)#int vlan 10<br />
-rtr01(config-if-Vl10)#ip address 10.0.0.1/24<br />
-rtr01(config-if-Et1)#int vlan 100<br />
-rtr01(config-if-Vl100)#ip address 192.168.0.1/30<br />
-rtr01(config-if-Vl100)#int vlan 200<br />
-rtr01(config-if-Vl200)#ip address 192.168.0.5/30                                                         
-<p>lab@console01:~&gt;&gt;&gt; rtr02<br />
-admin@rtr02:~&gt;&gt;&gt; configure<br />
-[edit]<br />
-admin@rtr02# set interfaces ethernet eth1 vif 20 address 10.0.1.1/24<br />
-[edit]<br />
-admin@rtr02# set interfaces ethernet eth1 vif 100 address 192.168.0.2/30<br />
-[edit]<br />
-admin@rtr02# set interfaces ethernet eth1 vif 200 address 192.168.0.6/30<br />
-admin@rtr02# commit<br />
-[edit]<br />
-admin@rtr02# save<br />
-Saving configuration to '/config/config.boot'...<br />
-Done</p>
-<p>Let's do some connectivity tests:</p>
-<p><code lang="bash[notools]">rtr01&gt;ping 10.0.0.10<br />
-PING 10.0.0.10 (10.0.0.10) 72(100) bytes of data.<br />
-80 bytes from 10.0.0.10: icmp_req=1 ttl=64 time=12.9 ms    
-<p>rtr01&gt;ping 192.168.0.2<br />
-PING 192.168.0.2 (192.168.0.2) 72(100) bytes of data.<br />
-80 bytes from 192.168.0.2: icmp_req=1 ttl=64 time=16.7 ms                </p>
-<p>rtr01&gt;ping 192.168.0.6<br />
-PING 192.168.0.6 (192.168.0.6) 72(100) bytes of data.<br />
-80 bytes from 192.168.0.6: icmp_req=1 ttl=64 time=13.2 ms       </p>
-<p>admin@rtr02:~&gt;&gt;&gt; ping 10.0.1.10<br />
-PING 10.0.1.10 (10.0.1.10) 56(84) bytes of data.<br />
-64 bytes from 10.0.1.10: icmp_req=1 ttl=64 time=3.74 ms         </p>
-<p>Now that we have the connectivity established on the connected links let's move forward and set up OSPF :</p>
-<p><code lang="c[notools]">lab@console01:~&gt;&gt;&gt; rtr01<br />
-rtr01&gt;en<br />
-rtr01#configure<br />
-rtr01(config)#ip routing<br />
-rtr01(config)#router ospf 10<br />
-rtr01(config-router-ospf)#network 10.0.0.1 0.0.0.0 area 0<br />
-rtr01(config-router-ospf)#network 192.168.0.1 0.0.0.0 area 0<br />
-rtr01(config-router-ospf)#network 192.168.0.5 0.0.0.0 area 0 
-<p>lab@console01:~&gt;&gt;&gt; rtr02<br />
-admin@rtr02:~&gt;&gt;&gt; configure<br />
-[edit]<br />
-admin@rtr02#<br />
-admin@rtr02# set protocols ospf area 0 network 10.0.1.0/24<br />
-[edit]<br />
-admin@rtr02# set protocols ospf area 0 network 192.168.0.0/30<br />
-[edit]<br />
-admin@rtr02# set protocols ospf area 0 network 192.168.0.4/30<br />
-admin@rtr02# commit</p>
-<p>Once that we have the ospf configuration done we can proceed and check the OSPF neighbor status on the 2 routers. We'll see that we have 2 equal cost paths to the hosts subnets. This means that the routers will load balance the packets through the 2 links.      </p>
-<p><code lang="c[notools]">rtr01#show ip ospf neighbor<br />
-Neighbor ID     VRF    Pri   State            Dead Time   Address         Interface<br />
-172.16.18.5     default    1   FULL/BDR         00:00:31    192.168.0.6     Vlan200<br />
-172.16.18.5     default    1   FULL/DR          00:00:31    192.168.0.2     Vlan100    
-<p>rtr01#show ip route 10.0.1.0/24<br />
-Codes: C - connected, S - static, K - kernel,<br />
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,<br />
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,<br />
-       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,<br />
-       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             </p>
-<p> O      10.0.1.0/24 [110/20] via 192.168.0.2, Vlan100<br />
-                             via 192.168.0.6, Vlan200                     </p>
-<p>admin@rtr02:~&gt;&gt;&gt; show ip ospf neighbor </p>
-<p>    Neighbor ID Pri State           Dead Time Address         Interface            RXmtL RqstL DBsmL<br />
-192.168.0.5       1 Full/Backup       36.750s 192.168.0.1     eth1.100:192.168.0.2     0     0     0<br />
-192.168.0.5       1 Full/DR           36.960s 192.168.0.5     eth1.200:192.168.0.6     0     0     0 </p>
-<p>admin@rtr02:~&gt;&gt;&gt; show ip route 10.0.0.0/24<br />
-Routing entry for 10.0.0.0/24<br />
-  Known via "ospf", distance 110, metric 20, best<br />
-  Last update 00:04:42 ago<br />
-  * 192.168.0.1, via eth1.100<br />
-  * 192.168.0.5, via eth1.200                 </p>
-<p>What if we want to set one of the links as primary ? We need to set a higher cost for the secondary link. At this time both of the paths have a cost of 20 (10 for the network segment that connects the 2 routers + 10 for the host network segment). Let'schoose the vlan 200 as secondary and increase the cost for the secondary link to 11.</p>
-<p><code lang="c[notools]">rtr01#configure<br />
-rtr01(config)#int vlan 200<br />
-rtr01(config-if-Vl200)#ip ospf cost 11<br />
-rtr01(config-if-Vl200)#show ip route 10.0.1.0/24<br />
-Codes: C - connected, S - static, K - kernel,<br />
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,<br />
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,<br />
-       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,<br />
-       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
-<p> O      10.0.1.0/24 [110/20] via 192.168.0.2, Vlan100      </p>
-<p>We can see that the routing table only contains the vlan 100 path. What happens if vlan 100 goes down ? </p>
-<p><code lang="c[notools]">rtr01(config)#int vlan 100<br />
-rtr01(config-if-Vl100)#shut<br />
-rtr01(config-if-Vl100)#show ip route 10.0.1.0/24<br />
-Codes: C - connected, S - static, K - kernel,<br />
-       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,<br />
-       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,<br />
-       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,<br />
-       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
-<p> O      10.0.1.0/24 [110/21] via 192.168.0.6, Vlan200          </p>
-<p>We can see that the vlan 200 path is installed in the routing table with a cost of 21 ( 11 + 10).</p>
-<p>I hope this post is useful for getting an idea of how you can use the virtual lab. Please let me know if you any questions.                                                             </p>
+	  				<p>In this post post we’ll see how we can do a basic routing scenario by using the remote-lab.net virtual appliances. Below is the logical diagram of the scenario. Our objective is to esatblish connectivity between the 2 clients: host01 - 10.0.0.10 and host02 - 10.0.1.10. </p>
 
-
-</code></p></code></p></code></p></code></p></code></p></code></p></code></p>
 	
   				</p>
   				<p>
-  					<a href="http://remoteur.github.io//linux/switching/routing/ios/2014/05/21/lab-basic-ospf-routing-scenario/" title="Lab - basic OSPF routing scenario">
+  					<a href="http://remoteur.github.io:4000//basic-ospf-routing-lab" title="Lab - basic OSPF routing scenario">
   						Read More
 					</a>
   				</p>
@@ -554,7 +201,7 @@ Codes: C - connected, S - static, K - kernel,<br />
   		
   			<div class="post">
     			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//linux/virtualization/storage/2014/05/07/virtualized-application-infrastructure/">
+			      <a href="http://remoteur.github.io:4000//virtualized-application-infrastructure">
 			        Virtualized application infrastructure
 			      </a>
     			</h3>
@@ -571,201 +218,12 @@ Codes: C - connected, S - static, K - kernel,<br />
           </p>          
     			    			
   				<p>
-	  				<p>In this post I'll show how you can build a secure virtualized infrastructure for a basic webapp. We will break the setup into VMs that provide isolated services. You can find below the infrastructure diagram. The followings steps will show how you can set up a bare-metal server running Debian Wheezy to act as a KVM hypervisor and the process of deploying and configuring the VMs and the services they are running. </p>
-<p><a href="https://remote-lab.net/wp-content/uploads/2014/05/rlug-New-Page.png"><img src="https://remote-lab.net/wp-content/uploads/2014/05/rlug-New-Page.png" alt="rlug - New Page" width="832" height="814" class="aligncenter size-full wp-image-255" /></a></p>
-<p>Install kvm and tools:</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; aptitude install qemu-kvm libvirt-bin virt-manager virt-viewer</code></p>
-<p>Install openvswitch :</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; aptitude install openvswitch-switch openvswitch-datapath-source</code></p>
-<p>Build Open vSwitch datapath kernel module:</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; module-assistant auto-install openvswitch-datapath</code></p>
-<p>The management IP address of the hypervisor and the other public IP addresses are assigned on the same interface by the hosting provider. In order to provide Internet connectivity for the VMs we need to create a bridge containing the physical interface where the public IPs are routed and add the VMs ports to this bridge. The trouble is that since this is also the management link we'll lose connectivity after adding the physical interface to the bridge. After this operation we need to assign the management IP address to the bridge interface. For doing this we edit the /etc/network/interfaces file.</p>
-<p>Add openvswitch bridges:</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; ovs-vsctl add-br sw-net</code></p>
-<p>Edit the /etc/network/interfaces file:</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; cat /etc/network/interfaces<br />
-auto sw-net<br />
-iface sw-net inet static<br />
-  address   46.4.71.66<br />
-  broadcast 46.4.71.95<br />
-  netmask   255.255.255.224<br />
-  gateway   46.4.71.65<br />
-pre-up ip link set dev eth0 up</code></p>
-<p>At boot time the openvswitch daemon is started after the network init script so when the network init script is run it won't find the sw-net interface defined in /etc/network/interfaces file. A dirty workaround for this is to re-run the network init script after all the services are loaded. In order to do this we need to edit the /etc/rc.local file:  </p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; cat /etc/rc.local<br />
-/etc/init.d/networking restart<br />
-exit 0 </code></p>
-<p>Now let's add the physical interface to the bridge. After this we should either restart the network service from the console or do a hard reset:</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; ovs-vsctl add-port sw-net eth0</code></p>
-<p>The next step is to add the second bridge, where the internal network ports will be connected </p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; ovs-vsctl add-br sw-lan</code></p>
-<p>I prefer using virt-install for new VMs provisioning. The problem with it is that it currently doesn't support Open vSwitch bridges so we'll need to adjust it a little by adding the following line to the /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py file. This will add the virtualport tag to the VM xml definition:</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; diff -u /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py.orig<br />
---- /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py	2014-05-06 22:06:21.396072330 +0200<br />
-+++ /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py.orig	2014-05-06 22:13:17.121958858 +0200<br />
-@@ -384,7 +384,6 @@<br />
-         xml += "      <mac address="%s" />\n" % self.macaddr<br />
-         xml += target_xml<br />
-         xml += model_xml<br />
--        xml += "      <virtualport type="openvswitch" />\n"<br />
-         xml += "    "<br />
-         return xml</code></p>
-<p>Now that we have the networking ready the last thing that we need are the storage files that the VMs will use. For creating the files we use the qemu-img utility. I prefer qcow2 files as they provide thin provision and snapshot capabilities. /var/lib/libvirt/images is the default directory used by libvirt-bin so let's create the storage files here:</p>
-<p><code lang="bash[notools]">root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; qemu-img create -f qcow2 rtr01.qcow2 10G<br />
-Formatting 'rtr01.qcow2', fmt=qcow2 size=10737418240 encryption=off cluster_size=65536 </code></p>
-<p>We can now create the VM and start the OS installation. We'll first install the rtr01 VM as it will provide Internet connectivity for the rest of the VMs in the internal network. The following command will generate a VM called rtr01 with 4 vCPUs, 4GB of ram, storage file located at /var/lib/libvirt/images/rtr01.qcow2 and 2 network interfaces - one in the bridge connected to the Internet and another connected to the internal network, the console is presented over VNC and it will first boot from the cdrom device loaded from the /var/lib/libvirt/images/vyatta-livecd_VC6.6R1_amd64.iso file. The disk and network interface will use paravirtualized drivers to obtain increased I/O performance.</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; virt-install --name rtr01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/rtr01.qcow2,bus=virtio --network bridge=sw-net,model=virtio --network bridge=sw-lan,model=virtio --graphics vnc --cdrom /var/lib/libvirt/images/vyatta-livecd_VC6.6R1_amd64.iso --boot cdrom</code></p>
-<p>After this command is issued a console windows will pop up and it will prompt the cdrom installation. After finishing the installation we can proceed to configuring the device:</p>
-<p><code lang="bash[notools]"><br />
-# set interfaces IP addresses<br />
-set interfaces ethernet eth0 mac 00:50:56:00:5e:97<br />
-set interfaces ethernet eth0 address 46.4.71.77/27<br />
-set protocols static route 0.0.0.0/0 next-hop 46.4.71.65<br />
-set system host-name rtr01<br />
-set system domain-name nullzero.me<br />
-set interfaces ethernet eth1 10.0.1.1/24<br />
-set interfaces ethernet eth1 address 10.0.1.1/24
-<p># set SNAT for internal network<br />
-set nat source rule 10 source address 10.0.1.0/24<br />
-set nat source rule 10 outbound-interface eth0<br />
-set nat source rule 10 translation address masquerade</p>
-<p># set DNAT for the request coming on port tcp 80 on the public IP<br />
-set nat destination rule 10 destination address 46.4.71.77<br />
-set nat destination rule 10 inbound-interface eth0<br />
-set nat destination rule 10 destination port 80<br />
-set nat destination rule 10 translation address 10.0.1.2<br />
-set nat destination rule 10 translation port 80<br />
-set nat destination rule 10 protocol tcp</p>
-<p># generate server and client certificates and keys<br />
-vyatta@rtr01:~$ sudo -s<br />
-vbash-4.1# cp -R /usr/share/doc/openvpn/examples/easy-rsa/2.0/* /etc/openvpn/<br />
-edit KEY_COUNTRY, KEY_PROVINCE, KEY_CITY, KEY_ORG, KEY_EMAIL variables<br />
-vbash-4.1# vi /etc/openvpn/vars<br />
-vbash-4.1# cd /etc/openvpn<br />
-vbash-4.1# source vars<br />
-vbash-4.1# ./clean-all<br />
-vbash-4.1# ./build-ca<br />
-vbash-4.1# ./build-dh<br />
-vbash-4.1# ./build-key-server rtr01<br />
-vbash-4.1# ./build-key client<br />
-vbash-4.1# mkdir /config/auth<br />
-vbash-4.1# cp -R /etc/openvpn/keys/* /config/auth</p>
-<p># configure the server certificates and key location<br />
-set interfaces openvpn vtun0 tls ca-cert-file /config/auth/ca.crt<br />
-set interfaces openvpn vtun0 tls cert-file /config/auth/rtr01.crt<br />
-set interfaces openvpn vtun0 tls dh-file /config/auth/dh1024.pem<br />
-set interfaces openvpn vtun0 tls key-file /config/auth/rtr01.key</p>
-<p># configure the openvpn server<br />
-set interfaces openvpn vtun0 mode server<br />
-set interfaces openvpn vtun0 server subnet 172.16.17.0/24<br />
-set interfaces openvpn vtun0 server push-route 10.0.1.0/24<br />
-set interfaces openvpn vtun0 openvpn-option "--comp-lzo --mssfix --tun-mtu 1488"</p>
-<p># openvpn client config file</p>
-<p>marius@remoteur:~&gt;&gt;&gt; cat /etc/openvpn/nullzero.conf<br />
-client<br />
-dev tun<br />
-proto udp<br />
-remote 46.4.71.77 1194<br />
-resolv-retry infinite<br />
-nobind<br />
-persist-key<br />
-persist-tun<br />
-ca /etc/openvpn/nullzero/ca.crt<br />
-cert /etc/openvpn/nullzero/client.crt<br />
-key /etc/openvpn/nullzero/client.key<br />
-ns-cert-type server<br />
-comp-lzo<br />
-verb 3</p>
-<p>#configure firewall<br />
-set firewall state-policy established action 'accept'<br />
-set firewall state-policy related action 'accept'<br />
-set firewall all-ping 'enable'<br />
-edit firewall name rtr01<br />
-set default-action 'drop'<br />
-set rule 10 action accept<br />
-set rule 10 destination port 22<br />
-set rule 10 protocol tcp<br />
-set rule 11 action accept<br />
-set rule 11 destination port 80<br />
-set rule 11 protocol tcp<br />
-set rule 12 action accept<br />
-set rule 12 destination port 1194<br />
-set rule 12 protocol udp<br />
-exit<br />
-set interfaces ethernet eth0 firewall in name rtr01</p>
-<p>After completing these steps we should have a working router, firewall and VPN server.</p>
-<p>Now let's continue with creating the second VM. We'll do a network install from minimal CD. First create the storage file:</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; qemu-img create -f qcow2 /var/lib/libvirt/images/lb01.qcow2 10G<br />
-Formatting '/var/lib/libvirt/images/lb01.qcow2', fmt=qcow2 size=10737418240 encryption=off cluster_size=65536</code></p>
-<p>Next we can start the installation process by using the cdrom file located at /var/lib/libvirt/images/debian-7.5.0-amd64-netinst.iso </p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; virt-install --name lb01 --vcpus=2 --ram=4096 --disk path=/var/lib/libvirt/images/lb01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --cdrom /var/lib/libvirt/images/debian-7.5.0-amd64-netinst.iso --boot cdrom</code></p>
-<p>After completing the OS installation we have a fresh running Debian Wheezy system. We don't want to repeat the install process for the other files so we'll just copy the existing image of the Debian system and modify the IP settings and hostnames. We first copy the base image, then attach it by using qemu-nbd, mount the partition where the file system resides and then edit the files that we need.</p>
-<p><code lang="bash[notools]">root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; cp lb01.qcow2 db01.qcow2; cp lb01.qcow2 web01.qcow2<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; modprobe nbd max_part=8<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; qemu-nbd -c /dev/nbd0 web01.qcow2<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; kpartx -a /dev/nbd0<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; mount /dev/mapper/nbd0p1 /mnt<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; vim /mnt/etc/network/interfaces<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; vim /mnt/etc/hosts<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; vim /mnt/etc/hostname<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; umount /mnt<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; kpartx -d /dev/nbd0<br />
-root@vmm:/var/lib/libvirt/images&gt;&gt;&gt; qemu-nbd -d /dev/nbd0</code></p>
-<p>We repeat the steps above for the db01.qcow2 file.</p>
-<p>Let's now create the web01 and db01 VMs. Since we already have the base storage files we don't need to run the OS installation:</p>
-<p><code lang="bash[notools]">root@vmm:~&gt;&gt;&gt; virt-install --name web01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/web01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --import<br />
-root@vmm:~&gt;&gt;&gt; virt-install --name db01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/db01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --import</code></p>
-<p>Once we have booted al the VMs let's start configuring the services.</p>
-<p>On the http load balancer we'll install varnish and configure the web server as backend: </p>
-<p><code lang="bash[notools]">root@lb01:~&gt;&gt;&gt; aptitude install varnish<br />
-root@lb01:~&gt;&gt;&gt; sed -i 's/6081/80/' /etc/default/varnish<br />
-root@lb01:~&gt;&gt;&gt; sed -i 's/127.0.0.1/10.0.1.3/' /etc/varnish/default.vcl<br />
-root@lb01:~&gt;&gt;&gt; sed -i 's/8080/80/' /etc/varnish/default.vcl<br />
-root@lb01:~&gt;&gt;&gt; /etc/init.d/varnish restart</code></p>
-<p>On the web server we'll install nginx and php-fpm and configure the default vhost:</p>
-<p><code lang="bash[notools]">root@web01:~&gt;&gt;&gt; aptitude install nginx php5-fpm php5-mysql</code></p>
-<p>Add the following location block to the first server block:</p>
-<p><code lang="bash[notools]">location ~ \.php$ {<br />
-        fastcgi_pass   unix:/var/run/php5-fpm.sock;<br />
-        fastcgi_index  index.php;<br />
-        include        fastcgi_params;<br />
-}</code></p>
-<p>Create an index file in the document root that will query the database server:</p>
-<p><code lang="bash[notools]">root@web01:/srv/www&gt;&gt;&gt; cat index.php<br />
-<?php<br />
-$con=mysqli_connect("10.0.1.4","user","parola","test");</p>
-<p>$result = mysqli_query($con,"SELECT * FROM testable");</p>
-<p>$row = mysqli_fetch_array($result);<br />
-echo $row['hello'];</p>
-<p>mysqli_close($con);<br />
-?></code></p>
-<p>On the database server we'll install mysql server and create a dummy database and table;</p>
-<p><code lang="bash[notools]">root@db01:~&gt;&gt;&gt; aptitude install mysql-server<br />
-root@db01:~&gt;&gt;&gt; mysql<br />
-Welcome to the MySQL monitor.  Commands end with ; or \g.<br />
-Your MySQL connection id is 43<br />
-Server version: 5.5.37-0+wheezy1 (Debian)
-<p>Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.</p>
-<p>Oracle is a registered trademark of Oracle Corporation and/or its<br />
-affiliates. Other names may be trademarks of their respective<br />
-owners.</p>
-<p>Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.</p>
-<p>mysql&gt; create database test;<br />
-mysql&gt; use test;<br />
-mysql&gt; CREATE TABLE testable (hello VARCHAR(20));<br />
-mysql&gt; INSERT INTO testable (hello) VALUES("Hello World!");<br />
-mysql&gt; CREATE USER 'user'@'10.0.1.3' IDENTIFIED BY 'parola';<br />
-mysql&gt; GRANT ALL PRIVILEGES ON * . * TO 'user'@'10.0.1.3';<br />
-mysql&gt; FLUSH PRIVILEGES;<br />
-mysql&gt; exit</p>
-<p>After this final step we have our setup ready and http://app.nullzero.me/ should show the Hello World!</p>
+	  				<p>In this post I’ll show how you can build a secure virtualized infrastructure for a basic webapp. We will break the setup into VMs that provide isolated services. You can find below the infrastructure diagram. The followings steps will show how you can set up a bare-metal server running Debian Wheezy to act as a KVM hypervisor and the process of deploying and configuring the VMs and the services they are running. </p>
 
-
-</code></p></code></p>
 	
   				</p>
   				<p>
-  					<a href="http://remoteur.github.io//linux/virtualization/storage/2014/05/07/virtualized-application-infrastructure/" title="Virtualized application infrastructure">
+  					<a href="http://remoteur.github.io:4000//virtualized-application-infrastructure" title="Virtualized application infrastructure">
   						Read More
 					</a>
   				</p>
@@ -773,7 +231,7 @@ mysql&gt; exit</p>
   		
   			<div class="post">
     			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//linux/2014/02/23/junos-interfaces-ip-addresses-a-and-ptr-records-generator/">
+			      <a href="http://remoteur.github.io:4000//junos-interfaces-ip-addresses-dns-records-generator">
 			        JunOS interfaces IP addresses DNS records generator
 			      </a>
     			</h3>
@@ -781,7 +239,7 @@ mysql&gt; exit</p>
           <p class="post-meta">
             
             <span class="categories">
-            linux
+            linux and automation
             </span> |
             
             <span class="post-date">
@@ -791,52 +249,11 @@ mysql&gt; exit</p>
     			    			
   				<p>
 	  				<p>This post is closely related to the previous one where I showed how you can parse the interfaces IP addresses from a curly bracket JunOS config file. The following script will be used to generate A and PTR records for a BIND zone file. Please note that the script needs to be run within the same directory as the Perl parser script and the config file.</p>
-<p>The entries will have the following format:<br />
-type-fpc-pic-port 300 IN A $value<br />
-$value IN PTR type-fpc-pic-port.hostname.domain</p>
-<p> <code lang="bash[notools]"><br />
-#/bin/bash<br />
-PERL='/usr/bin/perl'<br />
-PARSER='./parser.pl'<br />
-CONFIG_FILE='config.txt'<br />
-CONFIG_SYS='sys'<br />
-CONFIG_INT='int'<br />
-hostname=`$PERL $PARSER $CONFIG_SYS | grep host-name | sed -e s/host-name// -e s/\;// | tr '\r' ' ' | sed -e s/\ //g`<br />
-domain=`$PERL $PARSER $CONFIG_SYS | grep domain-name | sed -e s/domain-name// -e s/\;// | tr '\r' ' ' | sed -e s/\ //g`<br />
-for i in `grep "ge-[0-9]\/[0-9]\/[0-9] {\|ae[0-9] {\|lo[0-9] {" $CONFIG_FILE | sed -e s/\ //g  -e s/\{// | tr '\r' ' '`<br />
-    do<br />
-        intname=`echo $i | sed s/\\\//-/g`<br />
-        for j in `$PERL $PARSER $CONFIG_INT $i | grep unit | sed -e s/\ unit//g  -e s/\{// -e s/\ //g | tr '\r' ' '`<br />
-            do<br />
-                inetaddr=`$PERL $PARSER $CONFIG_INT $i $j | tr '\r' ' '`<br />
-                lastoct=`echo $inetaddr | awk -F '.' {'print $4'}`<br />
-                if [ $j -eq 0 ]<br />
-                then<br />
-                    echo "$intname 300 IN A  $inetaddr"<br />
-                    echo "$lastoct  IN  PTR $intname.$hostname.$domain."<br />
-                    echo
-<p>                else<br />
-                    if [ $j -eq 10 ]<br />
-                    then<br />
-                        echo "$intname 300 IN A  $inetaddr"<br />
-                        echo "$lastoct  IN  PTR $intname.$hostname.$domain."<br />
-                        echo<br />
-                    else<br />
-                        echo "$intname-u$j 300 IN A  $inetaddr"<br />
-                        echo "$lastoct  IN  PTR $intname-u$j.$hostname.$domain."<br />
-                        echo<br />
-                    fi<br />
-                fi<br />
-            done<br />
-    done<br />
-</p>
 
-
-</code></p>
 	
   				</p>
   				<p>
-  					<a href="http://remoteur.github.io//linux/2014/02/23/junos-interfaces-ip-addresses-a-and-ptr-records-generator/" title="JunOS interfaces IP addresses DNS records generator">
+  					<a href="http://remoteur.github.io:4000//junos-interfaces-ip-addresses-dns-records-generator" title="JunOS interfaces IP addresses DNS records generator">
   						Read More
 					</a>
   				</p>
@@ -844,7 +261,7 @@ for i in `grep "ge-[0-9]\/[0-9]\/[0-9] {\|ae[0-9] {\|lo[0-9] {" $CONFIG_FILE | s
   		
   			<div class="post">
     			<h3 class="post-title">
-			      <a href="http://remoteur.github.io//linux/2014/02/23/junos-curly-brackets-configuration-parser/">
+			      <a href="http://remoteur.github.io:4000//junos-curly-brackets-config-parser">
 			        JunOS config interfaces IP address parser
 			      </a>
     			</h3>
@@ -852,7 +269,7 @@ for i in `grep "ge-[0-9]\/[0-9]\/[0-9] {\|ae[0-9] {\|lo[0-9] {" $CONFIG_FILE | s
           <p class="post-meta">
             
             <span class="categories">
-            linux
+            linux and automation
             </span> |
             
             <span class="post-date">
@@ -861,136 +278,73 @@ for i in `grep "ge-[0-9]\/[0-9]\/[0-9] {\|ae[0-9] {\|lo[0-9] {" $CONFIG_FILE | s
           </p>          
     			    			
   				<p>
-	  				<p>Hello guys,</p>
-<p>In todays post I will show how you can obtain an interface IP address out of a JunOS curly brackets configuration file. You may find below the script and also the source configuration file. Please note that in order to run the script both files need to be placed in the same directory. </p>
-<p>Please check it and let me know what you think, it's my first Perl script so it could definitely be improved.</p>
-<p><code lang="perl[notools]">#!/usr/bin/perl<br />
-open (CONFIG, 'config.txt');<br />
-my $data = do { local $/; <config>;};<br />
-close (CONFIG);
-<p>my $system = $data =~ m{(\bsystem\s*({(?:(?&gt;[^{}]+)|(?-1))*}))}<br />
-    ? $1<br />
-    : die "system not found";</p>
-<p>my $intconfig = $data =~ m{(\binterfaces\s*({(?:(?&gt;[^{}]+)|(?-1))*}))}<br />
-    ? $1<br />
-    : die "interfaces not found";</p>
-<p>if ($ARGV[0] eq 'sys') {<br />
-    print $system;<br />
-}</p>
-<p>if ($ARGV[0] eq 'int') {<br />
-    if (!defined $ARGV[1]) {<br />
-        print $intconfig, "\n";<br />
-    }<br />
-    if (defined $ARGV[1]) {<br />
-        my $int = $intconfig =~ m{(\b$ARGV[1]\s*({(?:(?&gt;[^{}]+)|(?-1))*}))}<br />
-            ? $1<br />
-            : die "$ARGV[1] not found";</p>
-<p>        if (!defined $ARGV[2]) {<br />
-            print $int. "\n";<br />
-        }</p>
-<p>        if (defined $ARGV[2]) {<br />
-            my $unit = $int =~m{(\bunit $ARGV[2]\s*({(?:(?&gt;[^{}]+)|(?-1))*}))}<br />
-                ? $1<br />
-                : die "$ARGV[2] not found";</p>
-<p>            my $inet = $unit =~ m{(\bfamily inet\s*({(?:(?&gt;[^{}]+)|(?-1))*}))}<br />
-                ? $1<br />
-                : die "family inet not found in section";</p>
-<p>            my $inetaddr = $inet =~ m{\baddress\s(\d{1,3}(?:\.\d{1,3}){3})}<br />
-                ? $1<br />
-                : die "no IP address";<br />
-            print $inetaddr, "\n";<br />
-        }<br />
-    }<br />
-}</p>
-<p>if ($ARGV[0] eq '--help' or !defined $ARGV[0]) {<br />
-    print "Usage : ./parser.pl sys                              # outputs system section config", "\n";<br />
-    print "        ./parser.pl int                              # outputs interfaces section config", "\n";<br />
-    print "        ./parser.pl int [int-name]                   # outputs specific interface section config", "\n";<br />
-    print "        ./parser.pl int ge-1/1/7                     # outputs ge-1/1/7 interface section config", "\n";<br />
-    print "        ./parser.pl int [int-name] [unit-id]         # outputs specific interface unit IP address", "\n";<br />
-    print "        ./parser.pl int ge-1/1/7 1001                # outputs ge-1/1/7 interface unit 1001 IP address", "\n";<br />
-}<br />
-</p>
-<p><code lang="perl[notools]"><br />
-marius@remoteur:~&gt;&gt;&gt; cat config.txt<br />
-system {<br />
-    host-name junos-device;<br />
-    domain-name corporate.net<br />
-    time-zone Europe/Bucharest;<br />
-    default-address-selection;<br />
-    no-redirects;<br />
-    location country-code RO;<br />
-}<br />
-interfaces {<br />
-    ge-1/0/0 {<br />
-        description "Core: R:core1 RP:ge-0/1/4 (ptp, isis)";<br />
-        mtu 9192;<br />
-        unit 0 {<br />
-            family inet {<br />
-                address 192.168.140.29/31;<br />
-            }<br />
-        }<br />
-    }<br />
-    ge-1/0/1 {<br />
-        description "Cust: R:cust-a RP:ge-1/0/0 (srx240H)";<br />
-        unit 0 {<br />
-            family inet {<br />
-                address 172.16.166.196/30;<br />
-            }<br />
-        }<br />
-    }<br />
-    ge-1/0/2 {<br />
-        flexible-vlan-tagging;<br />
-        native-vlan-id 10;<br />
-        mtu 9192;<br />
-        unit 10 {<br />
-            description "Cust: R:cust-b (data, feed A)";<br />
-            vlan-id 10;<br />
-            family inet {<br />
-                address 192.168.136.184/31;<br />
-            }<br />
-        }<br />
-        unit 1001 {<br />
-            description "Core: R:cust-b (cpe management)";<br />
-            vlan-id 1001;<br />
-            family inet {<br />
-                filter {<br />
-                    output Protect-cpe;<br />
-                }<br />
-                address 10.15.4.6/30;<br />
-            }<br />
-        }<br />
-    }<br />
-    ae0 {<br />
-        description "Core: R:colo-vc2 RI:ae5";<br />
-        aggregated-ether-options {<br />
-            minimum-links 1;<br />
-            link-speed 1g;<br />
-        }<br />
-        unit 0 {<br />
-            family inet {<br />
-                address 192.168.140.126/31;<br />
-            }<br />
-        }<br />
-    }<br />
-    lo0 {<br />
-        unit 0 {<br />
-            description "Core: R:primary routing loopback";<br />
-            family inet {<br />
-                address 192.168.128.166/32;<br />
-            }
-<p>            }<br />
-        }<br />
-    }<br />
-}<br />
-</p>
+	  				<p>In this post I will show how you can obtain an interface IP address out of a JunOS curly brackets configuration file. You may find below the script and also the source configuration file. Please note that in order to run the script both files need to be placed in the same directory. </p>
 
-
-</code></p></config></code></p>
 	
   				</p>
   				<p>
-  					<a href="http://remoteur.github.io//linux/2014/02/23/junos-curly-brackets-configuration-parser/" title="JunOS config interfaces IP address parser">
+  					<a href="http://remoteur.github.io:4000//junos-curly-brackets-config-parser" title="JunOS config interfaces IP address parser">
+  						Read More
+					</a>
+  				</p>
+  			</div>
+  		
+  			<div class="post">
+    			<h3 class="post-title">
+			      <a href="http://remoteur.github.io:4000//linux-l2tp-ethernet-pseudowires">
+			        Linux L2TP ethernet pseudowires
+			      </a>
+    			</h3>
+
+          <p class="post-meta">
+            
+            <span class="categories">
+            linux, switching, routing, and virtualization
+            </span> |
+            
+            <span class="post-date">
+            Feb 16, 2014 
+            </span>
+          </p>          
+    			    			
+  				<p>
+	  				<p>This post describes how you can create L2TP ethernet pseudowires by using Linux kernel’s L2TP drivers and the “ip” utility of iproute2.  L2TP is a protocol that tunnels one or more sessions over an IP tunnel. It is commonly used for VPNs (L2TP/IPSec) and by ISPs to tunnel subscriber PPP sessions over an IP network infrastructure. With L2TPv3, it is also useful as a Layer-2 tunneling infrastructure. </p>
+
+	
+  				</p>
+  				<p>
+  					<a href="http://remoteur.github.io:4000//linux-l2tp-ethernet-pseudowires" title="Linux L2TP ethernet pseudowires">
+  						Read More
+					</a>
+  				</p>
+  			</div>
+  		
+  			<div class="post">
+    			<h3 class="post-title">
+			      <a href="http://remoteur.github.io:4000//cpu-benchmark-using-sysbench">
+			        CPU benchmark using sysbench
+			      </a>
+    			</h3>
+
+          <p class="post-meta">
+            
+            <span class="categories">
+            linux and benchmark
+            </span> |
+            
+            <span class="post-date">
+            Feb 9, 2014 
+            </span>
+          </p>          
+    			    			
+  				<p>
+	  				<p>Sysbench allows you to do a quick performance benchmark of several system parameters such as file I/O, CPU, scheduler and others.
+Below are the results for running a 100000 prime numbers calculation using 4 threads on my Intel Core i5-3427U CPU:</p>
+
+	
+  				</p>
+  				<p>
+  					<a href="http://remoteur.github.io:4000//cpu-benchmark-using-sysbench" title="CPU benchmark using sysbench">
   						Read More
 					</a>
   				</p>
@@ -998,7 +352,7 @@ interfaces {<br />
   		
 	</div>
 	<div class="post-footer">
-		<div class="column-full"><a href="http://remoteur.github.io//blog">Blog archive</a></div>
+		<div class="column-full"><a href="http://remoteur.github.io:4000//blog">Blog archive</a></div>
 	</div>
 </div>
 
@@ -1007,8 +361,8 @@ interfaces {<br />
                 <div class="column one">
                     <h6>Few more links</h6>
 <ul class="menu">
-    <li><a href="http://remoteur.github.io//about">About</a></li>
-    <li><a href="http://remoteur.github.io//blogroll">Blogroll</a></li>
+    <li><a href="http://remoteur.github.io:4000//about">About</a></li>
+    <li><a href="http://remoteur.github.io:4000//blogroll">Blogroll</a></li>
 </ul>		
                     
                 </div>
@@ -1071,9 +425,9 @@ Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>
         <!-- jQuery -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <!-- When no internet load JQuery from local -->
-        <script>window.jQuery || document.write('<script src="http://remoteur.github.io//assets/js/jquery.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="http://remoteur.github.io:4000//assets/js/jquery.min.js"><\/script>')</script>
         <!-- Site js -->
-        <script src="http://remoteur.github.io/assets/js/all.js"></script>
+        <script src="http://remoteur.github.io:4000/assets/js/all.js"></script>
         <!-- Google analytics  -->
         
 <script type="text/javascript">

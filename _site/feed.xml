@@ -5,108 +5,457 @@
     <description>learn by doing</description>
     <link>http://remoteur.github.io//</link>
     <atom:link href="http://remoteur.github.io//feed.xml" rel="self" type="application/rss+xml" />
-    <pubDate>Mon, 06 Apr 2015 01:46:32 +0000</pubDate>
-    <lastBuildDate>Mon, 06 Apr 2015 01:46:32 +0000</lastBuildDate>
+    <pubDate>Mon, 06 Apr 2015 09:45:31 +0000</pubDate>
+    <lastBuildDate>Mon, 06 Apr 2015 09:45:31 +0000</lastBuildDate>
     <generator>Jekyll v2.4.0</generator>
     
       <item>
         <title>Getting started with Docker and the wonders of Open Source</title>
-        <description>&lt;p&gt;As Docker has been a buzzword lately(last year or so) I though that I should give it a try and really do something with it besides reading articles about how great it is.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;First thing that came to mind and most handy I guess is to build a LAMP stack environment for Wordpress sites. So how do I start? Well, let’s take the LAMP environment and split it into components: we need a database to store data and a web server that can process the Wordpress PHP code. Based on this I decided to create a container for the MySQL database and a container for running Apache plus additional PHP modules. Then I would also like to run multiple Wordpress instances on the same server to make use of all the resources. In order to achieve isolation between the apps we can create separate containers for each WP instance, each with its own database on the MySQL server. Nevertheless since we want all the instances accessible by a single IP address, we also need a load balancer that routes traffic to the webserver containers according to the Host field in the HTTP header. 
-Below is a diagram that better describes the flow:
-&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot; alt=&quot;Containers start - New Page&quot; width=&quot;1167&quot; height=&quot;657&quot; class=&quot;aligncenter size-full wp-image-303&quot; /&gt;&lt;/a&gt;
-So, let’s get started. I got a Fedora21 instance powered up and followed the documentation &lt;a href=&quot;https://docs.docker.com/installation/fedora/&quot;&gt;here&lt;/a&gt;[1] to get Docker up and running. Once I got the docker environment ready I started searching for some examples that would quickly get me started with the apps that I needed. So I started with the MySQL server. A quick search on Google pointed me to the official MySQL &lt;a href=&quot;https://registry.hub.docker.com/_/mysql/&quot;&gt;repo&lt;/a&gt;[2] on Docker Hub that contains pretty straight forward documentation on how to get a running MySQL container. &lt;/p&gt;
-
-&lt;p&gt;Here’s the command that I ran in order to get it running:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker run --name db-server -v /srv/db-server/storage:/var/lib/mysql -e &lt;span class=&quot;nv&quot;&gt;MYSQL_ROOT_PASSWORD&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;openssl rand -hex 10&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; -d mysql:latest&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+        <description>&lt;p&gt;As Docker has been a buzzword lately(last year or so) I though that I should give it a try and really do something with it besides reading articles about how great it is. First thing that came to mind and most handy I guess is to build a LAMP stack environment for Wordpress sites. So how do I start? Well, let&#39;s take the LAMP environment and split it into components: we need a database to store data and a web server that can process the Wordpress PHP code. Based on this I decided to create a container for the MySQL database and a container for running Apache plus additional PHP modules. Then I would also like to run multiple Wordpress instances on the same server to make use of all the resources. In order to achieve isolation between the apps we can create separate containers for each WP instance, each with its own database on the MySQL server. Nevertheless since we want all the instances accessible by a single IP address, we also need a load balancer that routes traffic to the webserver containers according to the Host field in the HTTP header. &lt;/p&gt;
+&lt;p&gt;Below is a diagram that better describes the flow:&lt;br /&gt;
+&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Containers-start-New-Page1.png&quot; alt=&quot;Containers start - New Page&quot; width=&quot;1167&quot; height=&quot;657&quot; class=&quot;aligncenter size-full wp-image-303&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;So, let&#39;s get started. I got a Fedora21 instance powered up and followed the documentation &lt;a href=&quot;https://docs.docker.com/installation/fedora/&quot;&gt;here&lt;/a&gt;[1] to get Docker up and running. Once I got the docker environment ready I started searching for some examples that would quickly get me started with the apps that I needed. So I started with the MySQL server. A quick search on Google pointed me to the official MySQL &lt;a href=&quot;https://registry.hub.docker.com/_/mysql/&quot;&gt;repo&lt;/a&gt;[2] on Docker Hub that contains pretty straight forward documentation on how to get a running MySQL container. &lt;/p&gt;
+&lt;p&gt;Here&#39;s the command that I ran in order to get it running:&lt;br /&gt;
+&lt;code lang=&quot;python[notools]&quot;&gt;&lt;br /&gt;
+docker run --name db-server -v /srv/db-server/storage:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=$(openssl rand -hex 10) -d mysql:latest&lt;br /&gt;
+&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;What this does is that it creates a container called db-server with the /var/lib/mysql directory mounted from the /srv/db-server/storage directory on the host file system, injecting the MYSQL_ROOT_PASSWORD(some random generated hex string) environment variable that will be used at database server initialization and it uses the image called mysql(pulled from Docker hub) with the tag latest to build from. I chose storing the mysql content to a directory accessible on the host because I am not familiar yet with the Docker images and file system and I would like to preserve the db data in case I mess up something with the containers. Now that we ran the command we should see the container running:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker ps
-CONTAINER ID IMAGE 		COMMAND 		CREATED 	  STATUS  PORTS NAMES
-c383c56a7e66 mysql:latest	&lt;span class=&quot;err&quot;&gt;&amp;quot;&lt;/span&gt;/entrypoint.sh mysq   About an hour ago   Up &lt;span class=&quot;m&quot;&gt;7&lt;/span&gt; seconds        3306/tcp            db-server&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;We can see that the server is running and it’s exposing the MySQL port 3306. You can check the container properties by running ‘docker inspect db-server’. This should return a json containing all the container properties including the environment variables that were set at start, including the MySQL root password. 
-We can actually check the current databases by running this dirty one liner:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker &lt;span class=&quot;nb&quot;&gt;exec &lt;/span&gt;db-server mysql -uroot -p&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;docker inspect --format &lt;span class=&quot;s1&quot;&gt;&amp;#39;&amp;#39;&lt;/span&gt; db-server &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;print $1&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;|&lt;/span&gt; awk -F &lt;span class=&quot;s1&quot;&gt;&amp;#39;=&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;print $2&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt; -e &lt;span class=&quot;s1&quot;&gt;&amp;#39;show databases&amp;#39;&lt;/span&gt;
-Database
-information_schema
-domain
-mysql
-performance_schema&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;So now that we have the DB server ready we can proceed further with creating the Apache webserver. First thing before reinventing the wheel is to search if others already created the wheel. As expected I found John Finks docker-wordpress repo &lt;a href=&quot;https://github.com/jbfink/docker-wordpress.git&quot;&gt;here&lt;/a&gt;[3] where he covers a full LAMP stack, including Wordpress container. I didn’t need all that for my webserver containers but it was a great starting point for me. So I forked it, did some changes and it resulted in the following &lt;a href=&quot;https://github.com/remoteur/docker-wordpress.git&quot;&gt;repo&lt;/a&gt;. Let’s take a look at what’s inside the repo. We have a Dockerfile and 2 directories: configs and scripts. The 2 directories actually contain files that are called in the Dockerfile. What is this Dockerfile? It’s the file used for building Docker images. Usually it contains a base image and some additional steps that are ran on top of the base image. For instance my Dockerfile uses the Debian image tagged latest as base, then it adds the Dotdeb repos, installs the packages required for Apache and PHP modules, adds the config files from the config directory inside the image and also the files from the scripts directory that are going to be run when the container starts. Let’s build the image by using this Dockerfile.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git clone https://github.com/remoteur/docker-wordpress.git
-&lt;span class=&quot;nb&quot;&gt;cd &lt;/span&gt;docker-wordpress/
-docker build -t webnode .&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;It takes some time to build the image and after it’s finished we can go ahead and fire up the webnode container.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker run --name webnode  -v /srv/webnode/www:/var/www/ --link db-server:mysql -d webnode:latest&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;What this does is that it runs a container called webnode which is linked to the db-server container so that it can access it by it’s name (mysql in our example) and it’s using the image that we’ve just built called webnode with the ‘latest’ tag. Again we want the data that’s important to us from the container to be stored directly on the host file system so we mount the /var/www directory from the host’s /srv/webnode/www directory. We can now see both the containers are running:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker ps
-CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES
-4aba6d289230        webnode:latest      &lt;span class=&quot;s2&quot;&gt;&amp;quot;/bin/bash /start.sh   3 minutes ago       Up 3 minutes        80/tcp              webnode&lt;/span&gt;
-&lt;span class=&quot;s2&quot;&gt;c383c56a7e66        mysql:latest        &amp;quot;&lt;/span&gt;/entrypoint.sh mysq   &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; hours ago         Up &lt;span class=&quot;m&quot;&gt;32&lt;/span&gt; minutes       3306/tcp            db-server&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;At this point we have the database server and webserver running but without any content in the Apache root directory. So in order to get Wordpress automatically installed when running a webnode container I wrote a quick bash script that creates the requirements for the Wordpress instance such as database, database user, pulls the latest Wordpress  and adjusts the wp-config.php file so it matches the db settings. You may find the script &lt;a href=&quot;https://gist.github.com/remoteur/6b12ce450d0005acc287&quot;&gt;here&lt;/a&gt;[5]
-After running the container by using this script we have a full runing LAMP environment with Wordpress code installed in the Apache root. The only thing that we’re missing is the load balancer container that will acutally expose the websites publicly by the hosts IP address and route traffic to the webnode containers. Basically this could be done by installing an Nginx container that acts as a reverse proxy. But then we’d need to adjust the Nginx configuration files manually which we don’t want because we hate doing manual operations, right? :) So next step is to search for how others do this, I’m pretty sure I’m not the first one that hit this issue. My searches brought me to Jason Wilder nginx-proxy github &lt;a href=&quot;https://github.com/jwilder/nginx-proxy.git&quot;&gt;repo&lt;/a&gt;[6] which does exactly what I need. Basically the repo contains a Dockerfile that installs nginx plus docker-gen. Docker-gen is a tool that generates files based on templates and docker containers metadata. What this does in our case is that it watches for containers that are ran with the VIRTUAL_HOST env var set, generates the nginx config file containing the server directive with the values passed through VIRTUAL_HOST and reloads the nginx service in the end. &lt;/p&gt;
-
-&lt;p&gt;That’s pretty awesome so let’s start it:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker run --name loadbalancer -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock jwilder/nginx-proxy&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The command runs a container called loadbalancer with it’s port 80 translated to the host’s port 80(listening on all interfaces), the Docker socket file on the host(/var/run/docker.sock) is accessible inside the container by /tmp/docker.sock and it’s using the jwilder/nginx-proxy image to run from. We should now be able to create a new webnode container and access it via the the hosts IP address on port 80. 
-Let’s give it a try and see if it works:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;bash create_wordpress
-Enter wordress domain:
-domain.com
-Creating container web root in /srv/webnode/webnode-domain.com/www
-Downloading Wordpress to webnode-domain.com
-Creating Wordpress database
-Adjusting wp-config.php
-Adjusting permissions &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; www-data
+&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker ps&lt;br /&gt;
+CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES&lt;br /&gt;
+c383c56a7e66        mysql:latest        &quot;/entrypoint.sh mysq   About an hour ago   Up 7 seconds        3306/tcp            db-server&lt;/code&gt;         &lt;/p&gt;
+&lt;p&gt;We can see that the server is running and it&#39;s exposing the MySQL port 3306. You can check the container properties by running &#39;docker inspect db-server&#39;. This should return a json containing all the container properties including the environment variables that were set at start, including the MySQL root password. &lt;/p&gt;
+&lt;p&gt;We can actually check the current databases by running this dirty one liner:&lt;br /&gt;
+&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker exec db-server mysql -uroot -p`docker inspect --format &#39;&#39; db-server | awk {&#39;print $1&#39;} | awk -F &#39;=&#39; {&#39;print $2&#39;}` -e &#39;show databases&#39;&lt;br /&gt;
+Database&lt;br /&gt;
+information_schema&lt;br /&gt;
+domain&lt;br /&gt;
+mysql&lt;br /&gt;
+performance_schema&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;So now that we have the DB server ready we can proceed further with creating the Apache webserver. First thing before reinventing the wheel is to search if others already created the wheel. As expected I found John Finks docker-wordpress repo &lt;a href=&quot;https://github.com/jbfink/docker-wordpress.git&quot;&gt;here&lt;/a&gt;[3] where he covers a full LAMP stack, including Wordpress container. I didn&#39;t need all that for my webserver containers but it was a great starting point for me. So I forked it, did some changes and it resulted in the following &lt;a href=&quot;https://github.com/remoteur/docker-wordpress.git&quot;&gt;repo&lt;/a&gt;. Let&#39;s take a look at what&#39;s inside the repo. We have a Dockerfile and 2 directories: configs and scripts. The 2 directories actually contain files that are called in the Dockerfile. What is this Dockerfile? It&#39;s the file used for building Docker images. Usually it contains a base image and some additional steps that are ran on top of the base image. For instance my Dockerfile uses the Debian image tagged latest as base, then it adds the Dotdeb repos, installs the packages required for Apache and PHP modules, adds the config files from the config directory inside the image and also the files from the scripts directory that are going to be run when the container starts. Let&#39;s build the image by using this Dockerfile. &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; git clone https://github.com/remoteur/docker-wordpress.git&lt;br /&gt;
+root@docker:~&amp;gt;&amp;gt; cd docker-wordpress/&lt;br /&gt;
+root@docker:~/docker-wordpress&amp;gt;&amp;gt; docker build -t webnode .&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;It takes some time to build the image and after it&#39;s finished we can go ahead and fire up the webnode container. &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker run --name webnode  -v /srv/webnode/www:/var/www/ --link db-server:mysql -d webnode:latest&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;What this does is that it runs a container called webnode which is linked to the db-server container so that it can access it by it&#39;s name (mysql in our example) and it&#39;s using the image that we&#39;ve just built called webnode with the &#39;latest&#39; tag. Again we want the data that&#39;s important to us from the container to be stored directly on the host file system so we mount the /var/www directory from the host&#39;s /srv/webnode/www directory. We can now see both the containers are running:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker ps&lt;br /&gt;
+CONTAINER ID        IMAGE               COMMAND                CREATED             STATUS              PORTS               NAMES&lt;br /&gt;
+4aba6d289230        webnode:latest      &quot;/bin/bash /start.sh   3 minutes ago       Up 3 minutes        80/tcp              webnode&lt;br /&gt;
+c383c56a7e66        mysql:latest        &quot;/entrypoint.sh mysq   2 hours ago         Up 32 minutes       3306/tcp            db-server  &lt;/code&gt;         &lt;/p&gt;
+&lt;p&gt;At this point we have the database server and webserver running but without any content in the Apache root directory. So in order to get Wordpress automatically installed when running a webnode container I wrote a quick bash script that creates the requirements for the Wordpress instance such as database, database user, pulls the latest Wordpress  and adjusts the wp-config.php file so it matches the db settings. You may find the script &lt;a href=&quot;https://gist.github.com/remoteur/6b12ce450d0005acc287&quot;&gt;here&lt;/a&gt;[5]&lt;/p&gt;
+&lt;p&gt;After running the container by using this script we have a full runing LAMP environment with Wordpress code installed in the Apache root. The only thing that we&#39;re missing is the load balancer container that will acutally expose the websites publicly by the hosts IP address and route traffic to the webnode containers. Basically this could be done by installing an Nginx container that acts as a reverse proxy. But then we&#39;d need to adjust the Nginx configuration files manually which we don&#39;t want because we hate doing manual operations, right? :) So next step is to search for how others do this, I&#39;m pretty sure I&#39;m not the first one that hit this issue. My searches brought me to Jason Wilder nginx-proxy github &lt;a href=&quot;https://github.com/jwilder/nginx-proxy.git&quot;&gt;repo&lt;/a&gt;[6] which does exactly what I need. Basically the repo contains a Dockerfile that installs nginx plus docker-gen. Docker-gen is a tool that generates files based on templates and docker containers metadata. What this does in our case is that it watches for containers that are ran with the VIRTUAL_HOST env var set, generates the nginx config file containing the server directive with the values passed through VIRTUAL_HOST and reloads the nginx service in the end. That&#39;s pretty awesome so let&#39;s start it:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; docker run --name loadbalancer -d -p 80:80 -v /var/run/docker.sock:/tmp/docker.sock jwilder/nginx-proxy&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The command runs a container called loadbalancer with it&#39;s port 80 translated to the host&#39;s port 80(listening on all interfaces), the Docker socket file on the host(/var/run/docker.sock) is accessible inside the container by /tmp/docker.sock and it&#39;s using the jwilder/nginx-proxy image to run from. We should now be able to create a new webnode container and access it via the the hosts IP address on port 80. Let&#39;s give it a try and see if it works:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;root@docker:~&amp;gt;&amp;gt; bash create_wordpress&lt;br /&gt;
+Enter wordress domain:&lt;br /&gt;
+domain.com&lt;br /&gt;
+Creating container web root in /srv/webnode/webnode-domain.com/www&lt;br /&gt;
+Downloading Wordpress to webnode-domain.com&lt;br /&gt;
+Creating Wordpress database&lt;br /&gt;
+Adjusting wp-config.php&lt;br /&gt;
+Adjusting permissions for www-data&lt;br /&gt;
 c9f7ebb1935f60c293d6feddfb436321afb9b5d1b57800da62d77d49a292dbdb
-root@docker:~&amp;gt;&amp;gt; docker ps
-CONTAINER ID        IMAGE                        COMMAND                CREATED             STATUS              PORTS                         NAMES
-c9f7ebb1935f        webnode:latest               &lt;span class=&quot;s2&quot;&gt;&amp;quot;/bin/bash /start.sh   34 seconds ago      Up 31 seconds       80/tcp                        webnode-domain.com&lt;/span&gt;
-&lt;span class=&quot;s2&quot;&gt;812324707acd        jwilder/nginx-proxy:latest   &amp;quot;&lt;/span&gt;forego start -r&lt;span class=&quot;s2&quot;&gt;&amp;quot;      8 minutes ago       Up 8 minutes        443/tcp, 0.0.0.0:80-&amp;gt;80/tcp   loadbalancer&lt;/span&gt;
-&lt;span class=&quot;s2&quot;&gt;4aba6d289230        webnode:latest               &amp;quot;&lt;/span&gt;/bin/bash /start.sh   &lt;span class=&quot;m&quot;&gt;39&lt;/span&gt; minutes ago      Up &lt;span class=&quot;m&quot;&gt;39&lt;/span&gt; minutes       80/tcp                        webnode
-c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&gt;&amp;quot;&lt;/span&gt;/entrypoint.sh mysq   &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; hours ago         Up About an hour    3306/tcp                      db-server&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;And the result:&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot; alt=&quot;Screenshot from 2015-04-05 21:24:08&quot; width=&quot;1430&quot; height=&quot;847&quot; class=&quot;aligncenter size-full wp-image-304&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;That’s pretty awesome given the fact that I was able to do this in a couple of hours on a lazy Sunday. I’m pretty sure Docker has its caveats (building images takes such a long time) but it’s amazing how fast you can achieve this kind of automation and get familiar with the technology. Long live the Open Source community! :)&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;1&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://docs.docker.com/installation/fedora/
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;2&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://registry.hub.docker.com/_/mysql/
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;3&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/jbfink/docker-wordpress.git
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;4&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/remoteur/docker-wordpress.git
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;5&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://gist.github.com/remoteur/6b12ce450d0005acc287
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;6&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt; https://github.com/jwilder/nginx-proxy.git&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
+&lt;p&gt;root@docker:~&amp;gt;&amp;gt; docker ps&lt;br /&gt;
+CONTAINER ID        IMAGE                        COMMAND                CREATED             STATUS              PORTS                         NAMES&lt;br /&gt;
+c9f7ebb1935f        webnode:latest               &quot;/bin/bash /start.sh   34 seconds ago      Up 31 seconds       80/tcp                        webnode-domain.com&lt;br /&gt;
+812324707acd        jwilder/nginx-proxy:latest   &quot;forego start -r&quot;      8 minutes ago       Up 8 minutes        443/tcp, 0.0.0.0:80-&amp;gt;80/tcp   loadbalancer&lt;br /&gt;
+4aba6d289230        webnode:latest               &quot;/bin/bash /start.sh   39 minutes ago      Up 39 minutes       80/tcp                        webnode&lt;br /&gt;
+c383c56a7e66        mysql:latest                 &quot;/entrypoint.sh mysq   2 hours ago         Up About an hour    3306/tcp                      db-server            &lt;/p&gt;
+&lt;p&gt;And the result:&lt;br /&gt;
+&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/04/Screenshot-from-2015-04-05-212408.png&quot; alt=&quot;Screenshot from 2015-04-05 21:24:08&quot; width=&quot;1430&quot; height=&quot;847&quot; class=&quot;aligncenter size-full wp-image-304&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;That&#39;s pretty awesome given the fact that I was able to do this in a couple of hours on a lazy Sunday. I&#39;m pretty sure Docker has its caveats (building images takes such a long time) but it&#39;s amazing how fast you can achieve this kind of automation and get familiar with the technology. Long live the Open Source community! :)&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;python[notools]&quot;&gt;[1] https://docs.docker.com/installation/fedora/&lt;br /&gt;
+[2] https://registry.hub.docker.com/_/mysql/&lt;br /&gt;
+[3] https://github.com/jbfink/docker-wordpress.git&lt;br /&gt;
+[4] https://github.com/remoteur/docker-wordpress.git&lt;br /&gt;
+[5] https://gist.github.com/remoteur/6b12ce450d0005acc287&lt;br /&gt;
+[6] https://github.com/jwilder/nginx-proxy.git&lt;/code&gt;&lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 05 Apr 2015 22:07:40 +0000</pubDate>
-        <link>http://remoteur.github.io//getting-started-with-docker</link>
-        <guid isPermaLink="true">http://remoteur.github.io//getting-started-with-docker</guid>
+        <link>http://remoteur.github.io//uncategorized/linux/virtualization/python/2015/04/05/getting-started-with-docker-and-the-wonders-of-opensource/</link>
+        <guid isPermaLink="true">http://remoteur.github.io//uncategorized/linux/virtualization/python/2015/04/05/getting-started-with-docker-and-the-wonders-of-opensource/</guid>
+        
+        
+        <category>uncategorized</category>
+        
+        <category>linux</category>
+        
+        <category>virtualization</category>
+        
+        <category>python</category>
+        
+      </item>
+    
+      <item>
+        <title>OSPF lab provisioning on IOS with Ansible</title>
+        <description>&lt;p&gt;In this post we&#39;ll see how we can quickly get a basic OSPF lab deployed by using Ansible. Our setup consists of 3 x Cisco IOS routers which are connected according to the diagram below. All the routers should already have SSH set up and an interface connected to the management network that will be used for retrieving the configuration files from the server. On the server side we need a Linux machine that has Ansible installed.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2015/02/ansible_ospf-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2015/02/ansible_ospf-New-Page.png&quot; alt=&quot;ansible_ospf - New Page&quot; width=&quot;649&quot; height=&quot;594&quot; class=&quot;aligncenter size-full wp-image-297&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;So let&#39;s get started by building the Ansible playbook. I&#39;ll explain the site.yml file below: &lt;/p&gt;
+&lt;p&gt;1. Run the playbook on the &#39;localhost&#39; server by using the &#39;marius&#39; username with sudo&lt;br /&gt;
+2. Install and start Apache as the routers will pull the config files over HTTP&lt;br /&gt;
+3. Install Git - used to clone the netmiko library repo&lt;br /&gt;
+4. Install paramiko - dependency library for netmiko&lt;br /&gt;
+5. Clone the netmiko repo and install it as a system module&lt;br /&gt;
+6. Next we use the netmiko.j2 template to create a script file. The script uses netmiko and takes as arguments the ip address, username, password and command that will be run on the remote Cisco device.&lt;br /&gt;
+7. We generate the configuration files that are going to be pulled by the routers. For this we use the config.j2 template and write the configuration files on the Apache DocumentRoot. This will results in 3 files: /var/www/html/rtr-A.config, /var/www/html/rtr-B.config, /var/www/html/rtr-C.config containing the configuration commands for each of the routers.&lt;br /&gt;
+8. We run the script that we have created on step 6 by passing the &#39;copy http://... running-config&#39; command to each of the routers.&lt;br /&gt;
+9. Define the variables used in the template files and commands.&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+---&lt;br /&gt;
+- hosts: localhost&lt;br /&gt;
+  remote_user: marius&lt;br /&gt;
+  sudo: yes
+&lt;p&gt;  tasks:&lt;br /&gt;
+  - name: Install Apache&lt;br /&gt;
+    yum: name=httpd state=installed&lt;/p&gt;
+&lt;p&gt;  - name: Start Apache&lt;br /&gt;
+    service: name=httpd state=started enabled=yes&lt;/p&gt;
+&lt;p&gt;  - name: Install Git&lt;br /&gt;
+    yum: name=git state=installed&lt;/p&gt;
+&lt;p&gt;  - name: Install paramiko&lt;br /&gt;
+    yum: name=python-paramiko state=installed&lt;/p&gt;
+&lt;p&gt;  - name: Clone netmiko&lt;br /&gt;
+    git: repo=https://github.com/ktbyers/netmiko.git dest=/opt/netmiko&lt;/p&gt;
+&lt;p&gt;  - name: Install netmiko&lt;br /&gt;
+    command: chdir=/opt/netmiko python setup.py install&lt;/p&gt;
+&lt;p&gt;  - name: Create netmiko script&lt;br /&gt;
+    template: src=netmiko.j2 dest=/opt/remote_cmd&lt;/p&gt;
+&lt;p&gt;  - name: Generate config file&lt;br /&gt;
+    template: src=config.j2 dest=/var/www/html/.config&lt;br /&gt;
+    with_items: routers&lt;/p&gt;
+&lt;p&gt;  - name: Connect to routers and pull the config&lt;br /&gt;
+    shell: python /opt/remote_cmd    &#39;copy http:///.config running-config&#39;&lt;br /&gt;
+    with_items: routers&lt;/p&gt;
+&lt;p&gt;  vars:&lt;br /&gt;
+   routers:&lt;br /&gt;
+     - name: &quot;rtr-A&quot;&lt;br /&gt;
+       mgmt_ip: &quot;192.168.0.81&quot;&lt;br /&gt;
+       mgmt_user: &quot;admin&quot;&lt;br /&gt;
+       mgmt_pass: &quot;parola&quot;&lt;br /&gt;
+       int:&lt;br /&gt;
+         - name: &quot;GigabitEthernet0/1&quot;&lt;br /&gt;
+           address: &quot;10.0.0.1&quot;&lt;br /&gt;
+           netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
+           ospf: &quot;yes&quot;&lt;br /&gt;
+         - name: &quot;GigabitEthernet0/2&quot;&lt;br /&gt;
+           address: &quot;10.0.0.5&quot;&lt;br /&gt;
+           netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
+           ospf: &quot;yes&quot;&lt;br /&gt;
+         - name: &quot;Loopback0&quot;&lt;br /&gt;
+           address: &quot;1.1.1.1&quot;&lt;br /&gt;
+           netmask: &quot;255.255.255.0&quot;&lt;br /&gt;
+           ospf: &quot;yes&quot;&lt;/p&gt;
+&lt;p&gt;     - name: &quot;rtr-B&quot;&lt;br /&gt;
+       mgmt_ip: &quot;192.168.0.78&quot;&lt;br /&gt;
+       mgmt_user: &quot;admin&quot;&lt;br /&gt;
+       mgmt_pass: &quot;parola&quot;&lt;br /&gt;
+       int:&lt;br /&gt;
+        - name: &quot;GigabitEthernet0/1&quot;&lt;br /&gt;
+          address: &quot;10.0.0.2&quot;&lt;br /&gt;
+          netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
+          ospf: &quot;yes&quot;&lt;br /&gt;
+        - name: &quot;GigabitEthernet0/2&quot;&lt;br /&gt;
+          address: &quot;10.0.0.9&quot;&lt;br /&gt;
+          netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
+          ospf: &quot;yes&quot;&lt;br /&gt;
+        - name: &quot;Loopback0&quot;&lt;br /&gt;
+          address: &quot;2.2.2.2&quot;&lt;br /&gt;
+          netmask: &quot;255.255.255.0&quot;&lt;br /&gt;
+          ospf: &quot;yes&quot;&lt;/p&gt;
+&lt;p&gt;     - name: &quot;rtr-C&quot;&lt;br /&gt;
+       mgmt_ip: &quot;192.168.0.79&quot;&lt;br /&gt;
+       mgmt_user: &quot;admin&quot;&lt;br /&gt;
+       mgmt_pass: &quot;parola&quot;&lt;br /&gt;
+       int:&lt;br /&gt;
+         - name: &quot;GigabitEthernet0/1&quot;&lt;br /&gt;
+           address: &quot;10.0.0.6&quot;&lt;br /&gt;
+           netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
+           ospf: &quot;yes&quot;&lt;br /&gt;
+         - name: &quot;GigabitEthernet0/2&quot;&lt;br /&gt;
+           address: &quot;10.0.0.10&quot;&lt;br /&gt;
+           netmask: &quot;255.255.255.252&quot;&lt;br /&gt;
+           ospf: &quot;yes&quot;&lt;br /&gt;
+         - name: &quot;Loopback0&quot;&lt;br /&gt;
+           address: &quot;3.3.3.3&quot;&lt;br /&gt;
+           netmask: &quot;255.255.255.0&quot;&lt;br /&gt;
+           ospf: &quot;no&quot; &lt;/p&gt;
+&lt;p&gt;Now let&#39;s go through the template files. &lt;/p&gt;
+&lt;p&gt;The config.j2 template is used to build the configuration commands that will be loaded by the routers. What this does is basically loop through the interfaces defined for each of the routers and create the ip address statements for each of them. After this, it generates an entry for the ospf process and creates a network statement if the &#39;ospf&#39; variable is set to yes for a specific interface. &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+config.j2&lt;br /&gt;
+
+&lt;p&gt;router ospf 1&lt;br /&gt;
+&lt;/p&gt;
+&lt;p&gt;The netmiko.j2 template is just a python script that&#39;s using netmiko to connect to the router, first runs &#39;file prompt quiet&#39; configuration command to disable the save confirmation message. Then it runs the command that&#39;s passed as the 4th argument.  &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+netmiko.j2&lt;br /&gt;
+#!/usr/bin/env python&lt;br /&gt;
+import netmiko&lt;br /&gt;
+import sys
+&lt;p&gt;cisco_881 = {&lt;br /&gt;
+	&#39;device_type&#39;: &#39;cisco_ios&#39;,&lt;br /&gt;
+	&#39;ip&#39;:   sys.argv[1],&lt;br /&gt;
+	&#39;username&#39;: sys.argv[2],&lt;br /&gt;
+	&#39;password&#39;: sys.argv[3],&lt;br /&gt;
+	&#39;secret&#39;: &#39;secret&#39;,&lt;br /&gt;
+	&#39;verbose&#39;: False,&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;SSHClass = netmiko.ssh_dispatcher(device_type=cisco_881[&#39;device_type&#39;])&lt;/p&gt;
+&lt;p&gt;net_connect = SSHClass(**cisco_881)&lt;/p&gt;
+&lt;p&gt;config_commands = [ &#39;file prompt quiet&#39; ]&lt;br /&gt;
+output = net_connect.send_config_set(config_commands)&lt;/p&gt;
+&lt;p&gt;output = net_connect.send_command(sys.argv[4])&lt;br /&gt;
+&lt;/p&gt;
+&lt;p&gt;In order to run this we will also need the /etc/ansible/hosts file to contain the localhost hostname. You can find all the files in this GitHub repo: &lt;a href=&quot;https://github.com/remoteur/ansible-ospflab.git&quot;&gt;https://github.com/remoteur/ansible-ospflab.git&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Once we have all the files in place we can run the playbook by the &#39;ansible-playbook site.yml&#39; command. This is how the output looks like:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+marius@net-master:/etc/ansible&amp;gt;&amp;gt;&amp;gt; ansible-playbook site.yml 
+&lt;p&gt;PLAY [localhost] ************************************************************** &lt;/p&gt;
+&lt;p&gt;GATHERING FACTS ***************************************************************&lt;br /&gt;
+ok: [localhost]&lt;/p&gt;
+&lt;p&gt;TASK: [Install Apache] ********************************************************&lt;br /&gt;
+ok: [localhost]&lt;/p&gt;
+&lt;p&gt;TASK: [Start Apache] **********************************************************&lt;br /&gt;
+ok: [localhost]&lt;/p&gt;
+&lt;p&gt;TASK: [Install Git] ***********************************************************&lt;br /&gt;
+ok: [localhost]&lt;/p&gt;
+&lt;p&gt;TASK: [Install paramiko] ******************************************************&lt;br /&gt;
+ok: [localhost]&lt;/p&gt;
+&lt;p&gt;TASK: [Clone netmiko] *********************************************************&lt;br /&gt;
+ok: [localhost]&lt;/p&gt;
+&lt;p&gt;TASK: [Install netmiko] *******************************************************&lt;br /&gt;
+changed: [localhost]&lt;/p&gt;
+&lt;p&gt;TASK: [Create netmiko script] *************************************************&lt;br /&gt;
+ok: [localhost]&lt;/p&gt;
+&lt;p&gt;TASK: [Generate config file] **************************************************&lt;br /&gt;
+ok: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.1&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.5&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;1.1.1.1&#39;}], &#39;name&#39;: &#39;rtr-A&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.81&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;br /&gt;
+ok: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.2&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.9&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;2.2.2.2&#39;}], &#39;name&#39;: &#39;rtr-B&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.78&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;br /&gt;
+ok: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.6&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.10&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;no&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;3.3.3.3&#39;}], &#39;name&#39;: &#39;rtr-C&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.79&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;/p&gt;
+&lt;p&gt;TASK: [Connect to routers and pull the config] ********************************&lt;br /&gt;
+changed: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.1&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.5&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;1.1.1.1&#39;}], &#39;name&#39;: &#39;rtr-A&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.81&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;br /&gt;
+changed: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.2&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.9&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;2.2.2.2&#39;}], &#39;name&#39;: &#39;rtr-B&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.78&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;br /&gt;
+changed: [localhost] =&amp;gt; (item={&#39;mgmt_pass&#39;: &#39;parola&#39;, &#39;int&#39;: [{&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/1&#39;, &#39;address&#39;: &#39;10.0.0.6&#39;}, {&#39;netmask&#39;: &#39;255.255.255.252&#39;, &#39;ospf&#39;: &#39;yes&#39;, &#39;name&#39;: &#39;GigabitEthernet0/2&#39;, &#39;address&#39;: &#39;10.0.0.10&#39;}, {&#39;netmask&#39;: &#39;255.255.255.0&#39;, &#39;ospf&#39;: &#39;no&#39;, &#39;name&#39;: &#39;Loopback0&#39;, &#39;address&#39;: &#39;3.3.3.3&#39;}], &#39;name&#39;: &#39;rtr-C&#39;, &#39;mgmt_ip&#39;: &#39;192.168.0.79&#39;, &#39;mgmt_user&#39;: &#39;admin&#39;})&lt;/p&gt;
+&lt;p&gt;PLAY RECAP ********************************************************************&lt;br /&gt;
+localhost                  : ok=10   changed=2    unreachable=0    failed=0&lt;br /&gt;
+&lt;/p&gt;
+&lt;p&gt;This is how one of routers configuration files looks like:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+marius@net-master:/etc/ansible&amp;gt;&amp;gt;&amp;gt; cat /var/www/html/rtr-A.config&lt;br /&gt;
+interface GigabitEthernet0/1&lt;br /&gt;
+no shutdown&lt;br /&gt;
+ip address 10.0.0.1 255.255.255.252&lt;br /&gt;
+interface GigabitEthernet0/2&lt;br /&gt;
+no shutdown&lt;br /&gt;
+ip address 10.0.0.5 255.255.255.252&lt;br /&gt;
+interface Loopback0&lt;br /&gt;
+no shutdown&lt;br /&gt;
+ip address 1.1.1.1 255.255.255.0
+&lt;p&gt;router ospf 1&lt;br /&gt;
+network 10.0.0.1 0.0.0.0 area 0&lt;br /&gt;
+network 10.0.0.5 0.0.0.0 area 0&lt;br /&gt;
+network 1.1.1.1 0.0.0.0 area 0&lt;br /&gt;
+&lt;/p&gt;
+&lt;p&gt;So now we have the lab up and running. Why bother automating this? In the end it&#39;s a basic test environment. Here&#39;s my motivation:&lt;/p&gt;
+&lt;p&gt;1. I hate doing repetitive stuff&lt;br /&gt;
+2. Reproducibility. Manual repetitive stuff results in errored configurations, at least for me. If I do such a setup manually I usually get a terminal started for each of the routers and start writing commands. My problem is that almost all the time I end up messing up something like setting the wrong IP addresses on interfaces. By running this playbook I will always get the same result.&lt;br /&gt;
+3. I have the complete picture in one place and I can check the whole setup before running it, no need to switch through terminals, screens or other stuff.&lt;br /&gt;
+4. Time. I&#39;m running this setup on Openstack by using Cisco vIOS images so getting everything up and running from scratch takes me less than 5 minutes which is pretty awesome.&lt;/p&gt;
+&lt;p&gt;Let me know if you have any questions and I&#39;ll be more than happy to answer. &lt;/p&gt;
+&lt;p&gt;Thanks&lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 24 Feb 2015 19:21:31 +0000</pubDate>
+        <link>http://remoteur.github.io//uncategorized/linux/routing/ios/python/2015/02/24/ospf-lab-provisioning-on-ios-with-ansible/</link>
+        <guid isPermaLink="true">http://remoteur.github.io//uncategorized/linux/routing/ios/python/2015/02/24/ospf-lab-provisioning-on-ios-with-ansible/</guid>
+        
+        
+        <category>uncategorized</category>
+        
+        <category>linux</category>
+        
+        <category>routing</category>
+        
+        <category>ios</category>
+        
+        <category>python</category>
+        
+      </item>
+    
+      <item>
+        <title>SDN Intro: Basic L2 connectivity by using OVS and POX</title>
+        <description>&lt;p&gt;You&#39;ve all probably heard about this fancy SDN term that&#39;s been passing around in the networking world in the recent years. I&#39;ll try to explain below what SDN means for me and what are the benefits of using such a model. &lt;/p&gt;
+&lt;p&gt;SDN or Software Defined Networking refers to decoupling the data plane from the control plane. The data plane is the process by which the packets are forwarded and it&#39;s done by the hardware silicon. The control plane is the process that instructs the data plane how to behave (routing protocols, firewall policies, etc). In a typical networking device we find those 2 planes coupled in a single box. The SDN model says we can separate them and keep the packet forwarding on a box that&#39;s got the fast hardware silicon and move the control plane on a general purpose computer. Since the 2 planes are separated they need a means of communication which is OpenFlow. &lt;/p&gt;
+&lt;p&gt;OpenFlow is a communications protocol that allows remote manipulation of the devices forwarding tables. Think of this protocol like a standard API that you can consume by running any software. This is great because you can purchase the networking device from a specific vendor and run the controller by your own code, open source project or other proprietary software. In my opinion this provides you the freedom to choose and will push the vendors to create better and better software. Personally I&#39;m a big fan of opensource software and I&#39;m dreaming about the moment when the networking world will be able to get the benefits of a big opensource project. &lt;/p&gt;
+&lt;p&gt;Another advantage that SDN brings is a central point that controls the network. Think about how we currently manage the networking devices. Even if the network is a whole that provides services to upper applications, we currently log into each separate device and write some commands that configure services. SDN would save us from doing repetitive and boring tasks such as provisioning vlans.&lt;/p&gt;
+&lt;p&gt;Enough with the talk, let&#39;s start a simple scenario by using the remote-lab.net environment. The lab topology consists of two hosts connected to an OpenvSwitch switch. The OVS switch is connected to an OpenFlow controller running Pox. The controller runs the code that enables L2 connectivity between the hosts but the actual forwarding is done by the OVS switch.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/10/sdn_lab.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/10/sdn_lab.png&quot; alt=&quot;sdn_lab&quot; width=&quot;686&quot; height=&quot;364&quot; class=&quot;aligncenter size-full wp-image-284&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Let&#39;s first enable the ports the hosts are connected to, set an openvswitch bridge where the hosts are connected, set the IP addreses on the hosts and check we have connectivity between the hosts. By default the L2 learning mechanism is done by the OpenvSwitch internals. &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ip link set dev eth1 up&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ip link set dev eth2 up&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw0&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port sw0 eth1&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port sw0 eth2
+&lt;p&gt;root@host01:~&amp;gt;&amp;gt;&amp;gt; ip l set dev eth1 up&lt;br /&gt;
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip addr add 192.168.0.1/24 dev eth1&lt;br /&gt;
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip a s dev eth1&lt;br /&gt;
+3: eth1: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000&lt;br /&gt;
+    link/ether 52:54:00:56:e2:b2 brd ff:ff:ff:ff:ff:ff&lt;br /&gt;
+    inet 192.168.0.1/24 scope global eth1&lt;br /&gt;
+    inet6 fe80::5054:ff:fe56:e2b2/64 scope link&lt;br /&gt;
+       valid_lft forever preferred_lft forever&lt;/p&gt;
+&lt;p&gt;root@host02:~&amp;gt;&amp;gt;&amp;gt; ip l set dev eth1 up&lt;br /&gt;
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip addr add 192.168.0.2/24 dev eth1&lt;br /&gt;
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip a s dev eth1&lt;br /&gt;
+3: eth1: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000&lt;br /&gt;
+    link/ether 52:54:00:6e:22:0b brd ff:ff:ff:ff:ff:ff&lt;br /&gt;
+    inet 192.168.0.2/24 scope global eth1&lt;br /&gt;
+    inet6 fe80::5054:ff:fe6e:220b/64 scope link&lt;br /&gt;
+       valid_lft forever preferred_lft forever&lt;/p&gt;
+&lt;p&gt;root@host02:~&amp;gt;&amp;gt;&amp;gt; ping 192.168.0.1 -c1&lt;br /&gt;
+PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.&lt;br /&gt;
+64 bytes from 192.168.0.1: icmp_req=1 ttl=64 time=0.946 ms&lt;/p&gt;
+&lt;p&gt;--- 192.168.0.1 ping statistics ---&lt;br /&gt;
+1 packets transmitted, 1 received, 0% packet loss, time 0ms&lt;br /&gt;
+rtt min/avg/max/mdev = 0.946/0.946/0.946/0.000 ms&lt;/p&gt;
+&lt;p&gt;Now let&#39;s go to the controller:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ctrl01:~&amp;gt;&amp;gt;&amp;gt; ls&lt;br /&gt;
+floodlight  pox&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We see here that we have two directories that contain OpenFlow controller code - Floodlight and Pox. We&#39;ll choose Pox for our example. Pox is platform for the rapid development and prototyping of network control software using Python. Pox comes with some preinstalled components. One of the components is called forwarding.l2_learning and it does what its name says - make OpenFlow switches act as a type of L2 learning switch. You can find the code in the pox/forwarding/l2_learning.py file. We&#39;ll use this component for our example. Let&#39;s start it:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ctrl01:~/pox&amp;gt;&amp;gt;&amp;gt; ./pox.py --verbose forwarding.l2_learning&lt;br /&gt;
+POX 0.2.0 (carp) / Copyright 2011-2013 James McCauley, et al.&lt;br /&gt;
+DEBUG:core:POX 0.2.0 (carp) going up...&lt;br /&gt;
+DEBUG:core:Running on CPython (2.7.3/Jan 2 2013 13:56:14)&lt;br /&gt;
+DEBUG:core:Platform is Linux-3.2.0-4-amd64-x86_64-with-debian-7.4&lt;br /&gt;
+INFO:core:POX 0.2.0 (carp) is up.&lt;br /&gt;
+DEBUG:openflow.of_01:Listening on 0.0.0.0:6633&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The next step is to configure OpenvSwitch to use the POX controller. OpenvSwitch has 2 ways of working with an OpenFlow controller - standalone and secure. In standalone mode, if the connection to the controller fails then it will fall back to using its internal logic to install the flows. While in secure mode it will not install any flows if the connection to the controller fails. We&#39;ll use the standalone mode with 172.16.18.6 being the IP address of the POX controller.&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl set-fail-mode sw0 standalone&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl set-controller sw0 tcp:172.16.18.6:6633&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl show&lt;br /&gt;
+653dfcd6-85a4-4f72-995f-9fa05b5203f9&lt;br /&gt;
+    Bridge &quot;sw0&quot;&lt;br /&gt;
+        Controller &quot;tcp:172.16.18.6:6633&quot;&lt;br /&gt;
+            is_connected: true&lt;br /&gt;
+        fail_mode: standalone&lt;br /&gt;
+        Port &quot;sw0&quot;&lt;br /&gt;
+            Interface &quot;sw0&quot;&lt;br /&gt;
+                type: internal&lt;br /&gt;
+        Port &quot;eth2&quot;&lt;br /&gt;
+            Interface &quot;eth2&quot;&lt;br /&gt;
+        Port &quot;eth1&quot;&lt;br /&gt;
+            Interface &quot;eth1&quot;&lt;br /&gt;
+    ovs_version: &quot;1.9.3&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We can see the following message on the OpenFlow controller:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;INFO:openflow.of_01:[46-3e-63-ba-e5-46 1] connected&lt;br /&gt;
+DEBUG:forwarding.l2_learning:Connection [46-3e-63-ba-e5-46 1]&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Let&#39;s see what happens when we try to ping one host from the other:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;DEBUG:forwarding.l2_learning:installing flow for 52:54:00:6e:22:0b.2 -&amp;gt; 52:54:00:56:e2:b2.1&lt;br /&gt;
+DEBUG:forwarding.l2_learning:installing flow for 52:54:00:56:e2:b2.1 -&amp;gt; 52:54:00:6e:22:0b.2&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Check the flows that are installed in the switch. Notice how the flows are defined:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-ofctl dump-flows sw0&lt;br /&gt;
+NXST_FLOW reply (xid=0x4):&lt;br /&gt;
+ cookie=0x0, duration=7.348s, table=0, n_packets=7, n_bytes=686, idle_timeout=10, hard_timeout=30, idle_age=1, priority=65535,icmp,in_port=2,vlan_tci=0x0000,dl_src=52:54:00:6e:22:0b,dl_dst=52:54:00:56:e2:b2,nw_src=192.168.0.2,nw_dst=192.168.0.1,nw_tos=0,icmp_type=0,icmp_code=0 actions=output:1&lt;br /&gt;
+ cookie=0x0, duration=6.329s, table=0, n_packets=6, n_bytes=588, idle_timeout=10, hard_timeout=30, idle_age=1, priority=65535,icmp,in_port=1,vlan_tci=0x0000,dl_src=52:54:00:56:e2:b2,dl_dst=52:54:00:6e:22:0b,nw_src=192.168.0.1,nw_dst=192.168.0.2,nw_tos=0,icmp_type=8,icmp_code=0 actions=output:2&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;You can take any of these headers and manipulate them as you wish. I believe the whole model provides great flexibility and freedom and it will lead to better networking software. &lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 12 Oct 2014 21:35:48 +0000</pubDate>
+        <link>http://remoteur.github.io//linux/switching/routing/virtualization/ios/python/2014/10/12/sdn-intro-basic-l2-connectivity-by-using-ovs-and-pox/</link>
+        <guid isPermaLink="true">http://remoteur.github.io//linux/switching/routing/virtualization/ios/python/2014/10/12/sdn-intro-basic-l2-connectivity-by-using-ovs-and-pox/</guid>
         
         
         <category>linux</category>
         
-        <category>containers</category>
+        <category>switching</category>
         
-        <category>blog</category>
+        <category>routing</category>
+        
+        <category>virtualization</category>
+        
+        <category>ios</category>
+        
+        <category>python</category>
+        
+      </item>
+    
+      <item>
+        <title>Ansible playbook: postfix with Mandrill relay</title>
+        <description>&lt;p&gt;In this post I will show how you can use Ansible to automatically install postfix mail server and configure it to relay through Mandrill. Mandrill is a transactional email platform that allows you to send up to 12.000 emails for free. I use it for my servers to avoid situations where the IP addresses assigned by my ISP are blacklisted on some RBL lists. &lt;/p&gt;
+&lt;p&gt;Ansible is a config manamegement software that runs agentless over SSH. You only need python installed on the remote nodes. Ansible&#39;s configuration files are called playbooks. Playbooks are written as YAML files and they are used to manage configurations of and deployments to remote machines.&lt;/p&gt;
+&lt;p&gt;Below is the playbook that I use to install postfix, add the required configuration to use Mandrill and reload the service in order to use the new configuration. I will explain the playbook below:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+---&lt;br /&gt;
+- hosts: basenodes&lt;br /&gt;
+  tasks:&lt;br /&gt;
+    - name: Installs postfix mail server&lt;br /&gt;
+      apt: pkg=postfix state=installed update_cache=true&lt;br /&gt;
+      notify:&lt;br /&gt;
+        - start postfix&lt;br /&gt;
+    - name: Upload mandril authentication info&lt;br /&gt;
+      copy: src=/opt/files/postfix/mandril_passwd dest=/etc/postfix/mandril_passwd mode=0600&lt;br /&gt;
+      register: mandril&lt;br /&gt;
+      notify:&lt;br /&gt;
+        - postmap mandril_passwd&lt;br /&gt;
+    - name: Append mandril relay config&lt;br /&gt;
+      lineinfile:&lt;br /&gt;
+        dest=/etc/postfix/main.cf&lt;br /&gt;
+        line=&quot;&quot;&lt;br /&gt;
+      with_items:&lt;br /&gt;
+        - { line: &#39;smtp_sasl_auth_enable = yes&#39; }&lt;br /&gt;
+        - { line: &#39;smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd&#39; }&lt;br /&gt;
+        - { line: &#39;smtp_sasl_security_options = noanonymous&#39; }&lt;br /&gt;
+        - { line: &#39;smtp_use_tls = yes&#39; }&lt;br /&gt;
+        - { line: &#39;relayhost = [smtp.mandrillapp.com]&#39; }&lt;br /&gt;
+      notify:&lt;br /&gt;
+        - restart postfix
+&lt;p&gt;  handlers:&lt;br /&gt;
+    - name: start postfix&lt;br /&gt;
+      service: name=postfix state=started&lt;br /&gt;
+    - name: postmap mandril_passwd&lt;br /&gt;
+      command: postmap /etc/postfix/mandril_passwd&lt;br /&gt;
+      when: mandril|success&lt;br /&gt;
+    - name: restart postfix&lt;br /&gt;
+      service: name=postfix state=restarted&lt;br /&gt;
+&lt;/p&gt;
+&lt;p&gt;The hosts line contains the hosts group that this playbook will be applied to.&lt;br /&gt;
+Each play contains a list of tasks, which are actually calls to Ansible modules. We see that the first task is called &#39;Installs postfix mail server&#39; and it uses the apt module to get the postfix package in the installed stated. update_cache=true ensures that &#39;apt-get update&#39; will be run before installing the postfix package. The notify section contains the handlers. Handlers are lists of tasks, not really any different from regular tasks, that are referenced by name. You can find them in the handlers sections. Looking at our example - the &#39;start postfix&#39; handler ensures that the postfix server is started. &lt;/p&gt;
+&lt;p&gt;The &#39;Upload mandril authentication info&#39; task copies the /opt/files/postfix/mandril_passwd file on the ansible server to the remote node with /etc/postfix/mandril_passwd as a destination location. The mandril_passwd file contains the authentication details for the Mandril platform. The mode key contains the permissions the destination file will have. The register line gets the result of the copy operation stored in the mandril variable. After getting the file copied we need to create the postfix lookup table based on that file. In order to do this we run the &#39;postmap mandril_passwd&#39; handler which runs the &#39;postmap /etc/postfix/mandril_passwd&#39; command only if the copy task was run successfully.&lt;/p&gt;
+&lt;p&gt;The &#39;Append mandril relay config&#39; task will add the config lines to the postfix main.cf files. We&#39;ll store the lines in a dictionary. A dictionary is represented in a simple key: and value form:. Each new line will be the value stored in the &#39;line&#39; key of each dictionary element. After adding the lines to main.cf we&#39;ll restart postfix by running the &#39;restart postfix&#39; handler. &lt;/p&gt;
+&lt;p&gt;You may find below the output of running the playbook : &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+root@ansible:/etc/ansible/playbooks&amp;gt;&amp;gt;&amp;gt; ansible-playbook /etc/ansible/playbooks/playbook.yml
+&lt;p&gt;PLAY [basenodes] ************************************************************** &lt;/p&gt;
+&lt;p&gt;GATHERING FACTS *************************************************************** &lt;/p&gt;
+&lt;p&gt;TASK: [Installs postfix mail server] ******************************************&lt;br /&gt;
+changed: [node01.remote-lab.net]&lt;/p&gt;
+&lt;p&gt;TASK: [Upload mandril authentication info] ************************************&lt;br /&gt;
+changed: [node01.remote-lab.net]&lt;/p&gt;
+&lt;p&gt;TASK: [Append mandril relay config] *******************************************&lt;br /&gt;
+changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;smtp_sasl_auth_enable = yes&#39;})&lt;br /&gt;
+changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd&#39;})&lt;br /&gt;
+changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;smtp_sasl_security_options = noanonymous&#39;})&lt;br /&gt;
+changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;smtp_use_tls = yes&#39;})&lt;br /&gt;
+changed: [node01.remote-lab.net] =&amp;gt; (item={&#39;line&#39;: &#39;relayhost = [smtp.mandrillapp.com]&#39;})&lt;/p&gt;
+&lt;p&gt;NOTIFIED: [start postfix] *****************************************************&lt;br /&gt;
+ok: [node01.remote-lab.net]&lt;/p&gt;
+&lt;p&gt;NOTIFIED: [postmap mandril_passwd] ********************************************&lt;br /&gt;
+changed: [node01.remote-lab.net]&lt;/p&gt;
+&lt;p&gt;NOTIFIED: [restart postfix] ***************************************************&lt;br /&gt;
+changed: [node01.remote-lab.net]&lt;/p&gt;
+&lt;p&gt;PLAY RECAP ********************************************************************&lt;br /&gt;
+node01.remote-lab.net      : ok=7    changed=5    unreachable=0    failed=0&lt;br /&gt;
+&lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 14 Sep 2014 12:52:15 +0000</pubDate>
+        <link>http://remoteur.github.io//linux/virtualization/2014/09/14/ansible-playbook-postfix-with-mandrill-relay/</link>
+        <guid isPermaLink="true">http://remoteur.github.io//linux/virtualization/2014/09/14/ansible-playbook-postfix-with-mandrill-relay/</guid>
+        
+        
+        <category>linux</category>
+        
+        <category>virtualization</category>
         
       </item>
     
@@ -198,6 +547,569 @@ c383c56a7e66        mysql:latest                 &lt;span class=&quot;err&quot;&
         <category>blog</category>
         
         <category>jekyll</category>
+        
+      </item>
+    
+      <item>
+        <title>Lab - basic OSPF routing scenario</title>
+        <description>&lt;p&gt;Hello guys,&lt;/p&gt;
+&lt;p&gt;In the following post we&#39;ll see how we can do a basic routing scenario by using the remote-lab.net virtual appliances. Below is the logical diagram of the scenario. Our objective is to esatblish connectivity between the 2 clients: host01 - 10.0.0.10 and host02 - 10.0.1.10. Each of the hosts will be connected to a router that  will be the first hop router for the hosts subnet. The 2 routers will be connected by 2 redundant links. We&#39;ll set up OSPF as a routing protocol between the 2 routers that will be used to advertise the clients subnets. &lt;/p&gt;
+&lt;p&gt;rtr01 is an Arista vEOS and rtr02 is running Vyatta core. host01 and host02 are running Debian.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/05/routing-lab-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/05/routing-lab-New-Page.png&quot; alt=&quot;ospf routing lab logical&quot; width=&quot;821&quot; height=&quot;729&quot; class=&quot;aligncenter size-full wp-image-260&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Now let&#39;s get to the physical setup (which is actually virtual as all the components are VMs ). Each system (clients and routers) will be connected to the layer 2 switch (openvswitch running on Linux). We&#39;ll need to set up the links that connect the routers to the switch as trunks in order to allow multiple vlans to get through. The ports that connect the clients to the switch will be set as access ports. Please note that in a real world scenario you&#39;ll need to connect the routers by 2 different physical links across separate geographical paths to ensure rendundancy. Below is the physical diagram of the setup.&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/05/routing-physical-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/05/routing-physical-New-Page.png&quot; alt=&quot;routing lab physical&quot; width=&quot;745&quot; height=&quot;625&quot; class=&quot;aligncenter size-full wp-image-259&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;First thing we need to do is to configure the openvswitch. We&#39;ll create a bridge that contains all the ports and set up the client ports in access mode. By default all the openvswitch ports are trunks.&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; ovs01&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; for i in {1..4}; do ip l set dev eth$i up;done&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br l2switch&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth1 tag=10&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth2 tag=20&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth3&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port l2switch eth4&lt;br /&gt;
+root@ovs01:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl show&lt;br /&gt;
+653dfcd6-85a4-4f72-995f-9fa05b5203f9&lt;br /&gt;
+    Bridge &quot;l2switch&quot;&lt;br /&gt;
+        Port &quot;l2switch&quot;&lt;br /&gt;
+            Interface &quot;l2switch&quot;&lt;br /&gt;
+                type: internal&lt;br /&gt;
+        Port &quot;eth3&quot;&lt;br /&gt;
+            Interface &quot;eth3&quot;&lt;br /&gt;
+        Port &quot;eth2&quot;&lt;br /&gt;
+            tag: 20&lt;br /&gt;
+            Interface &quot;eth2&quot;&lt;br /&gt;
+        Port &quot;eth4&quot;&lt;br /&gt;
+            Interface &quot;eth4&quot;&lt;br /&gt;
+        Port &quot;eth1&quot;&lt;br /&gt;
+            tag: 10&lt;br /&gt;
+            Interface &quot;eth1&quot;&lt;br /&gt;
+    ovs_version: &quot;1.9.3&quot;&lt;/code&gt;       &lt;/p&gt;
+&lt;p&gt;Set up the client interfaces IP addresses and default routes:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; host01&lt;br /&gt;
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip l set dev eth1 up&lt;br /&gt;
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip addr add 10.0.0.10/24 dev eth1&lt;br /&gt;
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip route add default via 10.0.0.1
+&lt;p&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; host02&lt;br /&gt;
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip l set dev eth1 up&lt;br /&gt;
+root@host02:~&amp;gt;&amp;gt;&amp;gt; ip addr add 10.0.1.10/24 dev eth1&lt;br /&gt;
+root@host01:~&amp;gt;&amp;gt;&amp;gt; ip route add default via 10.0.1.1        &lt;/p&gt;
+&lt;p&gt;Configure the vlans and SVI IP addresses on the routers:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr01&lt;br /&gt;
+rtr01&amp;gt;en&lt;br /&gt;
+rtr01#configure&lt;br /&gt;
+rtr01(config)#vlan 10&lt;br /&gt;
+rtr01(config-vlan-10)#name host01-vlan&lt;br /&gt;
+rtr01(config-vlan-10)#vlan 100&lt;br /&gt;
+rtr01(config-vlan-100)#name path1-vlan&lt;br /&gt;
+rtr01(config-vlan-100)#vlan 200&lt;br /&gt;
+rtr01(config-vlan-200)#name path2-vlan&lt;br /&gt;
+rtr01(config)#int ethernet 1&lt;br /&gt;
+rtr01(config-if-Et1)#switchport mode trunk&lt;br /&gt;
+rtr01(config-if-Et1)#switchport trunk allowed vlan 10,100,200&lt;br /&gt;
+rtr01(config-vlan-200)#int vlan 10&lt;br /&gt;
+rtr01(config-if-Vl10)#ip address 10.0.0.1/24&lt;br /&gt;
+rtr01(config-if-Et1)#int vlan 100&lt;br /&gt;
+rtr01(config-if-Vl100)#ip address 192.168.0.1/30&lt;br /&gt;
+rtr01(config-if-Vl100)#int vlan 200&lt;br /&gt;
+rtr01(config-if-Vl200)#ip address 192.168.0.5/30                                                         
+&lt;p&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr02&lt;br /&gt;
+admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; configure&lt;br /&gt;
+[edit]&lt;br /&gt;
+admin@rtr02# set interfaces ethernet eth1 vif 20 address 10.0.1.1/24&lt;br /&gt;
+[edit]&lt;br /&gt;
+admin@rtr02# set interfaces ethernet eth1 vif 100 address 192.168.0.2/30&lt;br /&gt;
+[edit]&lt;br /&gt;
+admin@rtr02# set interfaces ethernet eth1 vif 200 address 192.168.0.6/30&lt;br /&gt;
+admin@rtr02# commit&lt;br /&gt;
+[edit]&lt;br /&gt;
+admin@rtr02# save&lt;br /&gt;
+Saving configuration to &#39;/config/config.boot&#39;...&lt;br /&gt;
+Done&lt;/p&gt;
+&lt;p&gt;Let&#39;s do some connectivity tests:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;rtr01&amp;gt;ping 10.0.0.10&lt;br /&gt;
+PING 10.0.0.10 (10.0.0.10) 72(100) bytes of data.&lt;br /&gt;
+80 bytes from 10.0.0.10: icmp_req=1 ttl=64 time=12.9 ms    
+&lt;p&gt;rtr01&amp;gt;ping 192.168.0.2&lt;br /&gt;
+PING 192.168.0.2 (192.168.0.2) 72(100) bytes of data.&lt;br /&gt;
+80 bytes from 192.168.0.2: icmp_req=1 ttl=64 time=16.7 ms                &lt;/p&gt;
+&lt;p&gt;rtr01&amp;gt;ping 192.168.0.6&lt;br /&gt;
+PING 192.168.0.6 (192.168.0.6) 72(100) bytes of data.&lt;br /&gt;
+80 bytes from 192.168.0.6: icmp_req=1 ttl=64 time=13.2 ms       &lt;/p&gt;
+&lt;p&gt;admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; ping 10.0.1.10&lt;br /&gt;
+PING 10.0.1.10 (10.0.1.10) 56(84) bytes of data.&lt;br /&gt;
+64 bytes from 10.0.1.10: icmp_req=1 ttl=64 time=3.74 ms         &lt;/p&gt;
+&lt;p&gt;Now that we have the connectivity established on the connected links let&#39;s move forward and set up OSPF :&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr01&lt;br /&gt;
+rtr01&amp;gt;en&lt;br /&gt;
+rtr01#configure&lt;br /&gt;
+rtr01(config)#ip routing&lt;br /&gt;
+rtr01(config)#router ospf 10&lt;br /&gt;
+rtr01(config-router-ospf)#network 10.0.0.1 0.0.0.0 area 0&lt;br /&gt;
+rtr01(config-router-ospf)#network 192.168.0.1 0.0.0.0 area 0&lt;br /&gt;
+rtr01(config-router-ospf)#network 192.168.0.5 0.0.0.0 area 0 
+&lt;p&gt;lab@console01:~&amp;gt;&amp;gt;&amp;gt; rtr02&lt;br /&gt;
+admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; configure&lt;br /&gt;
+[edit]&lt;br /&gt;
+admin@rtr02#&lt;br /&gt;
+admin@rtr02# set protocols ospf area 0 network 10.0.1.0/24&lt;br /&gt;
+[edit]&lt;br /&gt;
+admin@rtr02# set protocols ospf area 0 network 192.168.0.0/30&lt;br /&gt;
+[edit]&lt;br /&gt;
+admin@rtr02# set protocols ospf area 0 network 192.168.0.4/30&lt;br /&gt;
+admin@rtr02# commit&lt;/p&gt;
+&lt;p&gt;Once that we have the ospf configuration done we can proceed and check the OSPF neighbor status on the 2 routers. We&#39;ll see that we have 2 equal cost paths to the hosts subnets. This means that the routers will load balance the packets through the 2 links.      &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;rtr01#show ip ospf neighbor&lt;br /&gt;
+Neighbor ID     VRF    Pri   State            Dead Time   Address         Interface&lt;br /&gt;
+172.16.18.5     default    1   FULL/BDR         00:00:31    192.168.0.6     Vlan200&lt;br /&gt;
+172.16.18.5     default    1   FULL/DR          00:00:31    192.168.0.2     Vlan100    
+&lt;p&gt;rtr01#show ip route 10.0.1.0/24&lt;br /&gt;
+Codes: C - connected, S - static, K - kernel,&lt;br /&gt;
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,&lt;br /&gt;
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,&lt;br /&gt;
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,&lt;br /&gt;
+       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             &lt;/p&gt;
+&lt;p&gt; O      10.0.1.0/24 [110/20] via 192.168.0.2, Vlan100&lt;br /&gt;
+                             via 192.168.0.6, Vlan200                     &lt;/p&gt;
+&lt;p&gt;admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; show ip ospf neighbor &lt;/p&gt;
+&lt;p&gt;    Neighbor ID Pri State           Dead Time Address         Interface            RXmtL RqstL DBsmL&lt;br /&gt;
+192.168.0.5       1 Full/Backup       36.750s 192.168.0.1     eth1.100:192.168.0.2     0     0     0&lt;br /&gt;
+192.168.0.5       1 Full/DR           36.960s 192.168.0.5     eth1.200:192.168.0.6     0     0     0 &lt;/p&gt;
+&lt;p&gt;admin@rtr02:~&amp;gt;&amp;gt;&amp;gt; show ip route 10.0.0.0/24&lt;br /&gt;
+Routing entry for 10.0.0.0/24&lt;br /&gt;
+  Known via &quot;ospf&quot;, distance 110, metric 20, best&lt;br /&gt;
+  Last update 00:04:42 ago&lt;br /&gt;
+  * 192.168.0.1, via eth1.100&lt;br /&gt;
+  * 192.168.0.5, via eth1.200                 &lt;/p&gt;
+&lt;p&gt;What if we want to set one of the links as primary ? We need to set a higher cost for the secondary link. At this time both of the paths have a cost of 20 (10 for the network segment that connects the 2 routers + 10 for the host network segment). Let&#39;schoose the vlan 200 as secondary and increase the cost for the secondary link to 11.&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;rtr01#configure&lt;br /&gt;
+rtr01(config)#int vlan 200&lt;br /&gt;
+rtr01(config-if-Vl200)#ip ospf cost 11&lt;br /&gt;
+rtr01(config-if-Vl200)#show ip route 10.0.1.0/24&lt;br /&gt;
+Codes: C - connected, S - static, K - kernel,&lt;br /&gt;
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,&lt;br /&gt;
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,&lt;br /&gt;
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,&lt;br /&gt;
+       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
+&lt;p&gt; O      10.0.1.0/24 [110/20] via 192.168.0.2, Vlan100      &lt;/p&gt;
+&lt;p&gt;We can see that the routing table only contains the vlan 100 path. What happens if vlan 100 goes down ? &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;c[notools]&quot;&gt;rtr01(config)#int vlan 100&lt;br /&gt;
+rtr01(config-if-Vl100)#shut&lt;br /&gt;
+rtr01(config-if-Vl100)#show ip route 10.0.1.0/24&lt;br /&gt;
+Codes: C - connected, S - static, K - kernel,&lt;br /&gt;
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external type 1,&lt;br /&gt;
+       E2 - OSPF external type 2, N1 - OSPF NSSA external type 1,&lt;br /&gt;
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,&lt;br /&gt;
+       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
+&lt;p&gt; O      10.0.1.0/24 [110/21] via 192.168.0.6, Vlan200          &lt;/p&gt;
+&lt;p&gt;We can see that the vlan 200 path is installed in the routing table with a cost of 21 ( 11 + 10).&lt;/p&gt;
+&lt;p&gt;I hope this post is useful for getting an idea of how you can use the virtual lab. Please let me know if you any questions.                                                             &lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 21 May 2014 20:25:28 +0000</pubDate>
+        <link>http://remoteur.github.io//linux/switching/routing/ios/2014/05/21/lab-basic-ospf-routing-scenario/</link>
+        <guid isPermaLink="true">http://remoteur.github.io//linux/switching/routing/ios/2014/05/21/lab-basic-ospf-routing-scenario/</guid>
+        
+        
+        <category>linux</category>
+        
+        <category>switching</category>
+        
+        <category>routing</category>
+        
+        <category>ios</category>
+        
+      </item>
+    
+      <item>
+        <title>Virtualized application infrastructure</title>
+        <description>&lt;p&gt;In this post I&#39;ll show how you can build a secure virtualized infrastructure for a basic webapp. We will break the setup into VMs that provide isolated services. You can find below the infrastructure diagram. The followings steps will show how you can set up a bare-metal server running Debian Wheezy to act as a KVM hypervisor and the process of deploying and configuring the VMs and the services they are running. &lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://remote-lab.net/wp-content/uploads/2014/05/rlug-New-Page.png&quot;&gt;&lt;img src=&quot;https://remote-lab.net/wp-content/uploads/2014/05/rlug-New-Page.png&quot; alt=&quot;rlug - New Page&quot; width=&quot;832&quot; height=&quot;814&quot; class=&quot;aligncenter size-full wp-image-255&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Install kvm and tools:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; aptitude install qemu-kvm libvirt-bin virt-manager virt-viewer&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Install openvswitch :&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; aptitude install openvswitch-switch openvswitch-datapath-source&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Build Open vSwitch datapath kernel module:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; module-assistant auto-install openvswitch-datapath&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The management IP address of the hypervisor and the other public IP addresses are assigned on the same interface by the hosting provider. In order to provide Internet connectivity for the VMs we need to create a bridge containing the physical interface where the public IPs are routed and add the VMs ports to this bridge. The trouble is that since this is also the management link we&#39;ll lose connectivity after adding the physical interface to the bridge. After this operation we need to assign the management IP address to the bridge interface. For doing this we edit the /etc/network/interfaces file.&lt;/p&gt;
+&lt;p&gt;Add openvswitch bridges:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw-net&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Edit the /etc/network/interfaces file:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; cat /etc/network/interfaces&lt;br /&gt;
+auto sw-net&lt;br /&gt;
+iface sw-net inet static&lt;br /&gt;
+  address   46.4.71.66&lt;br /&gt;
+  broadcast 46.4.71.95&lt;br /&gt;
+  netmask   255.255.255.224&lt;br /&gt;
+  gateway   46.4.71.65&lt;br /&gt;
+pre-up ip link set dev eth0 up&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;At boot time the openvswitch daemon is started after the network init script so when the network init script is run it won&#39;t find the sw-net interface defined in /etc/network/interfaces file. A dirty workaround for this is to re-run the network init script after all the services are loaded. In order to do this we need to edit the /etc/rc.local file:  &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; cat /etc/rc.local&lt;br /&gt;
+/etc/init.d/networking restart&lt;br /&gt;
+exit 0 &lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Now let&#39;s add the physical interface to the bridge. After this we should either restart the network service from the console or do a hard reset:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-port sw-net eth0&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;The next step is to add the second bridge, where the internal network ports will be connected &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; ovs-vsctl add-br sw-lan&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;I prefer using virt-install for new VMs provisioning. The problem with it is that it currently doesn&#39;t support Open vSwitch bridges so we&#39;ll need to adjust it a little by adding the following line to the /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py file. This will add the virtualport tag to the VM xml definition:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; diff -u /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py.orig&lt;br /&gt;
+--- /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py	2014-05-06 22:06:21.396072330 +0200&lt;br /&gt;
++++ /usr/lib/pymodules/python2.7/virtinst/VirtualNetworkInterface.py.orig	2014-05-06 22:13:17.121958858 +0200&lt;br /&gt;
+@@ -384,7 +384,6 @@&lt;br /&gt;
+         xml += &quot;      &lt;mac address=&quot;%s&quot; /&gt;\n&quot; % self.macaddr&lt;br /&gt;
+         xml += target_xml&lt;br /&gt;
+         xml += model_xml&lt;br /&gt;
+-        xml += &quot;      &lt;virtualport type=&quot;openvswitch&quot; /&gt;\n&quot;&lt;br /&gt;
+         xml += &quot;    &quot;&lt;br /&gt;
+         return xml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Now that we have the networking ready the last thing that we need are the storage files that the VMs will use. For creating the files we use the qemu-img utility. I prefer qcow2 files as they provide thin provision and snapshot capabilities. /var/lib/libvirt/images is the default directory used by libvirt-bin so let&#39;s create the storage files here:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-img create -f qcow2 rtr01.qcow2 10G&lt;br /&gt;
+Formatting &#39;rtr01.qcow2&#39;, fmt=qcow2 size=10737418240 encryption=off cluster_size=65536 &lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We can now create the VM and start the OS installation. We&#39;ll first install the rtr01 VM as it will provide Internet connectivity for the rest of the VMs in the internal network. The following command will generate a VM called rtr01 with 4 vCPUs, 4GB of ram, storage file located at /var/lib/libvirt/images/rtr01.qcow2 and 2 network interfaces - one in the bridge connected to the Internet and another connected to the internal network, the console is presented over VNC and it will first boot from the cdrom device loaded from the /var/lib/libvirt/images/vyatta-livecd_VC6.6R1_amd64.iso file. The disk and network interface will use paravirtualized drivers to obtain increased I/O performance.&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name rtr01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/rtr01.qcow2,bus=virtio --network bridge=sw-net,model=virtio --network bridge=sw-lan,model=virtio --graphics vnc --cdrom /var/lib/libvirt/images/vyatta-livecd_VC6.6R1_amd64.iso --boot cdrom&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;After this command is issued a console windows will pop up and it will prompt the cdrom installation. After finishing the installation we can proceed to configuring the device:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+# set interfaces IP addresses&lt;br /&gt;
+set interfaces ethernet eth0 mac 00:50:56:00:5e:97&lt;br /&gt;
+set interfaces ethernet eth0 address 46.4.71.77/27&lt;br /&gt;
+set protocols static route 0.0.0.0/0 next-hop 46.4.71.65&lt;br /&gt;
+set system host-name rtr01&lt;br /&gt;
+set system domain-name nullzero.me&lt;br /&gt;
+set interfaces ethernet eth1 10.0.1.1/24&lt;br /&gt;
+set interfaces ethernet eth1 address 10.0.1.1/24
+&lt;p&gt;# set SNAT for internal network&lt;br /&gt;
+set nat source rule 10 source address 10.0.1.0/24&lt;br /&gt;
+set nat source rule 10 outbound-interface eth0&lt;br /&gt;
+set nat source rule 10 translation address masquerade&lt;/p&gt;
+&lt;p&gt;# set DNAT for the request coming on port tcp 80 on the public IP&lt;br /&gt;
+set nat destination rule 10 destination address 46.4.71.77&lt;br /&gt;
+set nat destination rule 10 inbound-interface eth0&lt;br /&gt;
+set nat destination rule 10 destination port 80&lt;br /&gt;
+set nat destination rule 10 translation address 10.0.1.2&lt;br /&gt;
+set nat destination rule 10 translation port 80&lt;br /&gt;
+set nat destination rule 10 protocol tcp&lt;/p&gt;
+&lt;p&gt;# generate server and client certificates and keys&lt;br /&gt;
+vyatta@rtr01:~$ sudo -s&lt;br /&gt;
+vbash-4.1# cp -R /usr/share/doc/openvpn/examples/easy-rsa/2.0/* /etc/openvpn/&lt;br /&gt;
+edit KEY_COUNTRY, KEY_PROVINCE, KEY_CITY, KEY_ORG, KEY_EMAIL variables&lt;br /&gt;
+vbash-4.1# vi /etc/openvpn/vars&lt;br /&gt;
+vbash-4.1# cd /etc/openvpn&lt;br /&gt;
+vbash-4.1# source vars&lt;br /&gt;
+vbash-4.1# ./clean-all&lt;br /&gt;
+vbash-4.1# ./build-ca&lt;br /&gt;
+vbash-4.1# ./build-dh&lt;br /&gt;
+vbash-4.1# ./build-key-server rtr01&lt;br /&gt;
+vbash-4.1# ./build-key client&lt;br /&gt;
+vbash-4.1# mkdir /config/auth&lt;br /&gt;
+vbash-4.1# cp -R /etc/openvpn/keys/* /config/auth&lt;/p&gt;
+&lt;p&gt;# configure the server certificates and key location&lt;br /&gt;
+set interfaces openvpn vtun0 tls ca-cert-file /config/auth/ca.crt&lt;br /&gt;
+set interfaces openvpn vtun0 tls cert-file /config/auth/rtr01.crt&lt;br /&gt;
+set interfaces openvpn vtun0 tls dh-file /config/auth/dh1024.pem&lt;br /&gt;
+set interfaces openvpn vtun0 tls key-file /config/auth/rtr01.key&lt;/p&gt;
+&lt;p&gt;# configure the openvpn server&lt;br /&gt;
+set interfaces openvpn vtun0 mode server&lt;br /&gt;
+set interfaces openvpn vtun0 server subnet 172.16.17.0/24&lt;br /&gt;
+set interfaces openvpn vtun0 server push-route 10.0.1.0/24&lt;br /&gt;
+set interfaces openvpn vtun0 openvpn-option &quot;--comp-lzo --mssfix --tun-mtu 1488&quot;&lt;/p&gt;
+&lt;p&gt;# openvpn client config file&lt;/p&gt;
+&lt;p&gt;marius@remoteur:~&amp;gt;&amp;gt;&amp;gt; cat /etc/openvpn/nullzero.conf&lt;br /&gt;
+client&lt;br /&gt;
+dev tun&lt;br /&gt;
+proto udp&lt;br /&gt;
+remote 46.4.71.77 1194&lt;br /&gt;
+resolv-retry infinite&lt;br /&gt;
+nobind&lt;br /&gt;
+persist-key&lt;br /&gt;
+persist-tun&lt;br /&gt;
+ca /etc/openvpn/nullzero/ca.crt&lt;br /&gt;
+cert /etc/openvpn/nullzero/client.crt&lt;br /&gt;
+key /etc/openvpn/nullzero/client.key&lt;br /&gt;
+ns-cert-type server&lt;br /&gt;
+comp-lzo&lt;br /&gt;
+verb 3&lt;/p&gt;
+&lt;p&gt;#configure firewall&lt;br /&gt;
+set firewall state-policy established action &#39;accept&#39;&lt;br /&gt;
+set firewall state-policy related action &#39;accept&#39;&lt;br /&gt;
+set firewall all-ping &#39;enable&#39;&lt;br /&gt;
+edit firewall name rtr01&lt;br /&gt;
+set default-action &#39;drop&#39;&lt;br /&gt;
+set rule 10 action accept&lt;br /&gt;
+set rule 10 destination port 22&lt;br /&gt;
+set rule 10 protocol tcp&lt;br /&gt;
+set rule 11 action accept&lt;br /&gt;
+set rule 11 destination port 80&lt;br /&gt;
+set rule 11 protocol tcp&lt;br /&gt;
+set rule 12 action accept&lt;br /&gt;
+set rule 12 destination port 1194&lt;br /&gt;
+set rule 12 protocol udp&lt;br /&gt;
+exit&lt;br /&gt;
+set interfaces ethernet eth0 firewall in name rtr01&lt;/p&gt;
+&lt;p&gt;After completing these steps we should have a working router, firewall and VPN server.&lt;/p&gt;
+&lt;p&gt;Now let&#39;s continue with creating the second VM. We&#39;ll do a network install from minimal CD. First create the storage file:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; qemu-img create -f qcow2 /var/lib/libvirt/images/lb01.qcow2 10G&lt;br /&gt;
+Formatting &#39;/var/lib/libvirt/images/lb01.qcow2&#39;, fmt=qcow2 size=10737418240 encryption=off cluster_size=65536&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Next we can start the installation process by using the cdrom file located at /var/lib/libvirt/images/debian-7.5.0-amd64-netinst.iso &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name lb01 --vcpus=2 --ram=4096 --disk path=/var/lib/libvirt/images/lb01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --cdrom /var/lib/libvirt/images/debian-7.5.0-amd64-netinst.iso --boot cdrom&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;After completing the OS installation we have a fresh running Debian Wheezy system. We don&#39;t want to repeat the install process for the other files so we&#39;ll just copy the existing image of the Debian system and modify the IP settings and hostnames. We first copy the base image, then attach it by using qemu-nbd, mount the partition where the file system resides and then edit the files that we need.&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; cp lb01.qcow2 db01.qcow2; cp lb01.qcow2 web01.qcow2&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; modprobe nbd max_part=8&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-nbd -c /dev/nbd0 web01.qcow2&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; kpartx -a /dev/nbd0&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; mount /dev/mapper/nbd0p1 /mnt&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/network/interfaces&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/hosts&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; vim /mnt/etc/hostname&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; umount /mnt&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; kpartx -d /dev/nbd0&lt;br /&gt;
+root@vmm:/var/lib/libvirt/images&amp;gt;&amp;gt;&amp;gt; qemu-nbd -d /dev/nbd0&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;We repeat the steps above for the db01.qcow2 file.&lt;/p&gt;
+&lt;p&gt;Let&#39;s now create the web01 and db01 VMs. Since we already have the base storage files we don&#39;t need to run the OS installation:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name web01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/web01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --import&lt;br /&gt;
+root@vmm:~&amp;gt;&amp;gt;&amp;gt; virt-install --name db01 --vcpus=4 --ram=4096 --disk path=/var/lib/libvirt/images/db01.qcow2,bus=virtio --network bridge=sw-lan,model=virtio  --graphics vnc --import&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Once we have booted al the VMs let&#39;s start configuring the services.&lt;/p&gt;
+&lt;p&gt;On the http load balancer we&#39;ll install varnish and configure the web server as backend: &lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@lb01:~&amp;gt;&amp;gt;&amp;gt; aptitude install varnish&lt;br /&gt;
+root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &#39;s/6081/80/&#39; /etc/default/varnish&lt;br /&gt;
+root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &#39;s/127.0.0.1/10.0.1.3/&#39; /etc/varnish/default.vcl&lt;br /&gt;
+root@lb01:~&amp;gt;&amp;gt;&amp;gt; sed -i &#39;s/8080/80/&#39; /etc/varnish/default.vcl&lt;br /&gt;
+root@lb01:~&amp;gt;&amp;gt;&amp;gt; /etc/init.d/varnish restart&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;On the web server we&#39;ll install nginx and php-fpm and configure the default vhost:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@web01:~&amp;gt;&amp;gt;&amp;gt; aptitude install nginx php5-fpm php5-mysql&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Add the following location block to the first server block:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;location ~ \.php$ {&lt;br /&gt;
+        fastcgi_pass   unix:/var/run/php5-fpm.sock;&lt;br /&gt;
+        fastcgi_index  index.php;&lt;br /&gt;
+        include        fastcgi_params;&lt;br /&gt;
+}&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Create an index file in the document root that will query the database server:&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@web01:/srv/www&amp;gt;&amp;gt;&amp;gt; cat index.php&lt;br /&gt;
+&lt;?php&lt;br /&gt;
+$con=mysqli_connect(&quot;10.0.1.4&quot;,&quot;user&quot;,&quot;parola&quot;,&quot;test&quot;);&lt;/p&gt;
+&lt;p&gt;$result = mysqli_query($con,&quot;SELECT * FROM testable&quot;);&lt;/p&gt;
+&lt;p&gt;$row = mysqli_fetch_array($result);&lt;br /&gt;
+echo $row[&#39;hello&#39;];&lt;/p&gt;
+&lt;p&gt;mysqli_close($con);&lt;br /&gt;
+?&gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;On the database server we&#39;ll install mysql server and create a dummy database and table;&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;bash[notools]&quot;&gt;root@db01:~&amp;gt;&amp;gt;&amp;gt; aptitude install mysql-server&lt;br /&gt;
+root@db01:~&amp;gt;&amp;gt;&amp;gt; mysql&lt;br /&gt;
+Welcome to the MySQL monitor.  Commands end with ; or \g.&lt;br /&gt;
+Your MySQL connection id is 43&lt;br /&gt;
+Server version: 5.5.37-0+wheezy1 (Debian)
+&lt;p&gt;Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.&lt;/p&gt;
+&lt;p&gt;Oracle is a registered trademark of Oracle Corporation and/or its&lt;br /&gt;
+affiliates. Other names may be trademarks of their respective&lt;br /&gt;
+owners.&lt;/p&gt;
+&lt;p&gt;Type &#39;help;&#39; or &#39;\h&#39; for help. Type &#39;\c&#39; to clear the current input statement.&lt;/p&gt;
+&lt;p&gt;mysql&amp;gt; create database test;&lt;br /&gt;
+mysql&amp;gt; use test;&lt;br /&gt;
+mysql&amp;gt; CREATE TABLE testable (hello VARCHAR(20));&lt;br /&gt;
+mysql&amp;gt; INSERT INTO testable (hello) VALUES(&quot;Hello World!&quot;);&lt;br /&gt;
+mysql&amp;gt; CREATE USER &#39;user&#39;@&#39;10.0.1.3&#39; IDENTIFIED BY &#39;parola&#39;;&lt;br /&gt;
+mysql&amp;gt; GRANT ALL PRIVILEGES ON * . * TO &#39;user&#39;@&#39;10.0.1.3&#39;;&lt;br /&gt;
+mysql&amp;gt; FLUSH PRIVILEGES;&lt;br /&gt;
+mysql&amp;gt; exit&lt;/p&gt;
+&lt;p&gt;After this final step we have our setup ready and http://app.nullzero.me/ should show the Hello World!&lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Wed, 07 May 2014 12:32:41 +0000</pubDate>
+        <link>http://remoteur.github.io//linux/virtualization/storage/2014/05/07/virtualized-application-infrastructure/</link>
+        <guid isPermaLink="true">http://remoteur.github.io//linux/virtualization/storage/2014/05/07/virtualized-application-infrastructure/</guid>
+        
+        
+        <category>linux</category>
+        
+        <category>virtualization</category>
+        
+        <category>storage</category>
+        
+      </item>
+    
+      <item>
+        <title>JunOS interfaces IP addresses DNS records generator</title>
+        <description>&lt;p&gt;This post is closely related to the previous one where I showed how you can parse the interfaces IP addresses from a curly bracket JunOS config file. The following script will be used to generate A and PTR records for a BIND zone file. Please note that the script needs to be run within the same directory as the Perl parser script and the config file.&lt;/p&gt;
+&lt;p&gt;The entries will have the following format:&lt;br /&gt;
+type-fpc-pic-port 300 IN A $value&lt;br /&gt;
+$value IN PTR type-fpc-pic-port.hostname.domain&lt;/p&gt;
+&lt;p&gt; &lt;code lang=&quot;bash[notools]&quot;&gt;&lt;br /&gt;
+#/bin/bash&lt;br /&gt;
+PERL=&#39;/usr/bin/perl&#39;&lt;br /&gt;
+PARSER=&#39;./parser.pl&#39;&lt;br /&gt;
+CONFIG_FILE=&#39;config.txt&#39;&lt;br /&gt;
+CONFIG_SYS=&#39;sys&#39;&lt;br /&gt;
+CONFIG_INT=&#39;int&#39;&lt;br /&gt;
+hostname=`$PERL $PARSER $CONFIG_SYS | grep host-name | sed -e s/host-name// -e s/\;// | tr &#39;\r&#39; &#39; &#39; | sed -e s/\ //g`&lt;br /&gt;
+domain=`$PERL $PARSER $CONFIG_SYS | grep domain-name | sed -e s/domain-name// -e s/\;// | tr &#39;\r&#39; &#39; &#39; | sed -e s/\ //g`&lt;br /&gt;
+for i in `grep &quot;ge-[0-9]\/[0-9]\/[0-9] {\|ae[0-9] {\|lo[0-9] {&quot; $CONFIG_FILE | sed -e s/\ //g  -e s/\{// | tr &#39;\r&#39; &#39; &#39;`&lt;br /&gt;
+    do&lt;br /&gt;
+        intname=`echo $i | sed s/\\\//-/g`&lt;br /&gt;
+        for j in `$PERL $PARSER $CONFIG_INT $i | grep unit | sed -e s/\ unit//g  -e s/\{// -e s/\ //g | tr &#39;\r&#39; &#39; &#39;`&lt;br /&gt;
+            do&lt;br /&gt;
+                inetaddr=`$PERL $PARSER $CONFIG_INT $i $j | tr &#39;\r&#39; &#39; &#39;`&lt;br /&gt;
+                lastoct=`echo $inetaddr | awk -F &#39;.&#39; {&#39;print $4&#39;}`&lt;br /&gt;
+                if [ $j -eq 0 ]&lt;br /&gt;
+                then&lt;br /&gt;
+                    echo &quot;$intname 300 IN A  $inetaddr&quot;&lt;br /&gt;
+                    echo &quot;$lastoct  IN  PTR $intname.$hostname.$domain.&quot;&lt;br /&gt;
+                    echo
+&lt;p&gt;                else&lt;br /&gt;
+                    if [ $j -eq 10 ]&lt;br /&gt;
+                    then&lt;br /&gt;
+                        echo &quot;$intname 300 IN A  $inetaddr&quot;&lt;br /&gt;
+                        echo &quot;$lastoct  IN  PTR $intname.$hostname.$domain.&quot;&lt;br /&gt;
+                        echo&lt;br /&gt;
+                    else&lt;br /&gt;
+                        echo &quot;$intname-u$j 300 IN A  $inetaddr&quot;&lt;br /&gt;
+                        echo &quot;$lastoct  IN  PTR $intname-u$j.$hostname.$domain.&quot;&lt;br /&gt;
+                        echo&lt;br /&gt;
+                    fi&lt;br /&gt;
+                fi&lt;br /&gt;
+            done&lt;br /&gt;
+    done&lt;br /&gt;
+&lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 23 Feb 2014 21:28:17 +0000</pubDate>
+        <link>http://remoteur.github.io//linux/2014/02/23/junos-interfaces-ip-addresses-a-and-ptr-records-generator/</link>
+        <guid isPermaLink="true">http://remoteur.github.io//linux/2014/02/23/junos-interfaces-ip-addresses-a-and-ptr-records-generator/</guid>
+        
+        
+        <category>linux</category>
+        
+      </item>
+    
+      <item>
+        <title>JunOS config interfaces IP address parser</title>
+        <description>&lt;p&gt;Hello guys,&lt;/p&gt;
+&lt;p&gt;In todays post I will show how you can obtain an interface IP address out of a JunOS curly brackets configuration file. You may find below the script and also the source configuration file. Please note that in order to run the script both files need to be placed in the same directory. &lt;/p&gt;
+&lt;p&gt;Please check it and let me know what you think, it&#39;s my first Perl script so it could definitely be improved.&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;perl[notools]&quot;&gt;#!/usr/bin/perl&lt;br /&gt;
+open (CONFIG, &#39;config.txt&#39;);&lt;br /&gt;
+my $data = do { local $/; &lt;config&gt;;};&lt;br /&gt;
+close (CONFIG);
+&lt;p&gt;my $system = $data =~ m{(\bsystem\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
+    ? $1&lt;br /&gt;
+    : die &quot;system not found&quot;;&lt;/p&gt;
+&lt;p&gt;my $intconfig = $data =~ m{(\binterfaces\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
+    ? $1&lt;br /&gt;
+    : die &quot;interfaces not found&quot;;&lt;/p&gt;
+&lt;p&gt;if ($ARGV[0] eq &#39;sys&#39;) {&lt;br /&gt;
+    print $system;&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;if ($ARGV[0] eq &#39;int&#39;) {&lt;br /&gt;
+    if (!defined $ARGV[1]) {&lt;br /&gt;
+        print $intconfig, &quot;\n&quot;;&lt;br /&gt;
+    }&lt;br /&gt;
+    if (defined $ARGV[1]) {&lt;br /&gt;
+        my $int = $intconfig =~ m{(\b$ARGV[1]\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
+            ? $1&lt;br /&gt;
+            : die &quot;$ARGV[1] not found&quot;;&lt;/p&gt;
+&lt;p&gt;        if (!defined $ARGV[2]) {&lt;br /&gt;
+            print $int. &quot;\n&quot;;&lt;br /&gt;
+        }&lt;/p&gt;
+&lt;p&gt;        if (defined $ARGV[2]) {&lt;br /&gt;
+            my $unit = $int =~m{(\bunit $ARGV[2]\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
+                ? $1&lt;br /&gt;
+                : die &quot;$ARGV[2] not found&quot;;&lt;/p&gt;
+&lt;p&gt;            my $inet = $unit =~ m{(\bfamily inet\s*({(?:(?&amp;gt;[^{}]+)|(?-1))*}))}&lt;br /&gt;
+                ? $1&lt;br /&gt;
+                : die &quot;family inet not found in section&quot;;&lt;/p&gt;
+&lt;p&gt;            my $inetaddr = $inet =~ m{\baddress\s(\d{1,3}(?:\.\d{1,3}){3})}&lt;br /&gt;
+                ? $1&lt;br /&gt;
+                : die &quot;no IP address&quot;;&lt;br /&gt;
+            print $inetaddr, &quot;\n&quot;;&lt;br /&gt;
+        }&lt;br /&gt;
+    }&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;if ($ARGV[0] eq &#39;--help&#39; or !defined $ARGV[0]) {&lt;br /&gt;
+    print &quot;Usage : ./parser.pl sys                              # outputs system section config&quot;, &quot;\n&quot;;&lt;br /&gt;
+    print &quot;        ./parser.pl int                              # outputs interfaces section config&quot;, &quot;\n&quot;;&lt;br /&gt;
+    print &quot;        ./parser.pl int [int-name]                   # outputs specific interface section config&quot;, &quot;\n&quot;;&lt;br /&gt;
+    print &quot;        ./parser.pl int ge-1/1/7                     # outputs ge-1/1/7 interface section config&quot;, &quot;\n&quot;;&lt;br /&gt;
+    print &quot;        ./parser.pl int [int-name] [unit-id]         # outputs specific interface unit IP address&quot;, &quot;\n&quot;;&lt;br /&gt;
+    print &quot;        ./parser.pl int ge-1/1/7 1001                # outputs ge-1/1/7 interface unit 1001 IP address&quot;, &quot;\n&quot;;&lt;br /&gt;
+}&lt;br /&gt;
+&lt;/p&gt;
+&lt;p&gt;&lt;code lang=&quot;perl[notools]&quot;&gt;&lt;br /&gt;
+marius@remoteur:~&amp;gt;&amp;gt;&amp;gt; cat config.txt&lt;br /&gt;
+system {&lt;br /&gt;
+    host-name junos-device;&lt;br /&gt;
+    domain-name corporate.net&lt;br /&gt;
+    time-zone Europe/Bucharest;&lt;br /&gt;
+    default-address-selection;&lt;br /&gt;
+    no-redirects;&lt;br /&gt;
+    location country-code RO;&lt;br /&gt;
+}&lt;br /&gt;
+interfaces {&lt;br /&gt;
+    ge-1/0/0 {&lt;br /&gt;
+        description &quot;Core: R:core1 RP:ge-0/1/4 (ptp, isis)&quot;;&lt;br /&gt;
+        mtu 9192;&lt;br /&gt;
+        unit 0 {&lt;br /&gt;
+            family inet {&lt;br /&gt;
+                address 192.168.140.29/31;&lt;br /&gt;
+            }&lt;br /&gt;
+        }&lt;br /&gt;
+    }&lt;br /&gt;
+    ge-1/0/1 {&lt;br /&gt;
+        description &quot;Cust: R:cust-a RP:ge-1/0/0 (srx240H)&quot;;&lt;br /&gt;
+        unit 0 {&lt;br /&gt;
+            family inet {&lt;br /&gt;
+                address 172.16.166.196/30;&lt;br /&gt;
+            }&lt;br /&gt;
+        }&lt;br /&gt;
+    }&lt;br /&gt;
+    ge-1/0/2 {&lt;br /&gt;
+        flexible-vlan-tagging;&lt;br /&gt;
+        native-vlan-id 10;&lt;br /&gt;
+        mtu 9192;&lt;br /&gt;
+        unit 10 {&lt;br /&gt;
+            description &quot;Cust: R:cust-b (data, feed A)&quot;;&lt;br /&gt;
+            vlan-id 10;&lt;br /&gt;
+            family inet {&lt;br /&gt;
+                address 192.168.136.184/31;&lt;br /&gt;
+            }&lt;br /&gt;
+        }&lt;br /&gt;
+        unit 1001 {&lt;br /&gt;
+            description &quot;Core: R:cust-b (cpe management)&quot;;&lt;br /&gt;
+            vlan-id 1001;&lt;br /&gt;
+            family inet {&lt;br /&gt;
+                filter {&lt;br /&gt;
+                    output Protect-cpe;&lt;br /&gt;
+                }&lt;br /&gt;
+                address 10.15.4.6/30;&lt;br /&gt;
+            }&lt;br /&gt;
+        }&lt;br /&gt;
+    }&lt;br /&gt;
+    ae0 {&lt;br /&gt;
+        description &quot;Core: R:colo-vc2 RI:ae5&quot;;&lt;br /&gt;
+        aggregated-ether-options {&lt;br /&gt;
+            minimum-links 1;&lt;br /&gt;
+            link-speed 1g;&lt;br /&gt;
+        }&lt;br /&gt;
+        unit 0 {&lt;br /&gt;
+            family inet {&lt;br /&gt;
+                address 192.168.140.126/31;&lt;br /&gt;
+            }&lt;br /&gt;
+        }&lt;br /&gt;
+    }&lt;br /&gt;
+    lo0 {&lt;br /&gt;
+        unit 0 {&lt;br /&gt;
+            description &quot;Core: R:primary routing loopback&quot;;&lt;br /&gt;
+            family inet {&lt;br /&gt;
+                address 192.168.128.166/32;&lt;br /&gt;
+            }
+&lt;p&gt;            }&lt;br /&gt;
+        }&lt;br /&gt;
+    }&lt;br /&gt;
+}&lt;br /&gt;
+&lt;/p&gt;
+&lt;/code&gt;&lt;/p&gt;&lt;/config&gt;&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 23 Feb 2014 20:58:36 +0000</pubDate>
+        <link>http://remoteur.github.io//linux/2014/02/23/junos-curly-brackets-configuration-parser/</link>
+        <guid isPermaLink="true">http://remoteur.github.io//linux/2014/02/23/junos-curly-brackets-configuration-parser/</guid>
+        
+        
+        <category>linux</category>
         
       </item>
     

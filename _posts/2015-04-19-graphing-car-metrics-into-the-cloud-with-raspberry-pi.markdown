@@ -23,7 +23,7 @@ I knew most of the cars have a diagnosis port called OBD which is used for readi
 
 - Data destination
 
-Once I got all the sensor data I needed to graph it somehow. This would be the easiest task since I've already used Graphite before and knew how easy it is to just pass the data and then it did all the graphing stuff.
+Once I got all the sensor data I needed to graph it somehow. This would be the easiest task since I had already used Graphite before and knew how easy sending the data and getting the graphs done was.
 
 - Data processor
 

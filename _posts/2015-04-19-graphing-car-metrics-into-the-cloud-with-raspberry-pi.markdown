@@ -32,7 +32,7 @@ Now that I have the data source and destination I also needed the device that pr
 - Put everything together
 
 At this point we have the system's individual components but we need to connect them somehow to get functionality out of it. After doing some searches I found out that there were some cheap Bluetooth OBD readers on the market and decided to go with that. Since I was going to use Bluetooth for connecting the Raspberry Pi to the OBD reader I also needed a USB Bluetooth dongle.
-The last step in getting the system done would be to get the Raspberry Pi connected to Graphite. Since I'm a cloudy guy I'm going to run Graphite on my Openstack lab so this means I'm going to need an Internet connection on the Pi. First thing that came to mind was getting an USB 3G modem. After doing some reading I found out that most of these modems require external power. I wanted to keep cabling as clean as possible by powering the Pi from the car's USB port so I went for another approach. The solution I came up was to use my phone's tethering capabilities and get the Pi connected via WiFi. By doing this I also required a USB WiFi dongle.
+The last step in getting the system done would be to get the Raspberry Pi connected to Graphite. Since I'm a cloudy guy I'm going to run Graphite on my Openstack lab so this means I'm going to need an Internet connection on the Pi. First thing that came to mind was getting a USB 3G modem. After doing some reading I found out that most of these modems require external power. I wanted to keep cabling as clean as possible by powering the Pi from the car's USB port so I went for another approach. The solution I came up was to use my phone's tethering capabilities and get the Pi connected via WiFi. By doing this I also required a USB WiFi dongle.
 
 ## Diagram of how this is going to work:
 <a href="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car OBD" width="500" height="350"/></a>
@@ -166,3 +166,10 @@ if __name__ == '__main__':
 
  <a href="http://graph.remote-lab.net/dashboard/db/ford-fiesta-mk7-b888unx?from=1429461436146&to=1429463338388&theme=light">Acess live Grafana dashboard</a>
  <a href="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car Stats" width="1167" height="657"/></a>
+
+ You can see that I only captured the RPM and speed sensor. The equation for calculating the instantaneous fuel consumptions includes a sensor that seems to be missing from my car or at least I don't know how to read it. I need to dig further to see how I can get it.
+
+I think this is a great example that demonstrates how easily you can leverage a physical measurement by software today. I really like it mostly because I have a general feeling that during our lifetime we could be missing important bits just because we're not analyzing enough the world around us. As humans we have a limited set of receptors(sensors) and I guess making use of the available compute power on a general scale might at least show us some unknown patterns in the world arounds us. 
+
+- Live recording of RPM graphs
+ <iframe width="854" height="510" src="https://youtu.be/g8cWz-SpWIo" frameborder="0" allowfullscreen></iframe>

@@ -57,15 +57,15 @@ The last component in the system was getting the Raspberry Pi connected to the G
 
 ## TL;DR. Let's get started:
 
-1. Connect the OBDII reader to your car
-2. Log in by SSH to the Pi
-3. Discover the ODBII mac address or read it from the case:
- {% highlight bash %}
- hcitool scan
- Scanning ...
- 00:0D:18:00:00:01 OBDII
- {% endhighlight %}
-4. Add the MAC address to the Bluetooth conf file.
+- Connect the OBDII reader to your car
+- Log in by SSH to the Pi
+- Discover the ODBII mac address or read it from the case:
+{% highlight bash %}
+hcitool scan
+Scanning ...
+00:0D:18:00:00:01 OBDII
+{% endhighlight %}
+- Add the MAC address to the Bluetooth conf file.
 {% highlight bash %}
 cat /etc/bluetooth/rfcomm.conf
 rfcomm99 {
@@ -75,7 +75,7 @@ rfcomm99 {
        comment "ELM327 based OBD II test tool";
    }
 {% endhighlight %}
-5. Write init script that will manage the Bluetooth connection through the /dev/rfcomm99 device.
+- Write init script that will manage the Bluetooth connection through the /dev/rfcomm99 device.
 {% highlight bash %}
 cat /etc/init.d/elm327
 #!/bin/bash
@@ -110,15 +110,15 @@ Usage:
 EOF
 esac
 {% endhighlight %}
-6. Create the device by running the init script
+- Create the device by running the init script
 {% highlight bash %}
 sudo /etc/init.d/elm327 start
 {% endhighlight %}
-7. Install obd python module via pip
+- Install obd python module via pip
 {% highlight bash %}
 sudo pip install obd
 {% endhighlight %}
-8. Write a script that reads sensor values and sends them to the graphite instance:
+- Write a script that reads sensor values and sends them to the graphite instance:
 {% highlight python %}
 import platform
 import socket
@@ -162,5 +162,5 @@ if __name__ == '__main__':
         send_msg(message)
         time.sleep(DELAY)
 {% endhighlight %}
-9. Run the script and you should start seeing the metrics graphed by Graphite. I'm using Grafana as a Graphite frontend and here's how they look like:
+- Run the script and you should start seeing the metrics graphed by Graphite. I'm using Grafana as a Graphite frontend and here's how they look like:
 <a href="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car Stats" width="1167" height="657"/></a>

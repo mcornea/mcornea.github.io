@@ -13,9 +13,9 @@ In this post we'll see how you can grab car sensors data and turn them into some
 ___
 
 ## Motivation:
-I've recently changed my car's stock air filter with a performance one which really improved the car's responsiveness. While driving back from Romania to Czech I was thinking that this just can't come for free and I wanted to somehow see how it impacts the car's working parameters. First thing I noticed that changed was the fuel consumption. Since the car board computer only provides instantaneous and average fuel consumption numbers I can't really get to do an analysis of what changed in time. Numbers are good but, at least for me, is hard to interpret them as absolute values and I need to get the whole picture where they stand. The first thought was that turning metrics like rpm, speed and instantaneous fuel consumption into easy to read graphs could get me one step closer to have an insight of how the car is actually behaving.
+I've recently changed my car's stock air filter with a performance one which really improved the car's responsiveness. While driving back from Romania to Czech Republic I was thinking that this can't just come for free and I wanted to see how it impacts the car's working parameters. First thing I noticed has changed was the fuel consumption. Since the car board computer only provides instantaneous and average fuel consumption numbers I can't really get to do an analysis of how it changed in time. Numbers are good but, at least for me, is hard to interpret them as absolute values and I need to get the whole picture where they stand. The first thought that came to mind was to turn metrics like rpm, speed and instantaneous fuel consumption into easy to read graphs. This would at least get me some more insight with historical data of the car's working parameters.
 
-So there kicked my doer spirit and started thinking of ways of doing it. What I need:
+So there kicked my doer spirit and started thinking of ways of doing it. What I needed:
 
 - Data source
 
@@ -23,7 +23,7 @@ I knew most of the cars have a diagnosis port called OBD which is used for readi
 
 - Data destination
 
-Once I got all the sensor data I needed to graph it somehow. This would be the easiest task since I've already used Graphite before and knew how is easy is to just pass data and then it did all the graphing stuff.
+Once I got all the sensor data I needed to graph it somehow. This would be the easiest task since I've already used Graphite before and knew how easy it is to just pass the data and then it did all the graphing stuff.
 
 - Data processor
 
@@ -31,8 +31,8 @@ Now that I have the data source and destination I also needed the device that pr
 
 - Put everything together
 
-Basically we have all the system's components but we need to connect them somehow to get functionality out of it. After doing some Google searches I found out that there were some cheap Bluetooth OBD readers on the market and decided to go with that. Since I was going to use Bluetooth for connecting the Raspberry Pi to the OBD reader I also needed a USB Bluetooth dongle.
-The last component in the system was getting the Raspberry Pi connected to the Graphite instance. Since I'm a cloudy guy I'm going to run Graphite on my lab Openstack so this means I was going to require an Internet connection on the Pi. First thing that came to mind was getting an USB 3G modem. After doing some reading I found out that most of these modems require external power. I wanted to keep cabling as clean as possible by powering the Pi from the car's USB port so I went for another approach. The solution I came up was to use my phone's tethering capabilities and get the Pi connected to it via WiFi so I also required a USB WiFi dongle.
+At this point we have the system's individual components but we need to connect them somehow to get functionality out of it. After doing some searches I found out that there were some cheap Bluetooth OBD readers on the market and decided to go with that. Since I was going to use Bluetooth for connecting the Raspberry Pi to the OBD reader I also needed a USB Bluetooth dongle.
+The last step in getting the system done would be to get the Raspberry Pi connected to Graphite. Since I'm a cloudy guy I'm going to run Graphite on my Openstack lab so this means I'm going to need an Internet connection on the Pi. First thing that came to mind was getting an USB 3G modem. After doing some reading I found out that most of these modems require external power. I wanted to keep cabling as clean as possible by powering the Pi from the car's USB port so I went for another approach. The solution I came up was to use my phone's tethering capabilities and get the Pi connected via WiFi. By doing this I also required a USB WiFi dongle.
 
 ## Diagram of how this is going to work:
 <a href="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car OBD" width="500" height="350"/></a>
@@ -51,7 +51,7 @@ The last component in the system was getting the Raspberry Pi connected to the G
 
 - Get your Raspberry Pi installed.
 - Make sure it's connected via WiFi to the mobile phone
-- Find it's IP address and connect to it via SSH
+- Find its IP address and connect to it via SSH
 - Install graphite and grafana. You can use these Ansible roles here: 
   https://github.com/remoteur/ansible-graphs
 
@@ -162,5 +162,6 @@ if __name__ == '__main__':
         send_msg(message)
         time.sleep(DELAY)
 {% endhighlight %}
-- Run the script and you should start seeing the metrics graphed by Graphite. I'm using Grafana as a Graphite frontend and here's how they look like:
+- Run the script and you should start seeing the metrics graphed by Graphite. I'm using Grafana as a Graphite frontend and here's how the graphs look like after a ride:
+ http://graph.remote-lab.net/dashboard/db/ford-fiesta-mk7-b888unx?from=1429461436146&to=1429463338388&theme=light
 <a href="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car Stats" width="1167" height="657"/></a>

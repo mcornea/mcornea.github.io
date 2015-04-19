@@ -163,5 +163,5 @@ if __name__ == '__main__':
         time.sleep(DELAY)
 {% endhighlight %}
 - Run the script and you should start seeing the metrics graphed by Graphite. I'm using Grafana as a Graphite frontend and here's how the graphs look like after a ride:
- http://graph.remote-lab.net/dashboard/db/ford-fiesta-mk7-b888unx?from=1429461436146&to=1429463338388&theme=light
+ <a href="http://graph.remote-lab.net/dashboard/db/ford-fiesta-mk7-b888unx?from=1429461436146&to=1429463338388&theme=light">Acess live Grafana dashboard</a>
 <a href="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car Stats" width="1167" height="657"/></a>

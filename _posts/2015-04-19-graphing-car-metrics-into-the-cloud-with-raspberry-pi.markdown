@@ -164,13 +164,13 @@ if __name__ == '__main__':
 {% endhighlight %}
 - Run the script and you should start seeing the metrics graphed by Graphite. I'm using Grafana as a Graphite frontend and here's how the graphs look like after a ride:
 
- <a href="http://graph.remote-lab.net/dashboard/db/ford-fiesta-mk7-b888unx?from=1429461436146&to=1429463338388&theme=light">Acess live Grafana dashboard</a>
  <a href="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car Stats" width="1167" height="657"/></a>
 
  You can see that I only captured the RPM and speed sensor. The equation for calculating the instantaneous fuel consumptions includes a sensor that seems to be missing from my car or at least I don't know how to read it. I need to dig further to see how I can get it.
 
 I think this is a great example that demonstrates how easily you can leverage a physical measurement by software today. I really like it mostly because I have a general feeling that during our lifetime we could be missing important bits just because we're not analyzing enough the world around us. As humans we have a limited set of receptors(sensors) and I guess making use of the available compute power on a general scale might at least show us some unknown patterns in the world arounds us. 
 
+ <a href="http://graph.remote-lab.net/dashboard/db/ford-fiesta-mk7-b888unx?from=1429461436146&to=1429463338388&theme=light">Live Grafana dashboard</a>
 - Live demo:
 
 <iframe width="854" height="510" src="https://www.youtube.com/embed/g8cWz-SpWIo" frameborder="0" allowfullscreen></iframe>

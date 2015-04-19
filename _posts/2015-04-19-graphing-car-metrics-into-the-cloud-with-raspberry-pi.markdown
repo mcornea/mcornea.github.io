@@ -60,11 +60,11 @@ The last component in the system was getting the Raspberry Pi connected to the G
 1. Connect the OBDII reader to your car
 2. Log in by SSH to the Pi
 3. Discover the ODBII mac address or read it from the case:
-{% highlight bash %}
-hcitool scan
-Scanning ...
-00:0D:18:00:00:01 OBDII
-{% endhighlight %}
+    {% highlight bash %}
+    hcitool scan
+    Scanning ...
+    00:0D:18:00:00:01 OBDII
+    {% endhighlight %}
 4. Add the MAC address to the Bluetooth conf file.
 {% highlight bash %}
 cat /etc/bluetooth/rfcomm.conf

@@ -15,7 +15,7 @@ ___
 ## Motivation:
 I've recently changed my car's stock air filter with a performance one which really improved the car's responsiveness. While driving back from Romania to Czech Republic I was thinking that this can't just come for free and I wanted to see how it impacts the car's working parameters. First thing I noticed has changed was the fuel consumption. Since the car board computer only provides instantaneous and average fuel consumption numbers I can't really get to do an analysis of how it changed in time. Numbers are good but, at least for me, it's hard to interpret them as absolute values and I need to get the whole picture where they stand. The first thought that came to mind was to turn metrics like rpm, speed and instantaneous fuel consumption into easy to read graphs. This would at least get me some more insight with historical data of the car's working parameters.
 
-So there kicked my doer spirit and started thinking of ways of doing it. What I needed:
+So there kicked my doer spirit and I started thinking of ways of doing it. What did I need:
 
 - Data source
 

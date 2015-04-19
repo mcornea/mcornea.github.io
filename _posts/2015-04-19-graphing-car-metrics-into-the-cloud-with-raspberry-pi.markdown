@@ -172,4 +172,5 @@ if __name__ == '__main__':
 I think this is a great example that demonstrates how easily you can leverage a physical measurement by software today. I really like it mostly because I have a general feeling that during our lifetime we could be missing important bits just because we're not analyzing enough the world around us. As humans we have a limited set of receptors(sensors) and I guess making use of the available compute power on a general scale might at least show us some unknown patterns in the world arounds us. 
 
 - Live recording of RPM graphs
- <iframe width="854" height="510" src="https://youtu.be/g8cWz-SpWIo" frameborder="0" allowfullscreen></iframe>
+
+<iframe width="854" height="510" src="https://youtu.be/g8cWz-SpWIo" frameborder="0" allowfullscreen></iframe>

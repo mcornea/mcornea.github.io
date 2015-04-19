@@ -35,7 +35,7 @@ Basically we have all the system's components but we need to connect them someho
 The last component in the system was getting the Raspberry Pi connected to the Graphite instance. Since I'm a cloudy guy I'm going to run Graphite on my lab Openstack so this means I was going to require an Internet connection on the Pi. First thing that came to mind was getting an USB 3G modem. After doing some reading I found out that most of these modems require external power. I wanted to keep cabling as clean as possible by powering the Pi from the car's USB port so I went for another approach. The solution I came up was to use my phone's tethering capabilities and get the Pi connected to it via WiFi so I also required a USB WiFi dongle.
 
 ## Diagram of how this is going to work:
-<a href="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car OBD" width="800" height="600"/></a>
+<a href="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car OBD" width="500" height="350"/></a>
 
 ## Bill of materials:
 

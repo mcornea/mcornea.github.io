@@ -18,20 +18,24 @@ I've recently changed my car's stock air filter with a performance one which rea
 So there kicked my doer spirit and started thinking of ways of doing it. What I need:
 
 - Data source
+
 I knew most of the cars have a diagnosis port called OBD which is used for reading data from most of the existing sensors in your car.
 
 - Data destination
+
 Once I got all the sensor data I needed to graph it somehow. This would be the easiest task since I've already used Graphite before and knew how is easy is to just pass data and then it did all the graphing stuff.
 
 - Data processor
+
 Now that I have the data source and destination I also needed the device that processes/forwards it. I had a Raspberry Pi standing on my desk for 2 or more years without turning it on so I thought that would be the ideal time to start using it.  
 
 - Put everything together
+
 Basically we have all the system's components but we need to connect them somehow to get functionality out of it. After doing some Google searches I found out that there were some cheap Bluetooth ODB readers on the market and decided to go with that. Since I was going to use Bluetooth for connecting the Raspberry Pi to the ODB reader I also needed a USB Bluetooth dongle.
 The last component in the system was getting the Raspberry Pi connected to the Graphite instance. Since I'm a cloudy guy I'm going to run Graphite on my lab Openstack so this means I was going to require an Internet connection on the Pi. First thing that came to mind was getting an USB 3G modem. After doing some reading I found out that most of these modems require external power. I wanted to keep cabling as clean as possible by powering the Pi from the car's USB port so I went for another approach. The solution I came up was to use my phone's tethering capabilities and get the Pi connected to it via WiFi so I also required a USB WiFi dongle.
 
 ## Diagram of how this is going to work:
-<a href="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car ODB" width="1167" height="657"/></a>
+<a href="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_odb.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car ODB" width="800" height="600"/></a>
 
 ## Bill of materials:
 
@@ -56,9 +60,11 @@ The last component in the system was getting the Raspberry Pi connected to the G
 1. Connect the OBDII reader to your car
 2. Log in by SSH to the Pi
 3. Discover the ODBII mac address or read it from the case:
+{% highlight bash %}
 hcitool scan
-
-
+Scanning ...
+00:0D:18:00:00:01 OBDII
+{% endhighlight %}
 4. Add the MAC address to the Bluetooth conf file.
 {% highlight bash %}
 cat /etc/bluetooth/rfcomm.conf
@@ -69,9 +75,7 @@ rfcomm99 {
        comment "ELM327 based OBD II test tool";
    }
 {% endhighlight %}
-
 5. Write init script that will manage the Bluetooth connection through the /dev/rfcomm99 device.
-
 {% highlight bash %}
 cat /etc/init.d/elm327
 #!/bin/bash
@@ -106,20 +110,15 @@ Usage:
 EOF
 esac
 {% endhighlight %}
-
 6. Create the device by running the init script
-
 {% highlight bash %}
 sudo /etc/init.d/elm327 start
 {% endhighlight %}
-
 7. Install obd python module via pip
 {% highlight bash %}
 sudo pip install obd
 {% endhighlight %}
-
 8. Write a script that reads sensor values and sends them to the graphite instance:
-
 {% highlight python %}
 import platform
 import socket
@@ -163,7 +162,5 @@ if __name__ == '__main__':
         send_msg(message)
         time.sleep(DELAY)
 {% endhighlight %}
-
 9. Run the script and you should start seeing the metrics graphed by Graphite. I'm using Grafana as a Graphite frontend and here's how they look like:
-
 <a href="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car Stats" width="1167" height="657"/></a>

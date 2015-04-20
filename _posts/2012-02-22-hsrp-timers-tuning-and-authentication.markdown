@@ -12,7 +12,7 @@ In today's post we are going to continue with some HSRP implementations. We have
 
 ___
 
-<img class="aligncenter size-large wp-image-125" title="HSRP2" src="{{'assets/static/HSRP2-1024x822.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="441" />
+<img class="aligncenter size-large wp-image-125" title="HSRP2" src="{{'/assets/static/HSRP2-1024x822.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="441" />
 
 Going forward to the actual HSRP configuration, we'll set HSRP group 0 for both the SVIs configured on the L3 switches. By default the active router in the HSRP group sends hello messages once every 3 seconds. The standby router is listening and if the hellos are missed for the duration of the holdtime timer ( 10 seconds by default ) the standby router is free to asume its active role. So this implies a 10 seconds downtime if one of the routers goes down which is unacceptable in todays networks. In order to avoid this kind of situation, we'll set the hello messages to be sent once every 200ms and the holdtimer to be 600ms so that the actual downtime will be less than a second. This will increase the bandwidth usage for the control plane messages but I don't think this should be a problem for nowadays links.
 
@@ -63,7 +63,7 @@ end
 You may see in the following captured packets that the plain text key actually appears in the HSRP header, while when using MD5 auth part of the payload is hased using the key string
 
 Plain text auth
-<a href="{{'assets/static/plain_text_auth.png' | prepend: site.baseurl | prepend: site.url }}"><img class="size-large wp-image-126 aligncenter" title="plain_text_auth" src="{{'assets/static/plain_text_auth.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="275" /></a>
+<a href="{{'/assets/static/plain_text_auth.png' | prepend: site.baseurl | prepend: site.url }}"><img class="size-large wp-image-126 aligncenter" title="plain_text_auth" src="{{'/assets/static/plain_text_auth.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="275" /></a>
 
 MD5 Auth
-<a href="{{'assets/static/md5auth.png' | prepend: site.baseurl | prepend: site.url }}"><img class="size-large wp-image-127 aligncenter" title="md5auth" src="{{'assets/static/md5auth.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="270" /></a>
+<a href="{{'/assets/static/md5auth.png' | prepend: site.baseurl | prepend: site.url }}"><img class="size-large wp-image-127 aligncenter" title="md5auth" src="{{'/assets/static/md5auth.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="270" /></a>

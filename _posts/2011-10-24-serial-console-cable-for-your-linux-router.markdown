@@ -13,7 +13,7 @@ ___
 
 Below you may find a scheme of the simplest converter I found. 
 
-<a href="href="{{'assets/static/ttltors2320kf.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/ttltors2320kf.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="" title="converter" width="486" height="263" class="aligncenter size-full wp-image-54" /></a>
+<a href="href="{{'/assets/static/ttltors2320kf.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/ttltors2320kf.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="" title="converter" width="486" height="263" class="aligncenter size-full wp-image-54" /></a>
 
 You will need the following components to build it:
 
@@ -28,8 +28,8 @@ This converter did the job for me but only when using it with a computer which h
 
 I am also attaching a document containing a complete list of RS232-to-3.3V TTL converters:
 
-<a href='{{'assets/static/mt1389-serial-interface-gallery.pdf' | prepend: site.baseurl | prepend: site.url }}'>Converters list</a>
+<a href='{{'/assets/static/mt1389-serial-interface-gallery.pdf' | prepend: site.baseurl | prepend: site.url }}'>Converters list</a>
 
 Later Edit: I found a workaround for the messy input when using an USB-to-serial adapter. The default OpenWRT image is compiled with a default baud rate of 115200 bps for the console port. You need to recompile the kernel and use a baud rate of 9600 bps, I will later post a tutorial on how this should be done. 
-<a href="{{'assets/static/IMG_0098.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/IMG_0098.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="" title="IMG_0098" width="550" height="410" class="aligncenter size-large wp-image-55" /></a>
-<a href="{{'assets/static/IMG_0100.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/IMG_0100.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="" title="IMG_0100" width="550" height="319" class="aligncenter size-large wp-image-56" /></a> 
+<a href="{{'/assets/static/IMG_0098.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/IMG_0098.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="" title="IMG_0098" width="550" height="410" class="aligncenter size-large wp-image-55" /></a>
+<a href="{{'/assets/static/IMG_0100.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/IMG_0100.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="" title="IMG_0100" width="550" height="319" class="aligncenter size-large wp-image-56" /></a> 

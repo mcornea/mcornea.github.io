@@ -32,4 +32,4 @@ logout port x
 If you are trying to reverse telnet and you get a connection refused it means that the session is probably open or hung.
 
 It's unlikely that you will find this device on the market nowadays but if you happen to find it and need some tweaking advice you can contact me and I'll share my experience.
-<img class="size-medium wp-image-116 aligncenter" title="lantronix" src="{{'assets/static/lantronix-300x199.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="" width="300" height="199" />
+<img class="size-medium wp-image-116 aligncenter" title="lantronix" src="{{'/assets/static/lantronix-300x199.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="" width="300" height="199" />

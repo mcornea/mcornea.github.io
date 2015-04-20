@@ -16,11 +16,11 @@ ___
 
 Each of the hosts will be connected to a router that  will be the first hop router for the hosts subnet. The 2 routers will be connected by 2 redundant links. We'll set up OSPF as a routing protocol between the 2 routers that will be used to advertise the clients subnets. 
 rtr01 is an Arista vEOS and rtr02 is running Vyatta core. host01 and host02 are running Debian.
-<a href="{{'assets/static/routing-lab-New-Page.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/routing-lab-New-Page.png' | prepend: site.baseurl | prepend: site.url }}" alt="ospf routing lab logical" width="821" height="729" class="aligncenter size-full wp-image-260" /></a>
+<a href="{{'/assets/static/routing-lab-New-Page.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/routing-lab-New-Page.png' | prepend: site.baseurl | prepend: site.url }}" alt="ospf routing lab logical" width="821" height="729" class="aligncenter size-full wp-image-260" /></a>
 
 Now let's get to the physical setup (which is actually virtual as all the components are VMs ). Each system (clients and routers) will be connected to the layer 2 switch (openvswitch running on Linux). We'll need to set up the links that connect the routers to the switch as trunks in order to allow multiple vlans to get through. The ports that connect the clients to the switch will be set as access ports. Please note that in a real world scenario you'll need to connect the routers by 2 different physical links across separate geographical paths to ensure rendundancy. Below is the physical diagram of the setup.
 
-<a href="{{'assets/static/routing-physical-New-Page.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/routing-physical-New-Page.png' | prepend: site.baseurl | prepend: site.url }}" alt="routing lab physical" width="745" height="625" class="aligncenter size-full wp-image-259" /></a>
+<a href="{{'/assets/static/routing-physical-New-Page.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/routing-physical-New-Page.png' | prepend: site.baseurl | prepend: site.url }}" alt="routing lab physical" width="745" height="625" class="aligncenter size-full wp-image-259" /></a>
 
 First thing we need to do is to configure the openvswitch. We'll create a bridge that contains all the ports and set up the client ports in access mode. By default all the openvswitch ports are trunks.
 

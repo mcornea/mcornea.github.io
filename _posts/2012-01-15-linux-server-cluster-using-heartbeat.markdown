@@ -72,7 +72,7 @@ Done.
 {% endhighlight %} 
 Let's test configuration, here comes the tricky part where I encountered some issues with my setup:
 
-<a href="{{'assets/static/cluster_setup.png' | prepend: site.baseurl | prepend: site.url }}"><img class="aligncenter size-medium wp-image-107" title="cluster_setup" src="{{'assets/static/cluster_setup.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="300" height="295" /></a>
+<a href="{{'/assets/static/cluster_setup.png' | prepend: site.baseurl | prepend: site.url }}"><img class="aligncenter size-medium wp-image-107" title="cluster_setup" src="{{'/assets/static/cluster_setup.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="300" height="295" /></a>
 
 So we've got server1 (10.0.0.11) and server2 (10.0.0.12) running on 2 virtual machine instances. I'm starting some ping packets from my PC (10.0.0.5) to the floating IP address - 10.0.0.20. I'm checking the ARP table of the PC and I'm seeing that 10.0.0.20 is associated to the mac address of server1, the primary node. Next, I shutdown interface eth0 of server1 and as configured in the ha.cf file I'm expecting for the ping packets to fail just for a couple of seconds more than 5 seconds.
 

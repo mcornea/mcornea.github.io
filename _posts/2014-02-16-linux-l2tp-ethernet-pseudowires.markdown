@@ -14,7 +14,7 @@ This post describes how you can create L2TP ethernet pseudowires by using Linux 
 ___
 
 Our topology consists of 5 virtual machines running Debian Wheezy with Linux Kernel 3.2.0. Our scenario objective is to ensure L2 connectivity between HOST01 and HOST02. In order to accomplish this we'll create a tunnel between TUNNEL01 and TUNNEL02 that will encapsulate packets coming from the 192.168.0.0/24 network. The INTERNET box just acts as a router for the packets exchanged by TUNNEL01 and TUNNEL02. 
-<a href="{{ 'assets/static/L2TP.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{ 'assets/static/L2TP.png' | prepend: site.baseurl | prepend: site.url }}" alt="L2TP" width="851" height="408" class="aligncenter size-full wp-image-238" /></a>
+<a href="{{ '/assets/static/L2TP.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{ '/assets/static/L2TP.png' | prepend: site.baseurl | prepend: site.url }}" alt="L2TP" width="851" height="408" class="aligncenter size-full wp-image-238" /></a>
 
 First thing let's make sure IP forwarding is enabled on all the machines that'll forward packets : TUNNEL0[1-2], INTERNET:
 

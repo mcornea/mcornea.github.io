@@ -8,7 +8,7 @@ categories:
 permalink: dynamic-routing-with-failover-on-backup-3g-link
 ---
 My latest lab toy is a Cisco 881G which integrates a cellular 3G interface used a secondary data link. In the following article I will present the existing scenario and what needs to be acomplished.
-<a href="{{'assets/static/3GBackup.png' | prepend: site.baseurl | prepend: site.url }}"><img class="aligncenter size-large wp-image-104" title="3GBackup" src="{{'assets/static/3GBackup.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="401" /></a>
+<a href="{{'/assets/static/3GBackup.png' | prepend: site.baseurl | prepend: site.url }}"><img class="aligncenter size-large wp-image-104" title="3GBackup" src="{{'/assets/static/3GBackup.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="401" /></a>
 
 ___
 

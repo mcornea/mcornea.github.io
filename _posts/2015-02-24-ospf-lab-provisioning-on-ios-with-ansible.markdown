@@ -14,7 +14,7 @@ permalink: opsf-on-ios-with-ansible
 In this post we'll see how we can quickly get a basic OSPF lab deployed by using Ansible. Our setup consists of 3 x Cisco IOS routers which are connected according to the diagram below. All the routers should already have SSH set up and an interface connected to the management network that will be used for retrieving the configuration files from the server. On the server side we need a Linux machine that has Ansible installed.
 
 ___
-<a href="{{ 'assets/static/ansible_ospf-New-Page.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{ 'assets/static/ansible_ospf-New-Page.png' | prepend: site.baseurl | prepend: site.url }}" alt="ansible_ospf - New Page" width="649" height="594" class="aligncenter size-full wp-image-297" /></a>
+<a href="{{ '/assets/static/ansible_ospf-New-Page.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{ '/assets/static/ansible_ospf-New-Page.png' | prepend: site.baseurl | prepend: site.url }}" alt="ansible_ospf - New Page" width="649" height="594" class="aligncenter size-full wp-image-297" /></a>
 
 So let's get started by building the Ansible playbook. I'll explain the site.yml file below:
 

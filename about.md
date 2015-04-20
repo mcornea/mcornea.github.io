@@ -17,7 +17,7 @@ Currently I am working as a quality engineer for Openstack on my day job and dur
 Find me on [Facebook][facebook] / [Github][github] / [Twitter][Twitter] or just say `Hello` at 
 [marius at remote-lab.net](marius at remote-lab.net).
 
-![Marius]({{'assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }} "Marius")
+![Marius]({{'/assets/static/marius.jpg' | prepend: site.baseurl | prepend: site.url }} "Marius")
 
 [tf]: http://template-factory.nl
 [m]: http://mearch.com

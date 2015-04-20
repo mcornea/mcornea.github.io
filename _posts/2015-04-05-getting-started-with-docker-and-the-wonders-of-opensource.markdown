@@ -14,7 +14,7 @@ ___
 
 First thing that came to mind and most handy I guess is to build a LAMP stack environment for Wordpress sites. So how do I start? Well, let's take the LAMP environment and split it into components: we need a database to store data and a web server that can process the Wordpress PHP code. Based on this I decided to create a container for the MySQL database and a container for running Apache plus additional PHP modules. Then I would also like to run multiple Wordpress instances on the same server to make use of all the resources. In order to achieve isolation between the apps we can create separate containers for each WP instance, each with its own database on the MySQL server. Nevertheless since we want all the instances accessible by a single IP address, we also need a load balancer that routes traffic to the webserver containers according to the Host field in the HTTP header. 
 Below is a diagram that better describes the flow:
-<a href="{{'assets/static/Containers-start-New-Page1.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/Containers-start-New-Page1.png' | prepend: site.baseurl | prepend: site.url }}" alt="Containers start - New Page" width="1167" height="657" class="aligncenter size-full wp-image-303" /></a>
+<a href="{{'/assets/static/Containers-start-New-Page1.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/Containers-start-New-Page1.png' | prepend: site.baseurl | prepend: site.url }}" alt="Containers start - New Page" width="1167" height="657" class="aligncenter size-full wp-image-303" /></a>
 So, let's get started. I got a Fedora21 instance powered up and followed the documentation <a href="https://docs.docker.com/installation/fedora/">here</a>[1] to get Docker up and running. Once I got the docker environment ready I started searching for some examples that would quickly get me started with the apps that I needed. So I started with the MySQL server. A quick search on Google pointed me to the official MySQL <a href="https://registry.hub.docker.com/_/mysql/">repo</a>[2] on Docker Hub that contains pretty straight forward documentation on how to get a running MySQL container. 
 
 Here's the command that I ran in order to get it running:
@@ -98,7 +98,7 @@ c383c56a7e66        mysql:latest                 "/entrypoint.sh mysq   2 hours 
 
 And the result:
 
-<a href="{{'assets/static/Screenshot-from-2015-04-05-212408.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'assets/static/Screenshot-from-2015-04-05-212408.png' | prepend: site.baseurl | prepend: site.url }}" alt="Screenshot from 2015-04-05 21:24:08" width="1430" height="847" class="aligncenter size-full wp-image-304" /></a>
+<a href="{{'/assets/static/Screenshot-from-2015-04-05-212408.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/Screenshot-from-2015-04-05-212408.png' | prepend: site.baseurl | prepend: site.url }}" alt="Screenshot from 2015-04-05 21:24:08" width="1430" height="847" class="aligncenter size-full wp-image-304" /></a>
 
 That's pretty awesome given the fact that I was able to do this in a couple of hours on a lazy Sunday. I'm pretty sure Docker has its caveats (building images takes such a long time) but it's amazing how fast you can achieve this kind of automation and get familiar with the technology. Long live the Open Source community! :)
 

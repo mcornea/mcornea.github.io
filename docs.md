@@ -33,3 +33,4 @@ permalink: /docs/
 |       Cockpit                                             | http://cockpit-project.org/                                                   |
 |       Learn Python the hard way                           | http://learnpythonthehardway.org/book/                                        |
 |       ClamAV tutorial                                     | http://www.debian-tutorials.com/how-to-install-clamav-on-debian-and-set-daily-scan-report |
+|       Docker logging                                      | http://nathanleclaire.com/blog/2015/04/27/automating-docker-logging-elasticsearch-logstash-kibana-and-logspout/ |

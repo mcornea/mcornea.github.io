@@ -164,7 +164,7 @@ if __name__ == '__main__':
 {% endhighlight %}
 - Run the script and you should start seeing the metrics graphed by Graphite. I'm using Grafana as a Graphite frontend and here's how the graphs look like after a ride:
 
-<iframe width="854" height="700" src="https://graph.remote-lab.net/dashboard/db/ford-fiesta-mk7-b888unx?from=1429461436146&to=1429463338388&theme=light" frameborder="0" allowfullscreen></iframe>
+<a href="{{'/assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/car_stats.png' | prepend: site.baseurl | prepend: site.url }}" alt="Car OBD" width="500" height="350"/></a>
 
  You can see that I only captured the RPM and speed sensor. The equation for calculating the instantaneous fuel consumptions includes a sensor that seems to be missing from my car or at least I don't know how to read it. I need to dig further to see how I can get it.
 

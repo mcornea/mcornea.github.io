@@ -35,3 +35,4 @@ permalink: /docs/
 |       ClamAV tutorial                                     | http://www.debian-tutorials.com/how-to-install-clamav-on-debian-and-set-daily-scan-report |
 |       Docker logging                                      | http://nathanleclaire.com/blog/2015/04/27/automating-docker-logging-elasticsearch-logstash-kibana-and-logspout/ |
 |       NAPALM network programmability                      | https://github.com/spotify/napalm                                             |
+|       Open Network Design                                 | http://opennetworkdesign.com/                                                 |

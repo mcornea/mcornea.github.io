@@ -36,3 +36,4 @@ permalink: /docs/
 |       Docker logging                                      | http://nathanleclaire.com/blog/2015/04/27/automating-docker-logging-elasticsearch-logstash-kibana-and-logspout/ |
 |       NAPALM network programmability                      | https://github.com/spotify/napalm                                             |
 |       Open Network Design                                 | http://opennetworkdesign.com/                                                 |
+|       L3 networking for Docker - Calico                   | http://www.projectcalico.org/                                                 | 

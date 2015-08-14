@@ -37,4 +37,4 @@ permalink: /docs/
 |       NAPALM network programmability                      | https://github.com/spotify/napalm                                             |
 |       Open Network Design                                 | http://opennetworkdesign.com/                                                 |
 |       L3 networking for Docker - Calico                   | http://www.projectcalico.org/                                                 | 
-|       Opensource sysadmin resources                       | https://n0where.net/open-source-sysadmin-resources/?utm_content=buffer7dbb7&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer | 
+|       Opensource sysadmin resources                       | https://n0where.net/open-source-sysadmin-resources/                           | 

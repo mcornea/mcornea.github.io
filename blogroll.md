@@ -24,4 +24,4 @@ These are some of the blogs I enjoy reading:
 - <li><a href="http://techblog.rosedu.org/">techblog.rosedu.org</a></li>
 - <li><a href="http://thenetworksherpa.com/">thenetworksherpa.com</a></li>
 - <li><a href="https://tobrunet.ch/">tobrunet.ch</a></li>
-- <li><a href="https://mellowd.co.uk/ccie">tobrunet.ch</a></li>
+- <li><a href="https://mellowd.co.uk/ccie">mellowd.co.uk</a></li>

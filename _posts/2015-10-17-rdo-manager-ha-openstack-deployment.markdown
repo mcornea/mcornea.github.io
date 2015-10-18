@@ -52,8 +52,7 @@ Now we can move forward to the overcloud deployment planning. We would like to d
 
 - HA control plane with 3 x controller nodes
 - 2 x Nova compute nodes
-- Service isolation by running them on separate networks
-- Use vlan tagging as a network isolation method
+- Achieve service isolation by binding them on separate networks running on top of different vlans
 
 Let's first make a copy of the tripleo-heat-templates tree in our home directory and use it for doing any modifications and run the deployment. As the docs mention use this approach with caution as you will need to rebase any local changes on updates to the openstack-tripleo-heat-templates package.
 

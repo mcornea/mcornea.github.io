@@ -41,3 +41,4 @@ permalink: /docs/
 |       OpenVPN in Docker containers                        | https://github.com/kylemanna/docker-openvpn                                   |
 |       Linux Networking                                    | https://github.com/knorrie/network-examples                                   | 
 |       ELK stack with Ansible                              | https://github.com/sadsfae/ansible-elk                                        | 
+|       Linux performance analysis in 60 s                  | http://techblog.netflix.com/2015/11/linux-performance-analysis-in-60s.html    |

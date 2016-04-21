@@ -40,3 +40,4 @@ permalink: /docs/
 |       Opensource sysadmin resources                       | https://n0where.net/open-source-sysadmin-resources/                           | 
 |       OpenVPN in Docker containers                        | https://github.com/kylemanna/docker-openvpn                                   |
 |       Linux Networking                                    | https://github.com/knorrie/network-examples                                   | 
+|       Understanding and hardening containers              | https://www.nccgroup.trust/globalassets/our-research/us/whitepapers/2016/april/ncc_group_understanding_hardening_linux_containers-10pdf |

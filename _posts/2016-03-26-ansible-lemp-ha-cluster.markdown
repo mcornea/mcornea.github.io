@@ -85,6 +85,6 @@ Below are the Ansible roles that I used for provisioning:
 
 I struggled a bit with the db role since I needed to serialize actions and I couldn't find a straightforward way of doing it. For example when a database server configuration change occurs you need to restart the mariadb service on each node individually and wait for it to get back in sync with the cluster. In order to do this I made a poor use of host variables. I'm pretty sure there must be a better way of achieving this and it's something that I'm looking to improve.
 
-You can check the playbook at <a href="https://github.com/remoteur/webapp-cluster" target="_blank">https://github.com/remoteur/webapp-cluster</a>
+You can check the playbook <a href="https://github.com/remoteur/infra.remote-lab.net/tree/master/lemp-ha-cluster" target="_blank">here</a>
 
 I'm quite impressed by Ansible's learning curve. I don't use it on a daily basis but every time I do I get the feeling that I can do complex tasks in a short timeframe which is awesome. 

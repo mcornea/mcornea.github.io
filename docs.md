@@ -40,4 +40,6 @@ permalink: /docs/
 |       Opensource sysadmin resources                       | https://n0where.net/open-source-sysadmin-resources/                           | 
 |       OpenVPN in Docker containers                        | https://github.com/kylemanna/docker-openvpn                                   |
 |       Linux Networking                                    | https://github.com/knorrie/network-examples                                   | 
+|       ELK stack with Ansible                              | https://github.com/sadsfae/ansible-elk                                        | 
+|       Linux performance analysis in 60 s                  | http://techblog.netflix.com/2015/11/linux-performance-analysis-in-60s.html    |
 |       Understanding and hardening containers              | https://www.nccgroup.trust/globalassets/our-research/us/whitepapers/2016/april/ncc_group_understanding_hardening_linux_containers-10pdf |

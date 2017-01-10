@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Serial console cable for your Linux router &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Serial console cable for your Linux router</h1>
+  <span class="post-date">24 Oct 2011</span>
+  <p>Today I have been trying to get some working console cables for the Asus WL-500 routers I have. The first thing I tried was using an old Nokia CA-42 data cable which includes an Prolific USB to 3.3V TTL converter but unfortunately it ended in getting a messy input and output. So the other solution I thought of was building my own RS232-to-3.3V TTL converter.</p>
+
+<hr />
+
+<p>Below you may find a scheme of the simplest converter I found.</p>
+
+<p>&lt;a href=”href=”http://remote-lab.net:4000/public/images/ttltors2320kf.jpg”&gt;<img src="http://remote-lab.net:4000/public/images/ttltors2320kf.jpg" alt="" title="converter" width="486" height="263" class="aligncenter size-full wp-image-54" />&lt;/a&gt;</p>
+
+<p>You will need the following components to build it:</p>
+
+<ul>
+  <li>2 x BC337 transistors</li>
+  <li>1 x 1.5K resistor</li>
+  <li>1 x 22K resistor</li>
+  <li>1 x 4.7K resistor</li>
+  <li>1 x 3.9K resistor</li>
+  <li>1 x DB9 female connector</li>
+</ul>
+
+<p>This converter did the job for me but only when using it with a computer which had a built-in serial port. When trying it with an USB-to-RS232 converter (Prolific chipset) I got a clean output from the UART port of the router but a messy input. I guess I’ll have to try another type of USB-RS232 converter(other chipset than Prolific) or build an USB-to-3.3V TTL converter from scratch.</p>
+
+<p>I am also attaching a document containing a complete list of RS232-to-3.3V TTL converters:</p>
+
+<p><a href="http://remote-lab.net:4000/public/images/mt1389-serial-interface-gallery.pdf">Converters list</a></p>
+
+<p>Later Edit: I found a workaround for the messy input when using an USB-to-serial adapter. The default OpenWRT image is compiled with a default baud rate of 115200 bps for the console port. You need to recompile the kernel and use a baud rate of 9600 bps, I will later post a tutorial on how this should be done. 
+<a href="http://remote-lab.net:4000/public/images/IMG_0098.jpg"><img src="http://remote-lab.net:4000/public/images/IMG_0098.jpg" alt="" title="IMG_0098" width="550" height="410" class="aligncenter size-large wp-image-55" /></a>
+<a href="http://remote-lab.net:4000/public/images/IMG_0100.jpg"><img src="http://remote-lab.net:4000/public/images/IMG_0100.jpg" alt="" title="IMG_0100" width="550" height="319" class="aligncenter size-large wp-image-56" /></a></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

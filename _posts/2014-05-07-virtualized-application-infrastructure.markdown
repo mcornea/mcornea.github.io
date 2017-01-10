@@ -13,7 +13,7 @@ In this post I'll show how you can build a secure virtualized infrastructure for
 
 ___
 
-<a href="{{'/assets/static//rlug-New-Page.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static//rlug-New-Page.png' | prepend: site.baseurl | prepend: site.url }}" alt="rlug - New Page" width="832" height="814" class="aligncenter size-full wp-image-255" /></a>
+<a href="{{'/public/images//rlug-New-Page.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/public/images//rlug-New-Page.png' | prepend: site.baseurl | prepend: site.url }}" alt="rlug - New Page" width="832" height="814" class="aligncenter size-full wp-image-255" /></a>
 
 Install kvm and tools:
 {% highlight bash %}

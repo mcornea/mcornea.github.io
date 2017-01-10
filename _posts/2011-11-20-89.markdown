@@ -8,7 +8,7 @@ categories:
 permalink: voip-us-number
 ---
 In today's post I will show how to get a free US DID - a local number and point it to your VoIP network. For this setup I will use an analog phone plugged into a FXS port of a Cisco 1751-V router. The use of a voice router isn't necessary, you may also use an ATA - Analog Telephone Adapter.
-<img class="aligncenter size-full wp-image-90" title="Diagram1" src="{{'/assets/static/Diagram1.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="286" height="360" />
+<img class="aligncenter size-full wp-image-90" title="Diagram1" src="{{'/public/images/Diagram1.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="286" height="360" />
 
 ___
 

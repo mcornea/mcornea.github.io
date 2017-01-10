@@ -21,7 +21,7 @@ In our scenario we will not configure any priority so the elected active router 
 
 That should be all you have to configure for basic HSRP. More detailed examples to follow where we shall tune the hello timers, configure authentication methods between the group members and try to load balance the traffic with the help of HSRP.
 
-<img class="aligncenter size-large wp-image-123" title="HSRP" src="{{'/assets/static/BlankNetworkDiagram-777x1024.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="724" />
+<img class="aligncenter size-large wp-image-123" title="HSRP" src="{{'/public/images/BlankNetworkDiagram-777x1024.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="550" height="724" />
 
 {% highlight bash %}
 GW_2#show standby

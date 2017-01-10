@@ -18,7 +18,7 @@ The Cisco 871 has 1 x FastEthernet external WAN port a 1 x 4 FastEthernet port s
 
 Please let me know what you think about this, in my opinion it's a very powerful tool.
 
-Download script file here: <a href="{{'/assets/static/871.txt' | prepend: site.baseurl | prepend: site.url }}">871.tcl</a>
+Download script file here: <a href="{{'/public/images/871.txt' | prepend: site.baseurl | prepend: site.url }}">871.tcl</a>
 
 {% highlight bash %}
 Router(tcl)#source flash:871.tcl

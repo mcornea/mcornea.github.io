@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      HA Openstack deployment using RDO-Manager &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">HA Openstack deployment using RDO-Manager</h1>
+  <span class="post-date">17 Oct 2015</span>
+  <p>In this post I’ll describe the steps needed to deploy an Openstack environment with 3 HA Controllers and 2 Nova compute nodes in a virtual environment.</p>
+
+<p>The setup was created by following the <a href="https://repos.fedorapeople.org/repos/openstack-m/rdo-manager-docs/liberty/">RDO-Manager Liberty docs</a>.</p>
+
+<hr />
+
+<h2 id="assumptions">Assumptions:</h2>
+
+<ol>
+  <li>The instack-virt-setup script has created 5 VMs (export NODE_COUNT=5) <br />
+  Instructions page: Environment Setup -&gt; Virtual Environment</li>
+  <li>You have completed the undercloud installation by using the default undercloud.conf
+  Instructions page: Undercloud Installation -&gt; Installing the Undercloud</li>
+  <li>You have completed images build and upload steps, nodes registration and introspection, flavors creation and configured the nameserver for the control plane network.<br />
+  Instructions page: Basic deployment</li>
+</ol>
+
+<h2 id="infrastructure">Infrastructure</h2>
+
+<p>At this point the undercloud has all the required pieces to start deploying the overcloud. As with any kind of infrastructure deployment which involves more than one machine we need to make sure we understand how the components interact with each other.</p>
+
+<p>Below is a diagram that shows the components created by the instack-virt-setup script and how we want to consume them in our deployment.</p>
+
+<p><a href="http://remote-lab.net:4000/public/images/instack.png"><img src="http://remote-lab.net:4000/public/images/instack.png" alt="Virtual infrastructure" width="700" height="450" /></a></p>
+
+<ul>
+  <li>
+    <p>instack VM: this is the VM that runs the undercloud. It’s got 2 nics: one connected to the libvirt default network which provides Internet connectivity and another one connected to the brbm bridge. The latter is connected to the provisioning network.</p>
+  </li>
+  <li>
+    <p>brbm OVS bridge: this will act as a L2 switch for interconnecting the undercloud with the overcloud nodes. By default the OVS ports are trunks, forwarding frames with any vlan tag.</p>
+  </li>
+  <li>
+    <p>baremetal_brbm VMs: these are the VMs that will run the overcloud nodes. Their number depends on how many you specified in the NODE_COUNT variable. All these VMs get created with a single nic connected to the brbm bridge by default.</p>
+  </li>
+</ul>
+
+<p>Before going further let’s take a minute and verify these settings on the undercloud:</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/47483abe424cae4521d6.js"> </script>
+
+<p>We can see that eth1(2nd nic) is bridged to br-ctlplane which has 192.0.2.1/24 as IP address. As you can see in the neutron subnet details it also acts as a default gateway for the ctlplane net (the provisioning network). This is because we want the undercloud machine to act as a router since it’s the single exit point to the Internet in the virtual environment. In addition there is also a masquerade rule which translates the source address for packets coming from the provisioning network. We can also see that a neutron port already exists in the provisioning network. This is actually the dhcp agent which will provide DHCP services for the overcloud nodes during the deployment.</p>
+
+<h2 id="overcloud-planning">Overcloud planning</h2>
+
+<p>Now we can move forward to the overcloud deployment planning. We would like to deploy an Openstack environment with the following characteristics:</p>
+
+<ul>
+  <li>HA control plane with 3 x controller nodes</li>
+  <li>2 x Nova compute nodes</li>
+  <li>Achieve service isolation by binding them on separate networks running on top of different vlans</li>
+</ul>
+
+<p>Let’s first make a copy of the tripleo-heat-templates tree in our home directory and use it for doing any modifications and run the deployment. As the docs mention use this approach with caution as you will need to rebase any local changes on updates to the openstack-tripleo-heat-templates package.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">stack@instack:~&gt;&gt;&gt; </span>mkdir the-cloud
+<span class="gp">stack@instack:~&gt;&gt;&gt; </span>cp -r /usr/share/openstack-tripleo-heat-templates/<span class="k">*</span> the-cloud/</code></pre></figure>
+
+<p>To enable network isolation we need to prepare the nic templates and an environment file which describe how the network interface configuration files on the overcloud nodes will be created. Thankfully, predefined templates for a single nic with vlan isolation environment are provided. Each role has its own template as not all the roles require connectivity to all the networks. Let’s take as example the controller role which requires connectivity to all the networks:</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/4e9fe56ac88de5ba002a.js"> </script>
+
+<p>We can see a bunch of parameters which describe things such as network subnets, vlan IDs, router address, etc. Some of them have default values(such as the vlan IDs which we’re going to use in our deployment) and some of them don’t thus we’ll have to provide them in the environment file.</p>
+
+<p>Going forward to the resources section we can see how the interfaces get created and the IP addresses assignment is done. Basically it first creates an OVS bridge having the name passed in the bridge_name parameter (defaults to br-ex). It then gets the DNS servers addresses from the DnsServers parameter (we’ll set it later in the environment file).  In the next step it assigns an IP address from the ctlplane network to the br-ex bridge. Next it adds a static route for the Nova metadata service via the EC2MetadataIp parameter(which we’ll pass in the environment file). Going further to the members section we can see nic1 as type interface which means it’s going to bridge nic1(first connected nic, in our case eth0) to the br-ex bridge. In the next steps it creates the vlan interfaces, taking as parameters the vlan IDs and the subnets for each of the networks. For the external network it adds a static route to 0.0.0.0/0 (default route) via the ExternalInterfaceDefaultRoute parameter (passed later in the environment file).</p>
+
+<p>You can go ahead and also check the nic templates for the other roles. You’ll see that the main difference is that they don’t have connections to all the vlans and the default route is set through the ControlPlaneDefaultRoute(set in the environment file) which is actually the undercloud’s IP address on the provisioning network.</p>
+
+<p>Let’s go to the next step and create the network environment file:</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/c69d57a17d76f88452ee.js"> </script>
+
+<p>Here we set the networks subnets, allocation pools together with other parameters which were previously described in the template walkthrough.</p>
+
+<p>More thorough details on the network isolation bits can be found on the docs page:
+<a href="https://repos.fedorapeople.org/repos/openstack-m/rdo-manager-docs/liberty/advanced_deployment/network_isolation.html">Network Isolation Docs</a></p>
+
+<p>We’ve seen earlier that the undercloud is used as a router for the provisioning network. Now that we want to have the overcloud provisioned with an external network which also requires Internet connectivity we must set an additional interface on the undercloud. This has to match the external network vlan id and the ExternalInterfaceDefaultRoute parameter set in the environment file. This step is also required because, during the overcloud deployment, the undercloud will try to reach the public VIP of the overcloud for post config initialization.</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/01cd42ca76e77ecc1b35.js"> </script>
+
+<h2 id="deploy">Deploy!</h2>
+
+<p>We’re almost ready for deployment. Let’s build the deploy command and fire it up:</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/6884e0cb1c5177a21571.js"> </script>
+
+<p>Some explanations on the command arguments:</p>
+
+<ul>
+  <li>control-scale: number of controller nodes</li>
+  <li>compute-scale: number of compute nodes</li>
+  <li>libvirt-type: virtualization type; since we’re running hypervisors on VMs we’ll use qemu</li>
+  <li>ntp-server: HA deployments require an NTP server for time syncronization</li>
+  <li>templates: location of the Heat templates directory</li>
+  <li>puppet-pacemaker.yaml: enables Pacemaker as cluster resource manager; required in HA environments</li>
+  <li>network-isolation.yaml : enables the creation of Neutron ports in the isolated networks</li>
+  <li>net-single-nic-with-vlans.yaml: enables the use of single-nic-vlans templates</li>
+  <li>network-environment.yaml: the environment file we have built earlier</li>
+</ul>
+
+<p>To monitor the deployment progress I usually run in a separate terminal:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">watch -n1 <span class="s1">'heat stack-list -n | grep PROGRESS'</span></code></pre></figure>
+
+<p>This way I can see if any nested stack gets stuck for long time, comparing the current time with the timestamps of the the stacks.</p>
+
+<p>I also watch  the output of nova list. During the early stages of the deployment you should see the instances being in spawning state:</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/955dcaf2960fcb8a6889.js"> </script>
+
+<p>This usually means that the nodes are booted in the deploy stage and transferring the overcloud image to disk. Once it gets written the nodes will reboot, the nova instances will show as active, they’ll load the image from disk and you’ll be able to reach them via ssh.</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/f98756e2e77c696e6554.js"> </script>
+
+<p>SSH access can be done by using the undercloud stack user private key and heat-admin as remote user. Let’s jump in overcloud-controller-0 and see what’s happening there:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">stack@instack:~&gt;&gt;&gt; </span>ssh heat-admin@192.0.2.14</code></pre></figure>
+
+<p>You can check the os-collect-config and /var/log/messages for deployment logs or errors:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>heat-admin@overcloud-controller-0 ~]<span class="nv">$ </span>sudo journalctl -fl -u os-collect-config 
+<span class="o">[</span>heat-admin@overcloud-controller-0 ~]<span class="nv">$ </span>sudo tail -f /var/log/messages </code></pre></figure>
+
+<p>You may check the actual result of the controller nic template showed earlier. This will end up in the /etc/os-net-config/config.json file which is used by os-net-config to build the ifcfg scripts in /etc/sysconfig/network-scripts.</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/d382c5442649bf276a90.js"> </script>
+
+<p>Once the deployment is done you will get a resulting overcloudrc file that you just need to source and then you’ll have the overcloud Openstack at your disposal.</p>
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/920109a31083942ba5e1.js"> </script>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/getting-started-with-docker">
+            Getting started with Docker and the wonders of Open Source
+            <small>05 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

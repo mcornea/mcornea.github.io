@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Debug Cisco laggy 3G Modem &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Debug Cisco laggy 3G Modem</h1>
+  <span class="post-date">25 Feb 2012</span>
+  <p>I am writing this post as I’ve been having these strange issues with my backup 3G Internet link. My primary data provider was down for approximately 2 days so as I presented in this <a href="http://www.remote-lab.net/?p=103">tutorial</a> my router automatically failovers to the backup 3G data. The dynamic failover got in place just fine but after a couple of minutes of using the link it suddenly got stuck.</p>
+
+<hr />
+
+<p>I checked the interface, it was up/up but pings just won’t come back - actually I think they didn’t even get to leave my router. After a shut/no shut of the interface everything looked back to normal and packets were passing just fine. I investigated further this issue but nothing indicated to a problem, the link was establish and the radio signal was strong.</p>
+
+<p>One solution <a href="http://adminlife.ro/?page_id=10">Adrian</a> came with in hist <a href="http://adminlife.ro/?p=379">post</a> is to track the interface and based on its state to action an EEM script. I adapted a little his script to my needs and here’s what I decided to do: I will use the same ip sla to monitor by icmp a core router of my backup data link provider. If within 30 seconds no replies are received then the ip sla goes down and a script which resets the 3G modem is triggered.</p>
+
+<p>One more thing I need to add is a static route to the IP address that I am monitoring in the IP SLA to go through the 3G interface and write the script lines - they are pretty straight forward.</p>
+
+<p>Notice that the “test cellular” command is enabled after entering the “service internal” command from the config mode</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ip sla 2
+ icmp-echo 213.154.121.1 <span class="nb">source</span>-interface Dialer2
+ timeout 10000
+ frequency 10
+ip sla schedule 2 life forever start-time now
+track 2 ip sla 2 reachability
+event manager applet RESET-3G
+ event track 2 state down&lt;br /&gt;
+ action 1.0 cli <span class="nb">command</span> <span class="s2">"enable"</span>
+ action 2.0 cli <span class="nb">command</span> <span class="s2">"test cellular 0 modem-power-cycle"</span></code></pre></figure>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

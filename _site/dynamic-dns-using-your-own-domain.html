@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Dynamic DNS using your own domain &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Dynamic DNS using your own domain</h1>
+  <span class="post-date">20 May 2013</span>
+  <p>I have recently changed my ISP and the new one is providing me an IP address through PPPoE that’s changing after every disconnect. 
+Being in this situation I had two options: set up a dynamic DNS client on my router using a dynamic DNS service such as no-ip.com or use my current DNS server and automatically update its zone records. I decided to go for the latter.</p>
+
+<hr />
+
+<p>The mechanism I will use is pretty simple: a client inside my LAN will periodically initiate an HTTP request to a particular section of this website that is password protected. The web server I am running remote-lab.net on is also the authoritative name server of remote-lab.net. The server will run a script every couple of minutes that checks the source IP address of completed HTTP requests, it will update the zone file records and increment the zone’s serial number.</p>
+
+<p>First, let’s install the required servers: Bind9 DNS server and Apache HTTP server:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">aptitude install bind9 apache2</code></pre></figure>
+
+<p>By default Apache’s default DocumentRoot is placed in /var/www. Let’s create a section inside it that is password protected:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@remote-lab:~# </span>mkdir /var/www/randomstring
+<span class="gp">root@remote-lab:~# </span><span class="nb">echo</span> <span class="s2">"Dynamic DNS"</span> &gt; /var/www/randomstring/index.html
+<span class="gp">root@remote-lab:~# </span>vim /var/www/randomstring/.htaccess
+AuthUserFile /etc/apache2/htpasswd
+AuthName <span class="s2">"Please Log In"</span>
+AuthType Basic
+require user admin
+<span class="gp">root@remote-lab:~# </span>htpasswd -c /etc/apache2/htpasswd admin
+New password:
+Re-type new password:
+Adding password <span class="k">for </span>user admin
+<span class="gp">root@remote-lab:~# </span>cat /etc/apache2/htpasswd
+admin:NA4V0VYvLWlU2</code></pre></figure>
+
+<p>Now let’s try a test that sends an HTTP request and see if the server returns a 200 OK.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">marius@remoteur:~\&gt; </span>curl -s http://admin:pass@www.remote-lab.net/randomstring/index.html</code></pre></figure>
+
+<p>Check the apache logs:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">188.26.130.193, 188.26.130.193 - admin <span class="o">[</span>20/Jan/2013:12:21:39 +0200] <span class="s2">"GET /randomstring/index.html HTTP/1.1"</span> 200 23 <span class="s2">"-"</span> <span class="s2">"curl/7.26.0"</span></code></pre></figure>
+
+<p>Setting up the DNS server. I will use bind9 and show the config files used for remote-lab.net domain as example:
+Create the zone file of your domain:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@remote-lab:~# </span>vim /etc/bind/db.remote-lab.net
+<span class="nv">$TTL</span>    120
+@   IN  SOA ns.remote-lab.net. marius.remote-lab.net. <span class="o">(</span>
+            2012121951  ; Serial
+            120         ; Refresh
+            86400       ; Retry
+            2419200     ; Expire
+            120 <span class="o">)</span>   ; Negative Cache TTL
+;
+@       IN  NS  ns.remote-lab.net.
+ns      IN  A   188.240.48.106
+@       IN  A   188.240.48.106
+@       IN  MX  1 aspmx.l.google.com.
+@       IN  MX  5 alt1.aspmx.l.google.com.
+@       IN  MX  5 alt2.aspmx.l.google.com.
+@       IN  MX  10 aspmx2.googlemail.com.
+@       IN  MX  10 aspmx3.googlemail.com.
+@       IN  MX  10 aspmx4.googlemail.com.
+@       IN  MX  10 aspmx5.googlemail.com.
+@       IN  TXT <span class="s2">"v=spf1 include:_spf.google.com ip4:188.240.48.106 ~all"</span>
+mail    IN  CNAME  ghs.google.com.
+www     IN  CNAME  remote-lab.net.
+virtual IN  A   188.26.130.193</code></pre></figure>
+
+<p>One thing to notice is that I set the TTL value to 3 minutes so that the changes will be quickly propagated. 
+virtual.remote-lab.net is the hostname assigned to my lab ip address.
+Edit the named.conf.local file and add your zone to the config :</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@remote-lab:~# </span>vim /etc/bind/named.conf.local
+zone <span class="s2">"remote-lab.net"</span> <span class="o">{</span>
+        <span class="nb">type </span>master;
+        file <span class="s2">"/etc/bind/db.remote-lab.net"</span>;
+<span class="o">}</span>;</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@remote-lab:~# </span>/etc/init.d/bind9 restart</code></pre></figure>
+
+<p>Restart the server and it should be up and running. You can do a quick test by querying the server for a specific record:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">marius@remoteur:~\&gt; </span>dig @188.240.48.106 virtual.remote-lab.net
+;; QUESTION SECTION:
+;virtual.remote-lab.net.		IN      	A
+;; ANSWER SECTION:
+virtual.remote-lab.net.	120     	IN      	A       	188.26.130.193
+;; AUTHORITY SECTION:
+remote-lab.net.  	        120     IN      	NS      	ns.remote-lab.net.
+;; ADDITIONAL SECTION:
+ns.remote-lab.net.	120     	IN      	A       	188.240.48.106</code></pre></figure>
+
+<p>Create a bash script that checks the web server logs, updates the zone records based on the source IP address of the HTTP requests and sends you an email when a change occurs:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="nv">IPCLIENT</span><span class="o">=</span><span class="sb">`</span>grep <span class="s1">'randomstring/index.html HTTP/1.1" 200'</span> /var/log/apache2/access_log | tail -1 | awk <span class="s1">'{print $2}'</span><span class="sb">`</span>
+<span class="nv">SERIAL</span><span class="o">=</span><span class="sb">`</span>grep Serial /etc/bind/db.remote-lab.net | sed -e <span class="s1">'s/; Serial//'</span><span class="sb">`</span>
+<span class="nv">SERIALNEW</span><span class="o">=</span><span class="k">$((</span><span class="nv">$SERIAL</span><span class="o">+</span><span class="m">1</span><span class="k">))</span>
+<span class="nv">IPLAB</span><span class="o">=</span><span class="sb">`</span>grep virtual /etc/bind/db.remote-lab.net | awk -F<span class="s2">" "</span> <span class="s1">'{print $4}'</span><span class="sb">`</span>
+<span class="k">if</span> <span class="o">[</span> <span class="s2">"</span><span class="nv">$IPCLIENT</span><span class="s2">"</span> <span class="o">==</span> <span class="s2">"</span><span class="nv">$IPLAB</span><span class="s2">"</span> <span class="o">]</span>
+<span class="k">then</span>
+    :
+<span class="k">else
+    </span>sed -i <span class="s2">"s/</span><span class="nv">$SERIAL</span><span class="s2">/</span><span class="nv">$SERIALNEW</span><span class="s2">/"</span> /etc/bind/db.remote-lab.net
+    sed -i <span class="s2">"s/</span><span class="nv">$IPLAB</span><span class="s2">/</span><span class="nv">$IPCLIENT</span><span class="s2">/"</span> /etc/bind/db.remote-lab.net
+    /etc/init.d/bind9 reload
+    <span class="nb">echo</span> <span class="s2">"The new LAB IP is </span><span class="nv">$IPCLIENT</span><span class="s2">"</span> | mail -s <span class="s2">"Your ISP has just changed your assigned IP"</span> -r root@remote-lab.net marius@remote-lab.net
+
+<span class="k">fi</span></code></pre></figure>
+
+<p>The last thing to do is to add our script to the cron jobs and run every several minutes.</p>
+
+<p>Please let me know if you have any questions or if I missed something in this setup.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

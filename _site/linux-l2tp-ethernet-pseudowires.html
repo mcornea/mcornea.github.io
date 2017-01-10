@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Linux L2TP ethernet pseudowires &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Linux L2TP ethernet pseudowires</h1>
+  <span class="post-date">16 Feb 2014</span>
+  <p>This post describes how you can create L2TP ethernet pseudowires by using Linux kernel’s L2TP drivers and the “ip” utility of iproute2.  L2TP is a protocol that tunnels one or more sessions over an IP tunnel. It is commonly used for VPNs (L2TP/IPSec) and by ISPs to tunnel subscriber PPP sessions over an IP network infrastructure. With L2TPv3, it is also useful as a Layer-2 tunneling infrastructure.</p>
+
+<hr />
+
+<p>Our topology consists of 5 virtual machines running Debian Wheezy with Linux Kernel 3.2.0. Our scenario objective is to ensure L2 connectivity between HOST01 and HOST02. In order to accomplish this we’ll create a tunnel between TUNNEL01 and TUNNEL02 that will encapsulate packets coming from the 192.168.0.0/24 network. The INTERNET box just acts as a router for the packets exchanged by TUNNEL01 and TUNNEL02. 
+<a href="http://remote-lab.net:4000/public/images/L2TP.png"><img src="http://remote-lab.net:4000/public/images/L2TP.png" alt="L2TP" width="851" height="408" class="aligncenter size-full wp-image-238" /></a></p>
+
+<p>First thing let’s make sure IP forwarding is enabled on all the machines that’ll forward packets : TUNNEL0[1-2], INTERNET:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@tun01:~# </span><span class="nb">echo </span>1 &gt; /proc/sys/net/ipv4/ip_forward
+<span class="gp">root@tun02:~# </span><span class="nb">echo </span>1 &gt; /proc/sys/net/ipv4/ip_forward
+<span class="gp">root@tun-inet:~# </span><span class="nb">echo </span>1 &gt; /proc/sys/net/ipv4/ip_forward</code></pre></figure>
+
+<p>Next thing to do is to establish L3 connectivity between TUNNEL01 and TUNNEL02 by setting static routes:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@tun01:~# </span>ip route add 2.2.2.0/30 via 1.1.1.1
+<span class="gp">root@tun02:~# </span>ip route add 1.1.1.0/30 via 2.2.2.1
+<span class="gp">root@tun01:~# </span>ping -c1 2.2.2.2
+PING 2.2.2.2 <span class="o">(</span>2.2.2.2<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+64 bytes from 2.2.2.2: <span class="nv">icmp_req</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>63 <span class="nb">time</span><span class="o">=</span>1.03 ms
+<span class="gp">root@tun02:~# </span>ping -c1 1.1.1.2
+PING 1.1.1.2 <span class="o">(</span>1.1.1.2<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+64 bytes from 1.1.1.2: <span class="nv">icmp_req</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>63 <span class="nb">time</span><span class="o">=</span>1.20 ms</code></pre></figure>
+
+<p>Once we’ve established L3 connectivity between the tunnel endpoints we can proceed to creating the tunnels. Before configuring the tunnels we need to load the L2TPv3 ethernet pseudowire kernel module:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@tun01:~# </span>modprobe l2tp_eth
+<span class="gp">root@tun01:~# </span>ip l2tp add tunnel tunnel_id 1000 peer_tunnel_id 2000 encap udp <span class="nb">local </span>1.1.1.2 remote 2.2.2.2 udp_sport 6000 udp_dport 5000
+<span class="gp">root@tun01:~# </span>ip l2tp add session tunnel_id 1000 session_id 3000 peer_session_id 4000
+<span class="gp">root@tun01:~# </span>ip l2tp show tunnel
+Tunnel 1000, encap UDP
+  From 1.1.1.2 to 2.2.2.2
+  Peer tunnel 2000
+  UDP <span class="nb">source</span> / dest ports: 6000/5000
+<span class="gp">root@tun01:~# </span>ip l2tp show session
+Session 3000 <span class="k">in </span>tunnel 1000
+  Peer session 4000, tunnel 2000
+  interface name: l2tpeth0
+  offset 0, peer offset 0
+<span class="gp">root@tun02:~# </span>modprobe l2tp_eth
+<span class="gp">root@tun02:~# </span>ip l2tp add tunnel tunnel_id 2000 peer_tunnel_id 1000 encap udp <span class="nb">local </span>2.2.2.2 remote 1.1.1.2 udp_sport 5000 udp_dport 6000
+<span class="gp">root@tun02:~# </span>ip l2tp add session tunnel_id 2000 session_id 4000 peer_session_id 3000
+<span class="gp">root@tun02:~# </span>ip l2tp show tunnel
+Tunnel 2000, encap UDP
+  From 2.2.2.2 to 1.1.1.2
+  Peer tunnel 1000
+  UDP <span class="nb">source</span> / dest ports: 5000/6000
+<span class="gp">root@tun02:~# </span>ip l2tp show session
+Session 4000 <span class="k">in </span>tunnel 2000
+  Peer session 3000, tunnel 1000
+  interface name: l2tpeth0
+  offset 0, peer offset 0</code></pre></figure>
+
+<p>We’ll notice a new interface has been created with a MTU of 1488 (1500bytes Ethernet MTU - 12bytes L2TP header):</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@tun01:~# </span>ip a s dev l2tpeth0
+5: l2tpeth0: &lt;BROADCAST,MULTICAST&gt; mtu 1488 qdisc noop state DOWN qlen 1000
+    link/ether 1a:8f:6e:04:3f:a3 brd ff:ff:ff:ff:ff:ff
+<span class="gp">root@tun02:~# </span>ip a s dev l2tpeth0
+5: l2tpeth0: &lt;BROADCAST,MULTICAST&gt; mtu 1488 qdisc noop state DOWN qlen 1000
+    link/ether 3e:d8:00:8c:d0:a2 brd ff:ff:ff:ff:ff:ff</code></pre></figure>
+
+<p>Next thing to do is install bridge-utils and bridge the l2tp interface with the network interface that’s attached to the LAN segment we want to extend over the tunnel, in our case it’s called eth1:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@tun01:~# </span>aptitude install bridge-utils
+<span class="gp">root@tun02:~# </span>aptitude install bridge-utils
+<span class="gp">root@tun01:~# </span>brctl addbr l2tp
+<span class="gp">root@tun02:~# </span>brctl addbr l2tp
+<span class="gp">root@tun01:~# </span>brctl addif l2tp eth1 l2tpeth0
+<span class="gp">root@tun02:~# </span>brctl addif l2tp eth1 l2tpeth0
+<span class="gp">root@tun01:~# </span>brctl show
+bridge name	        bridge id	    STP enabled	     interfaces
+l2tp		  8000.1a8f6e043fa3           no		            eth1 l2tpeth0
+<span class="gp">root@tun01:~# </span>ip l <span class="nb">set </span>dev l2tpeth0 up
+<span class="gp">root@tun01:~# </span>ip l <span class="nb">set </span>dev l2tp up
+<span class="gp">root@tun02:~# </span>ip l <span class="nb">set </span>dev l2tpeth0 up
+<span class="gp">root@tun02:~# </span>ip l <span class="nb">set </span>dev l2tp up</code></pre></figure>
+
+<p>Now we should be up and running and have L2 connectivity over the L2TP pseudowire:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@host01:~# </span>ping -c5 192.168.0.4
+PING 192.168.0.4 <span class="o">(</span>192.168.0.4<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+64 bytes from 192.168.0.4: <span class="nv">icmp_req</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>3.85 ms
+64 bytes from 192.168.0.4: <span class="nv">icmp_req</span><span class="o">=</span>2 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>1.93 ms
+64 bytes from 192.168.0.4: <span class="nv">icmp_req</span><span class="o">=</span>3 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>1.91 ms
+64 bytes from 192.168.0.4: <span class="nv">icmp_req</span><span class="o">=</span>4 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>1.87 ms
+64 bytes from 192.168.0.4: <span class="nv">icmp_req</span><span class="o">=</span>5 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>1.89 ms</code></pre></figure>
+
+<p>Now let’s go further to the transport layer and do a TCP throughput test:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@host02:~# </span>nuttcp -S
+<span class="gp">root@host01:~# </span>nuttcp 192.168.0.4
+nuttcp-t: v6.1.2: Error: server not ACKing data</code></pre></figure>
+
+<p>Looks that we’ve got a problem. It appears that the TCP session was established with a MSS of 1460bytes. This would cause packets fragmentation through the tunnel interface as the packets would exceed the maximum MTU on the Ethernet link of 1500bytes. Even though the connection should establish correctly and the transfer should run just fine fragmentation could case performance issues due to encapsulation overhead.</p>
+
+<p><a href="https://remote-lab.net/wp-content/uploads/2014/02/mss.png"><img src="https://remote-lab.net/wp-content/uploads/2014/02/mss-1024x438.png" alt="mss" width="960" height="410" class="aligncenter size-large wp-image-239" /></a></p>
+
+<p>I thought of lowering the MTU of the internal interfaces and enforcing the MSS for the TCP connections so that all the packets that are transmitted across the tunnel interfaces do not exceed 1500bytes.
+Now let’s do some basic maths and find out what’s the maximum TCP payload, also known as the maximum segment size in the TCP header:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">1500B</span><span class="o">=</span>20B<span class="o">(</span>IP_HEADER<span class="o">)</span>+8B<span class="o">(</span>UDP_HEADER<span class="o">)</span>+12B<span class="o">(</span>L2TP_HEADER<span class="o">)</span>+14B<span class="o">(</span>ETH_HEADER<span class="o">)</span>+20B<span class="o">(</span>IP_HEADER<span class="o">)</span>+20B<span class="o">(</span>TCP_HEADER<span class="o">)</span>+PAYLOAD <span class="o">=</span>&gt; <span class="nv">PAYLOAD</span><span class="o">=</span>1406B
+
+<span class="gp">root@tun01:~# </span>ip link <span class="nb">set </span>eth1 mtu 1446
+<span class="gp">root@tun01:~# </span>iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1406:1536 -j TCPMSS --set-mss 1406
+<span class="gp">root@tun02:~# </span>ip link <span class="nb">set </span>eth1 mtu 1446
+<span class="gp">root@tun02:~# </span>iptables -A FORWARD -p tcp --tcp-flags SYN,RST SYN -m tcpmss --mss 1406:1536 -j TCPMSS --set-mss 1406
+<span class="gp">root@host01:~# </span>nuttcp 192.168.0.4
+   45.7992 MB /  10.05 sec <span class="o">=</span>   38.2292 Mbps 15 %TX 30 %RX 0 retrans 1.89 msRTT</code></pre></figure>
+
+<p>All the virtual machines are running on my laptop so I guess it’s a decent throughput as the CPU seems to be the bottleneck.</p>
+
+<p>I hope you find this post useful. I am going to continue it in a future post by configuring L2TP over IPsec.</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

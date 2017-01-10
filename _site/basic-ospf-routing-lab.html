@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Lab - basic OSPF routing scenario &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Lab - basic OSPF routing scenario</h1>
+  <span class="post-date">21 May 2014</span>
+  <p>In this post post we’ll see how we can do a basic routing scenario by using the remote-lab.net virtual appliances. Below is the logical diagram of the scenario. Our objective is to esatblish connectivity between the 2 clients: host01 - 10.0.0.10 and host02 - 10.0.1.10.</p>
+
+<hr />
+
+<p>Each of the hosts will be connected to a router that  will be the first hop router for the hosts subnet. The 2 routers will be connected by 2 redundant links. We’ll set up OSPF as a routing protocol between the 2 routers that will be used to advertise the clients subnets. 
+rtr01 is an Arista vEOS and rtr02 is running Vyatta core. host01 and host02 are running Debian.
+<a href="http://remote-lab.net:4000/public/images/routing-lab-New-Page.png"><img src="http://remote-lab.net:4000/public/images/routing-lab-New-Page.png" alt="ospf routing lab logical" width="821" height="729" class="aligncenter size-full wp-image-260" /></a></p>
+
+<p>Now let’s get to the physical setup (which is actually virtual as all the components are VMs ). Each system (clients and routers) will be connected to the layer 2 switch (openvswitch running on Linux). We’ll need to set up the links that connect the routers to the switch as trunks in order to allow multiple vlans to get through. The ports that connect the clients to the switch will be set as access ports. Please note that in a real world scenario you’ll need to connect the routers by 2 different physical links across separate geographical paths to ensure rendundancy. Below is the physical diagram of the setup.</p>
+
+<p><a href="http://remote-lab.net:4000/public/images/routing-physical-New-Page.png"><img src="http://remote-lab.net:4000/public/images/routing-physical-New-Page.png" alt="routing lab physical" width="745" height="625" class="aligncenter size-full wp-image-259" /></a></p>
+
+<p>First thing we need to do is to configure the openvswitch. We’ll create a bridge that contains all the ports and set up the client ports in access mode. By default all the openvswitch ports are trunks.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">lab@console01:~&gt;&gt;&gt; </span>ovs01
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span><span class="k">for </span>i <span class="k">in</span> <span class="o">{</span>1..4<span class="o">}</span>; <span class="k">do </span>ip l <span class="nb">set </span>dev eth<span class="nv">$i</span> up;done
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl add-br l2switch
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl add-port l2switch eth1 <span class="nv">tag</span><span class="o">=</span>10
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl add-port l2switch eth2 <span class="nv">tag</span><span class="o">=</span>20
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl add-port l2switch eth3
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl add-port l2switch eth4
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl show
+653dfcd6-85a4-4f72-995f-9fa05b5203f9
+    Bridge <span class="s2">"l2switch"</span>
+        Port <span class="s2">"l2switch"</span>
+            Interface <span class="s2">"l2switch"</span>
+                <span class="nb">type</span>: internal
+        Port <span class="s2">"eth3"</span>
+            Interface <span class="s2">"eth3"</span>
+        Port <span class="s2">"eth2"</span>
+            tag: 20
+            Interface <span class="s2">"eth2"</span>
+        Port <span class="s2">"eth4"</span>
+            Interface <span class="s2">"eth4"</span>
+        Port <span class="s2">"eth1"</span>
+            tag: 10
+            Interface <span class="s2">"eth1"</span>
+    ovs_version: <span class="s2">"1.9.3"</span></code></pre></figure>
+
+<p>Set up the client interfaces IP addresses and default routes:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">lab@console01:~&gt;&gt;&gt; </span>host01
+<span class="gp">root@host01:~&gt;&gt;&gt; </span>ip l <span class="nb">set </span>dev eth1 up
+<span class="gp">root@host01:~&gt;&gt;&gt; </span>ip addr add 10.0.0.10/24 dev eth1
+<span class="gp">root@host01:~&gt;&gt;&gt; </span>ip route add default via 10.0.0.1
+<span class="gp">lab@console01:~&gt;&gt;&gt; </span>host02
+<span class="gp">root@host02:~&gt;&gt;&gt; </span>ip l <span class="nb">set </span>dev eth1 up
+<span class="gp">root@host02:~&gt;&gt;&gt; </span>ip addr add 10.0.1.10/24 dev eth1
+<span class="gp">root@host01:~&gt;&gt;&gt; </span>ip route add default via 10.0.1.1</code></pre></figure>
+
+<p>Configure the vlans and SVI IP addresses on the routers:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">lab@console01:~&gt;&gt;&gt; </span>rtr01
+rtr01&gt;en
+rtr01#configure
+rtr01<span class="o">(</span>config<span class="o">)</span><span class="c">#vlan 10</span>
+rtr01<span class="o">(</span>config-vlan-10<span class="o">)</span><span class="c">#name host01-vlan</span>
+rtr01<span class="o">(</span>config-vlan-10<span class="o">)</span><span class="c">#vlan 100</span>
+rtr01<span class="o">(</span>config-vlan-100<span class="o">)</span><span class="c">#name path1-vlan</span>
+rtr01<span class="o">(</span>config-vlan-100<span class="o">)</span><span class="c">#vlan 200</span>
+rtr01<span class="o">(</span>config-vlan-200<span class="o">)</span><span class="c">#name path2-vlan</span>
+rtr01<span class="o">(</span>config<span class="o">)</span><span class="c">#int ethernet 1</span>
+rtr01<span class="o">(</span>config-if-Et1<span class="o">)</span><span class="c">#switchport mode trunk</span>
+rtr01<span class="o">(</span>config-if-Et1<span class="o">)</span><span class="c">#switchport trunk allowed vlan 10,100,200</span>
+rtr01<span class="o">(</span>config-vlan-200<span class="o">)</span><span class="c">#int vlan 10</span>
+rtr01<span class="o">(</span>config-if-Vl10<span class="o">)</span><span class="c">#ip address 10.0.0.1/24</span>
+rtr01<span class="o">(</span>config-if-Et1<span class="o">)</span><span class="c">#int vlan 100</span>
+rtr01<span class="o">(</span>config-if-Vl100<span class="o">)</span><span class="c">#ip address 192.168.0.1/30</span>
+rtr01<span class="o">(</span>config-if-Vl100<span class="o">)</span><span class="c">#int vlan 200</span>
+rtr01<span class="o">(</span>config-if-Vl200<span class="o">)</span><span class="c">#ip address 192.168.0.5/30                                                         </span>
+<span class="gp">lab@console01:~&gt;&gt;&gt; </span>rtr02
+<span class="gp">admin@rtr02:~&gt;&gt;&gt; </span>configure
+<span class="o">[</span>edit]
+<span class="gp">admin@rtr02# </span><span class="nb">set </span>interfaces ethernet eth1 vif 20 address 10.0.1.1/24
+<span class="o">[</span>edit]
+<span class="gp">admin@rtr02# </span><span class="nb">set </span>interfaces ethernet eth1 vif 100 address 192.168.0.2/30
+<span class="o">[</span>edit]
+<span class="gp">admin@rtr02# </span><span class="nb">set </span>interfaces ethernet eth1 vif 200 address 192.168.0.6/30
+<span class="gp">admin@rtr02# </span>commit
+<span class="o">[</span>edit]
+<span class="gp">admin@rtr02# </span>save
+Saving configuration to <span class="s1">'/config/config.boot'</span>...
+Done</code></pre></figure>
+
+<p>Let’s do some connectivity tests:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">rtr01&gt;ping 10.0.0.10
+PING 10.0.0.10 <span class="o">(</span>10.0.0.10<span class="o">)</span> 72<span class="o">(</span>100<span class="o">)</span> bytes of data.
+80 bytes from 10.0.0.10: <span class="nv">icmp_req</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>12.9 ms    
+rtr01&gt;ping 192.168.0.2
+PING 192.168.0.2 <span class="o">(</span>192.168.0.2<span class="o">)</span> 72<span class="o">(</span>100<span class="o">)</span> bytes of data.
+80 bytes from 192.168.0.2: <span class="nv">icmp_req</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>16.7 ms                
+rtr01&gt;ping 192.168.0.6
+PING 192.168.0.6 <span class="o">(</span>192.168.0.6<span class="o">)</span> 72<span class="o">(</span>100<span class="o">)</span> bytes of data.
+80 bytes from 192.168.0.6: <span class="nv">icmp_req</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>13.2 ms       
+<span class="gp">admin@rtr02:~&gt;&gt;&gt; </span>ping 10.0.1.10
+PING 10.0.1.10 <span class="o">(</span>10.0.1.10<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+64 bytes from 10.0.1.10: <span class="nv">icmp_req</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>3.74 ms</code></pre></figure>
+
+<p>Now that we have the connectivity established on the connected links let’s move forward and set up OSPF :</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">lab@console01:~&gt;&gt;&gt; </span>rtr01
+rtr01&gt;en
+rtr01#configure
+rtr01<span class="o">(</span>config<span class="o">)</span><span class="c">#ip routing</span>
+rtr01<span class="o">(</span>config<span class="o">)</span><span class="c">#router ospf 10</span>
+rtr01<span class="o">(</span>config-router-ospf<span class="o">)</span><span class="c">#network 10.0.0.1 0.0.0.0 area 0</span>
+rtr01<span class="o">(</span>config-router-ospf<span class="o">)</span><span class="c">#network 192.168.0.1 0.0.0.0 area 0</span>
+rtr01<span class="o">(</span>config-router-ospf<span class="o">)</span><span class="c">#network 192.168.0.5 0.0.0.0 area 0 </span>
+<span class="gp">lab@console01:~&gt;&gt;&gt; </span>rtr02
+<span class="gp">admin@rtr02:~&gt;&gt;&gt; </span>configure
+<span class="o">[</span>edit]
+admin@rtr02#
+<span class="gp">admin@rtr02# </span><span class="nb">set </span>protocols ospf area 0 network 10.0.1.0/24
+<span class="o">[</span>edit]
+<span class="gp">admin@rtr02# </span><span class="nb">set </span>protocols ospf area 0 network 192.168.0.0/30
+<span class="o">[</span>edit]
+<span class="gp">admin@rtr02# </span><span class="nb">set </span>protocols ospf area 0 network 192.168.0.4/30
+<span class="gp">admin@rtr02# </span>commit</code></pre></figure>
+
+<p>Once that we have the ospf configuration done we can proceed and check the OSPF neighbor status on the 2 routers. We’ll see that we have 2 equal cost paths to the hosts subnets. This means that the routers will load balance the packets through the 2 links.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">rtr01#show ip ospf neighbor
+Neighbor ID     VRF    Pri   State            Dead Time   Address         Interface
+172.16.18.5     default    1   FULL/BDR         00:00:31    192.168.0.6     Vlan200
+172.16.18.5     default    1   FULL/DR          00:00:31    192.168.0.2     Vlan100    
+rtr01#show ip route 10.0.1.0/24
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external <span class="nb">type </span>1,
+       E2 - OSPF external <span class="nb">type </span>2, N1 - OSPF NSSA external <span class="nb">type </span>1,
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,
+       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
+ O      10.0.1.0/24 <span class="o">[</span>110/20] via 192.168.0.2, Vlan100
+                             via 192.168.0.6, Vlan200                     
+<span class="gp">admin@rtr02:~&gt;&gt;&gt; </span>show ip ospf neighbor 
+    Neighbor ID Pri State           Dead Time Address         Interface            RXmtL RqstL DBsmL
+192.168.0.5       1 Full/Backup       36.750s 192.168.0.1     eth1.100:192.168.0.2     0     0     0
+192.168.0.5       1 Full/DR           36.960s 192.168.0.5     eth1.200:192.168.0.6     0     0     0 
+<span class="gp">admin@rtr02:~&gt;&gt;&gt; </span>show ip route 10.0.0.0/24
+Routing entry <span class="k">for </span>10.0.0.0/24
+  Known via <span class="s2">"ospf"</span>, distance 110, metric 20, best
+  Last update 00:04:42 ago
+  <span class="k">*</span> 192.168.0.1, via eth1.100
+  <span class="k">*</span> 192.168.0.5, via eth1.200</code></pre></figure>
+
+<p>What if we want to set one of the links as primary ? We need to set a higher cost for the secondary link. At this time both of the paths have a cost of 20 (10 for the network segment that connects the 2 routers + 10 for the host network segment). Let’schoose the vlan 200 as secondary and increase the cost for the secondary link to 11.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">rtr01#configure
+rtr01<span class="o">(</span>config<span class="o">)</span><span class="c">#int vlan 200</span>
+rtr01<span class="o">(</span>config-if-Vl200<span class="o">)</span><span class="c">#ip ospf cost 11</span>
+rtr01<span class="o">(</span>config-if-Vl200<span class="o">)</span><span class="c">#show ip route 10.0.1.0/24</span>
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external <span class="nb">type </span>1,
+       E2 - OSPF external <span class="nb">type </span>2, N1 - OSPF NSSA external <span class="nb">type </span>1,
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,
+       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
+ O      10.0.1.0/24 <span class="o">[</span>110/20] via 192.168.0.2, Vlan100</code></pre></figure>
+
+<p>We can see that the routing table only contains the vlan 100 path. What happens if vlan 100 goes down ?</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">rtr01<span class="o">(</span>config<span class="o">)</span><span class="c">#int vlan 100</span>
+rtr01<span class="o">(</span>config-if-Vl100<span class="o">)</span><span class="c">#shut</span>
+rtr01<span class="o">(</span>config-if-Vl100<span class="o">)</span><span class="c">#show ip route 10.0.1.0/24</span>
+Codes: C - connected, S - static, K - kernel,
+       O - OSPF, IA - OSPF inter area, E1 - OSPF external <span class="nb">type </span>1,
+       E2 - OSPF external <span class="nb">type </span>2, N1 - OSPF NSSA external <span class="nb">type </span>1,
+       N2 - OSPF NSSA external type2, B I - iBGP, B E - eBGP,
+       R - RIP, I - ISIS, A B - BGP Aggregate, A O - OSPF Summary                                                                                                                             
+ O      10.0.1.0/24 <span class="o">[</span>110/21] via 192.168.0.6, Vlan200</code></pre></figure>
+
+<p>We can see that the vlan 200 path is installed in the routing table with a cost of 21 ( 11 + 10).</p>
+
+<p>I hope this post is useful for getting an idea of how you can use the virtual lab. Please let me know if you any questions.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

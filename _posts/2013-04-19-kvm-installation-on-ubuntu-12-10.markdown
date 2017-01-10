@@ -54,4 +54,4 @@ marius@remoteur:~\> sudo virt-install --name vm --disk path=/home/marius/vm.stor
 
 
 After this our install should be starting. You can use virt-manager to manage all the machines that are running on your local or remote hypervisor. It also allows you to access their consoles and adjust different parameters in the VM definition.
-<a href="{{'/assets/static/virt-manager.png' | prepend: site.baseurl | prepend: site.url }}"><img class="aligncenter size-medium wp-image-147" title="virt-manager" alt="" src="{{'/assets/static/virt-manager.png' | prepend: site.baseurl | prepend: site.url }}" width="500" height="465" /></a>
+<a href="{{'/public/images/virt-manager.png' | prepend: site.baseurl | prepend: site.url }}"><img class="aligncenter size-medium wp-image-147" title="virt-manager" alt="" src="{{'/public/images/virt-manager.png' | prepend: site.baseurl | prepend: site.url }}" width="500" height="465" /></a>

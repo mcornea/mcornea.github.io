@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Ansible playbook: postfix with Mandrill relay &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Ansible playbook: postfix with Mandrill relay</h1>
+  <span class="post-date">14 Sep 2014</span>
+  <p>In this post I will show how you can use Ansible to automatically install postfix mail server and configure it to relay through Mandrill. Mandrill is a transactional email platform that allows you to send up to 12.000 emails for free. I use it for my servers to avoid situations where the IP addresses assigned by my ISP are blacklisted on some RBL lists.</p>
+
+<hr />
+
+<p>Ansible is a config manamegement software that runs agentless over SSH. You only need python installed on the remote nodes. Ansible’s configuration files are called playbooks. Playbooks are written as YAML files and they are used to manage configurations of and deployments to remote machines.</p>
+
+<p>Below is the playbook that I use to install postfix, add the required configuration to use Mandrill and reload the service in order to use the new configuration. I will explain the playbook below:</p>
+
+<p>true<script src="https://gist.github.com/aa3d27a6fc948ed6e857.js"> </script></p>
+
+<p>The hosts line contains the hosts group that this playbook will be applied to.
+Each play contains a list of tasks, which are actually calls to Ansible modules. We see that the first task is called ‘Installs postfix mail server’ and it uses the apt module to get the postfix package in the installed stated. update_cache=true ensures that ‘apt-get update’ will be run before installing the postfix package. The notify section contains the handlers. Handlers are lists of tasks, not really any different from regular tasks, that are referenced by name. You can find them in the handlers sections. Looking at our example - the ‘start postfix’ handler ensures that the postfix server is started.</p>
+
+<p>The ‘Upload mandril authentication info’ task copies the /opt/files/postfix/mandril_passwd file on the ansible server to the remote node with /etc/postfix/mandril_passwd as a destination. The mandril_passwd file contains the authentication details for the Mandril platform. The mode key contains the permissions the destination file will have. The register line gets the result of the copy operation stored in the mandril variable. After getting the file copied we need to create the postfix lookup table based on that file. In order to do this we run the ‘postmap mandril_passwd’ handler which runs the ‘postmap /etc/postfix/mandril_passwd’ command only if the copy task was run successfully.</p>
+
+<p>The ‘Append mandril relay config’ task will add the config lines to the postfix main.cf files. We’ll store the lines in a dictionary. A dictionary is represented in a simple key: and value form:. Each new line will be the value stored in the ‘line’ key of each dictionary element. After adding the lines to main.cf we’ll restart postfix by running the ‘restart postfix’ handler.</p>
+
+<p>You may find below the output of running the playbook :</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@ansible:/etc/ansible/playbooks&gt;&gt;&gt; </span>ansible-playbook /etc/ansible/playbooks/playbook.yml
+PLAY <span class="o">[</span>basenodes] <span class="k">**************************************************************</span> 
+GATHERING FACTS <span class="k">***************************************************************</span> 
+TASK: <span class="o">[</span>Installs postfix mail server] <span class="k">******************************************</span>
+changed: <span class="o">[</span>node01.remote-lab.net]
+TASK: <span class="o">[</span>Upload mandril authentication info] <span class="k">************************************</span>
+changed: <span class="o">[</span>node01.remote-lab.net]
+TASK: <span class="o">[</span>Append mandril relay config] <span class="k">*******************************************</span>
+changed: <span class="o">[</span>node01.remote-lab.net] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'line'</span>: <span class="s1">'smtp_sasl_auth_enable = yes'</span><span class="o">})</span>
+changed: <span class="o">[</span>node01.remote-lab.net] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'line'</span>: <span class="s1">'smtp_sasl_password_maps = hash:/etc/postfix/mandril_passwd'</span><span class="o">})</span>
+changed: <span class="o">[</span>node01.remote-lab.net] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'line'</span>: <span class="s1">'smtp_sasl_security_options = noanonymous'</span><span class="o">})</span>
+changed: <span class="o">[</span>node01.remote-lab.net] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'line'</span>: <span class="s1">'smtp_use_tls = yes'</span><span class="o">})</span>
+changed: <span class="o">[</span>node01.remote-lab.net] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'line'</span>: <span class="s1">'relayhost = [smtp.mandrillapp.com]'</span><span class="o">})</span>
+NOTIFIED: <span class="o">[</span>start postfix] <span class="k">*****************************************************</span>
+ok: <span class="o">[</span>node01.remote-lab.net]
+NOTIFIED: <span class="o">[</span>postmap mandril_passwd] <span class="k">********************************************</span>
+changed: <span class="o">[</span>node01.remote-lab.net]
+NOTIFIED: <span class="o">[</span>restart postfix] <span class="k">***************************************************</span>
+changed: <span class="o">[</span>node01.remote-lab.net]
+PLAY RECAP <span class="k">********************************************************************</span>
+node01.remote-lab.net      : <span class="nv">ok</span><span class="o">=</span>7    <span class="nv">changed</span><span class="o">=</span>5    <span class="nv">unreachable</span><span class="o">=</span>0    <span class="nv">failed</span><span class="o">=</span>0</code></pre></figure>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

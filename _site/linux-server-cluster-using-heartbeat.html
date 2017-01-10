@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Linux Servers Cluster using HeartBeat &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Linux Servers Cluster using HeartBeat</h1>
+  <span class="post-date">15 Jan 2012</span>
+  <p>Today I’ve been working to set up a High Availability cluster made up of 2 virtual instances of CentOS Servers using Heartbeat. The cluster will be using one of the servers as primary and the second one as backup. The basic idea behing Heartbeat is that the backup server will be continuously pinging the primary server (using broadcast, multicast or unicast packets). In the eventuality that the active server goes down the backup server sets up a floating IP address, sends a gratious ARP message informing the others hosts on the local network segment that the mac-address corresponding to the floating IP has changed. The floating IP address is an IP address shared by the active and standby servers but it’s assigned just to one of them at a time.</p>
+
+<hr />
+
+<p>Heartbeat setup is pretty straight forward, I’ll describe in the following lines how you can install it on a CentOS system.</p>
+
+<ul>
+  <li>Download the latest epel-release rpm from</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# wget http://download.fedora.redhat.com/pub/epel/6/i386/epel-release-6-5.noarch.rpm
+<span class="o">[</span>root@server1 ~]# rpm -uvh epel-release-6-5.noarch.rpm</code></pre></figure>
+
+<ul>
+  <li>Install Heartbeat packages:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# yum install heartbeat</code></pre></figure>
+
+<ul>
+  <li>The Heartbeat config files are authkeys, ha.cf and haresources. We have to move thos into /etc/ha.d/ directory and edit them according to our setup.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# cp /usr/share/doc/heartbeat-3.0.4/authkeys /etc/ha.d
+<span class="o">[</span>root@server1 ~]# cp /usr/share/doc/heartbeat-3.0.4/ha.cf /etc/ha.d
+<span class="o">[</span>root@server1 ~]# cp /usr/share/doc/heartbeat-3.0.4/haresources /etc/ha.d/</code></pre></figure>
+
+<ul>
+  <li>Edit authkeys with sha1 as authentication method:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# vim /etc/ha.d/authkeys&lt;/pre&gt;
+auth 2
+2 sha1 pass</code></pre></figure>
+
+<ul>
+  <li>Change the permission for /etc/ha.d/authkeys to “600”:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# chmod 600 /etc/ha.d/authkeys&lt;/pre&gt;</code></pre></figure>
+
+<ul>
+  <li>Now let’s edit the ha.cf configuration file:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# vim /etc/ha.d/ha.cf
+logfile /var/log/ha-log <span class="c">#File to write log messages to</span>
+logfacility local0 <span class="c">#Facility to use for syslog()/logger</span>
+keepalive 1 <span class="c">#how long between heartbeats?</span>
+deadtime 5 <span class="c">#how long-to-declare-host-dead?</span>
+bcast eth0 <span class="c">#What interfaces to broadcast heartbeats over?</span>
+udpport 694 <span class="c">#What UDP port to use for bcast/ucast communication?</span>
+auto_failback on <span class="c">#if set to on the resource will automatically fail back to the primary server once it restores</span>
+node server1 <span class="c">#the hostname of the primary server - must match uname -n</span>
+node server2 <span class="c">#the hostname of the secondary server</span></code></pre></figure>
+
+<ul>
+  <li>Edit the haresources file - it must contain the hostname of the primary server and the floating virtual IP shared by the 2 servers:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# vim /etc/ha.d/haresources
+server1 IPaddr::10.0.0.20/255.255.255.0</code></pre></figure>
+
+<ul>
+  <li>Edit the Linux hosts file so that we map each of the hostnames to their corresponind IP address:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# vim /etc/hosts
+ 10.0.0.11 server1
+ 10.0.0.12 server2&lt;/pre&gt;</code></pre></figure>
+
+<p>The steps above must be repeated on Server2, please note that the configuration on both the machines in the cluster must match.
+After setting up the config on the machines we are ready to start the Heartbeat service.
+- Starting the Heartbeat service:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>root@server1 ~]# /etc/init.d/heartbeat start
+Starting High-Availability services: IPaddr[7248]: INFO: Resource is stopped
+Done.</code></pre></figure>
+
+<p>Let’s test configuration, here comes the tricky part where I encountered some issues with my setup:</p>
+
+<p><a href="http://remote-lab.net:4000/public/images/cluster_setup.png"><img class="aligncenter size-medium wp-image-107" title="cluster_setup" src="http://remote-lab.net:4000/public/images/cluster_setup.png" alt="" width="300" height="295" /></a></p>
+
+<p>So we’ve got server1 (10.0.0.11) and server2 (10.0.0.12) running on 2 virtual machine instances. I’m starting some ping packets from my PC (10.0.0.5) to the floating IP address - 10.0.0.20. I’m checking the ARP table of the PC and I’m seeing that 10.0.0.20 is associated to the mac address of server1, the primary node. Next, I shutdown interface eth0 of server1 and as configured in the ha.cf file I’m expecting for the ping packets to fail just for a couple of seconds more than 5 seconds.</p>
+
+<p>Unfortunately I don’t get this result with my setup, the ICMP replies start to appear after aproximately 40 seconds.
+From what I’m seeing the gratious ARP message which had to be sent by Heartbeat to inform that the HW MAC address corresponding to 10.0.0.20 has changed doesn’t reach my PC. So the PC waits until the OS flushes the ARP entry for 10.0.0.20 and then broadcasts another ARP request for 10.0.0.20.
+One thing I don’t understand is that before sending a broadcast ARP in the network to discover who has 10.0.0.20 my PC sends 3 unicast ARP messages to the MAC Address of the host which went down asking for 10.0.0.20.</p>
+
+<p><a href="http://www.remote-lab.net/wp-content/uploads/2012/02/Screenshot.png"><img class="aligncenter size-large wp-image-108" title="ARP" src="http://www.remote-lab.net/wp-content/uploads/2012/02/Screenshot-1024x110.png" alt="" width="550" height="59" /></a></p>
+
+<p>If you have got any ideas please let me know how I can improve this behavior.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

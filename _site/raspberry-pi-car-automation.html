@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite</h1>
+  <span class="post-date">19 Apr 2015</span>
+  <p>In this post we’ll see how you can grab car sensors data and turn them into some good loking and easy to watch graphs.</p>
+
+<hr />
+
+<h2 id="motivation">Motivation:</h2>
+<p>I’ve recently changed my car’s stock air filter with a performance one which really improved the car’s responsiveness. While driving back from Romania to Czech Republic I was thinking that this can’t just come for free and I wanted to see how it impacts the car’s working parameters. First thing I noticed has changed was the fuel consumption. Since the car board computer only provides instantaneous and average fuel consumption numbers I can’t really get to do an analysis of how it changed in time. Numbers are good but, at least for me, it’s hard to interpret them as absolute values and I need to get the whole picture where they stand. The first thought that came to mind was to turn metrics like rpm, speed and instantaneous fuel consumption into easy to read graphs. This would at least get me some more insight with historical data of the car’s working parameters.</p>
+
+<p>So there kicked my doer spirit and I started thinking of ways of doing it. What did I need:</p>
+
+<ul>
+  <li>Data source</li>
+</ul>
+
+<p>I knew most of the cars have a diagnosis port called OBD which is used for reading data from most of the existing sensors in your car.</p>
+
+<ul>
+  <li>Data destination</li>
+</ul>
+
+<p>Once I got all the sensor data I needed to graph it somehow. This would be the easiest task since I had already used Graphite before and knew how easy sending the data and getting the graphs done was.</p>
+
+<ul>
+  <li>Data processor</li>
+</ul>
+
+<p>Now that I have the data source and destination I also needed the device that processes/forwards it. I had a Raspberry Pi standing on my desk for 2 or more years without turning it on so I thought that would be the ideal time to start using it.</p>
+
+<ul>
+  <li>Put everything together</li>
+</ul>
+
+<p>At this point we have the system’s individual components but we need to connect them somehow to get functionality out of it. After doing some searches I found out that there were some cheap Bluetooth OBD readers on the market and decided to go with that. Since I was going to use Bluetooth for connecting the Raspberry Pi to the OBD reader I also needed a USB Bluetooth dongle.
+The last step in getting the system done would be to get the Raspberry Pi connected to Graphite. Since I’m a cloudy guy I’m going to run Graphite on my Openstack lab so this means I’m going to need an Internet connection on the Pi. First thing that came to mind was getting a USB 3G modem. After doing some reading I found out that most of these modems require external power. I wanted to keep cabling as clean as possible by powering the Pi from the car’s USB port so I went for another approach. The solution I came up was to use my phone’s tethering capabilities and get the Pi connected via WiFi. By doing this I also required a USB WiFi dongle.</p>
+
+<h2 id="diagram-of-how-this-is-going-to-work">Diagram of how this is going to work:</h2>
+<p><a href="http://remote-lab.net:4000/public/images/car_odb.png"><img src="http://remote-lab.net:4000/public/images/car_odb.png" alt="Car OBD" width="500" height="350" /></a></p>
+
+<h2 id="bill-of-materials">Bill of materials:</h2>
+
+<ul>
+  <li>Raspberry Pi Model B</li>
+  <li>Kingston 32GB SDHC Memory Card Class 10</li>
+  <li>MicroUSB cable</li>
+  <li>Asus USB-BT400 Bluetooth dongle</li>
+  <li>Edimax EW-7811Un WiFi dongle</li>
+  <li>Elm327 OBDII Bluetooth Scanner</li>
+  <li>3G Tethering capable phone</li>
+</ul>
+
+<h2 id="before-getting-started">Before getting started:</h2>
+
+<ul>
+  <li>Get your Raspberry Pi installed.</li>
+  <li>Make sure it’s connected via WiFi to the mobile phone</li>
+  <li>Find its IP address and connect to it via SSH</li>
+  <li>Install graphite and grafana. You can use these Ansible roles here: 
+https://github.com/remoteur/ansible-graphs</li>
+</ul>
+
+<h2 id="tldr-lets-get-started">TL;DR. Let’s get started:</h2>
+
+<ul>
+  <li>Connect the OBDII reader to your car</li>
+  <li>Log in by SSH to the Pi</li>
+  <li>Discover the OBDII mac address or read it from the case:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">hcitool scan
+Scanning ...
+00:0D:18:00:00:01 OBDII</code></pre></figure>
+
+<ul>
+  <li>Add the MAC address to the Bluetooth conf file.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">cat /etc/bluetooth/rfcomm.conf
+rfcomm99 <span class="o">{</span>
+       <span class="nb">bind </span>yes;
+       device 00:0D:18:00:00:01;
+       channel 1;
+       comment <span class="s2">"ELM327 based OBD II test tool"</span>;
+   <span class="o">}</span></code></pre></figure>
+
+<ul>
+  <li>Write init script that will manage the Bluetooth connection through the /dev/rfcomm99 device.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">cat /etc/init.d/elm327
+<span class="c">#!/bin/bash</span>
+<span class="c">### BEGIN INIT INFO</span>
+<span class="c"># Provides: elm327</span>
+<span class="c"># Required-Start:</span>
+<span class="c"># Required-Stop:</span>
+<span class="c"># Should-Start:</span>
+<span class="c"># Should-Stop: $null</span>
+<span class="c"># Default-Start: 3 5</span>
+<span class="c"># Default-Stop: 0 1 2 6</span>
+<span class="c"># Short-Description: Start elm327</span>
+<span class="c"># Description: starts the elm327 bluetooth device</span>
+<span class="c">### END INIT INFO</span>
+
+<span class="nv">DevNum</span><span class="o">=</span>99       <span class="c"># DevNum is depending on the rfcom settings /etc/bluetooth/rfcom.cfg</span>
+<span class="k">case</span> <span class="nv">$1</span> <span class="k">in
+</span>start<span class="p">)</span>
+     rfcomm <span class="nb">bind</span> <span class="nv">$DevNum</span>
+     <span class="p">;;</span>
+stop<span class="p">)</span>
+     rfcomm release <span class="nv">$DevNum</span>
+     <span class="p">;;</span>
+status<span class="p">)</span>
+    rfcomm show <span class="nv">$DevNum</span>
+    <span class="p">;;</span>
+<span class="k">*</span><span class="p">)</span>
+    cat<span class="sh">&lt;&lt;EOF
+Usage:
+    $0 [ start | stop | status ]
+
+EOF
+</span><span class="k">esac</span></code></pre></figure>
+
+<ul>
+  <li>Create the device by running the init script</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo /etc/init.d/elm327 start</code></pre></figure>
+
+<ul>
+  <li>Install obd python module via pip</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo pip install obd</code></pre></figure>
+
+<ul>
+  <li>Write a script that reads sensor values and sends them to the graphite instance:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">platform</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">obd</span>
+
+<span class="n">CARBON_SERVER</span> <span class="o">=</span> <span class="s">'graph.remote-lab.net'</span>
+<span class="n">CARBON_PORT</span> <span class="o">=</span> <span class="mi">2003</span>
+<span class="n">DELAY</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c"># secs</span>
+
+
+<span class="k">def</span> <span class="nf">send_msg</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
+    <span class="c">#    print 'sending message:\n%s' % message</span>
+    <span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="n">CARBON_SERVER</span><span class="p">,</span> <span class="n">CARBON_PORT</span><span class="p">))</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">get_rpms</span><span class="p">():</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="n">obd</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">RPM</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">value</span>
+
+<span class="k">def</span> <span class="nf">get_speed</span><span class="p">():</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="n">obd</span><span class="o">.</span><span class="n">commands</span><span class="o">.</span><span class="n">SPEED</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">value</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">node</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">node</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s">'.'</span><span class="p">,</span> <span class="s">'-'</span><span class="p">)</span>
+    <span class="n">connection</span> <span class="o">=</span> <span class="n">obd</span><span class="o">.</span><span class="n">OBD</span><span class="p">(</span><span class="s">"/dev/rfcomm99"</span><span class="p">)</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        <span class="n">rpms</span> <span class="o">=</span> <span class="n">get_rpms</span><span class="p">()</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="n">get_speed</span><span class="p">()</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s">'system.</span><span class="si">%</span><span class="s">s.rpm </span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">d'</span> <span class="o">%</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">rpms</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">),</span>
+            <span class="s">'system.</span><span class="si">%</span><span class="s">s.speed </span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">d'</span> <span class="o">%</span> <span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span> <span class="o">+</span> <span class="s">'</span><span class="se">\n</span><span class="s">'</span>
+        <span class="n">send_msg</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">DELAY</span><span class="p">)</span></code></pre></figure>
+
+<ul>
+  <li>Run the script and you should start seeing the metrics graphed by Graphite. I’m using Grafana as a Graphite frontend and here’s how the graphs look like after a ride:</li>
+</ul>
+
+<p><a href="http://remote-lab.net:4000/public/images/car_stats.png"><img src="http://remote-lab.net:4000/public/images/car_stats.png" alt="Car OBD" width="500" height="350" /></a></p>
+
+<p>You can see that I only captured the RPM and speed sensor. The equation for calculating the instantaneous fuel consumptions includes a sensor that seems to be missing from my car or at least I don’t know how to read it. I need to dig further to see how I can get it.</p>
+
+<p>I think this is a great example that demonstrates how easily you can leverage a physical measurement by software today. I really like it mostly because I have a general feeling that during our lifetime we could be missing important bits just because we’re not analyzing enough the world around us. As humans we have a limited set of receptors(sensors) and I guess making use of the available compute power on a general scale might at least show us some unknown patterns in the world arounds us.</p>
+
+<ul>
+  <li>Live demo:</li>
+</ul>
+
+<iframe width="854" height="510" src="https://www.youtube.com/embed/g8cWz-SpWIo" frameborder="0" allowfullscreen=""></iframe>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/getting-started-with-docker">
+            Getting started with Docker and the wonders of Open Source
+            <small>05 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

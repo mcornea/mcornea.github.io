@@ -31,7 +31,7 @@ At this point the undercloud has all the required pieces to start deploying the 
 
 Below is a diagram that shows the components created by the instack-virt-setup script and how we want to consume them in our deployment. 
 
-<a href="{{'/assets/static/instack.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/instack.png' | prepend: site.baseurl | prepend: site.url }}" alt="Virtual infrastructure" width="700" height="450"/></a>
+<a href="{{'/public/images/instack.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/public/images/instack.png' | prepend: site.baseurl | prepend: site.url }}" alt="Virtual infrastructure" width="700" height="450"/></a>
 
 - instack VM: this is the VM that runs the undercloud. It's got 2 nics: one connected to the libvirt default network which provides Internet connectivity and another one connected to the brbm bridge. The latter is connected to the provisioning network.
 

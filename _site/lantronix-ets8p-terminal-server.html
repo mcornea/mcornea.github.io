@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+       Lantronix ETS8P Terminal Server &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title"> Lantronix ETS8P Terminal Server</h1>
+  <span class="post-date">05 Feb 2012</span>
+  <p>I recently got a terminal server for my lab because as the number of devices grows it was difficult to manage them all by USB console adapters. So i found a cheap and quite old terminal server - Lantronix ETS8P - a terminal server with 8 serial RJ45 ports and 1 x 10Mbps ethernet interface. It’s actually that old that it doesn’t even support SSH, you can remote access it just by telnet.</p>
+
+<hr />
+
+<p>Anyways, I was very excited when I got it and I got right away a console cable on my laptop and connected to it -  I was thinking I will have it configured in a couple of minutes but in the end it took me a couple of more minutes to have it ready.</p>
+
+<p>I configured an IP address for it, prepared 8 rollover cables for connecting to Cisco devices, connected my devices and after that there I was trying to access the switches in my lab through the terminal server.</p>
+
+<p>You may access the console ports by telneting to the terminal server (username ‘admin’, su password ‘system’) and connect from it by “connect local port_x” or by reverse telnet to its IP address, on the port 2000+local_port ( eg. telnet 192.168.0.1 2001 for console port 1).  There are a couple of hints you may want to use if you are using the TS as I do: the console ports are set by default act both as DTE or DCE so we need to enforce those as the DTE side.</p>
+
+<p>To avoid these situations you have to set the following options for the ports:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">define port all autostart disabled
+define port dtrwait enabled</code></pre></figure>
+
+<p>You may always disconnect a hung session on the local console port by:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">logout </span>port x</code></pre></figure>
+
+<p>If you are trying to reverse telnet and you get a connection refused it means that the session is probably open or hung.</p>
+
+<p>It’s unlikely that you will find this device on the market nowadays but if you happen to find it and need some tweaking advice you can contact me and I’ll share my experience.
+<img class="size-medium wp-image-116 aligncenter" title="lantronix" src="http://remote-lab.net:4000/public/images/lantronix-300x199.jpg" alt="" width="300" height="199" /></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

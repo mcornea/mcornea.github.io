@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Cisco IOS Scripting with TCL - Cisco 871 example &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Cisco IOS Scripting with TCL - Cisco 871 example</h1>
+  <span class="post-date">05 Mar 2012</span>
+  <p>In today’s post I will briefly introduce with a simple example how TCL scripting language can be used with the Cisco IOS. Starting with IOS version 12.3(2)T the TCL shell was integrated into Cisco’s IOS. Basically it provides a TCL shell environment where you can make use of all the TCL functions, process variables and configure your Cisco device with the help of these.</p>
+
+<hr />
+
+<p>To make an idea of what you can do here’s a simple script that would ping all the hosts in a subnet - with the TCL shell it’s as simple as defining a counter which will be the host part of the IP address and creating a loop where you are repeating the ping command and incrementing the counter. Even more with the help of Cisco Embedded Event Manager you can do even more fancy things. The EEM can trigger TCL scripts based on several policies such as SNMP MIB values or MIB variable thresholds or the matching the output of a local syslog message. You can even set your device to send you email messages based on these events which is pretty awesome.</p>
+
+<p>My example consists of a script which will configure a Cisco 871 router by interactive prompts asking for the hostname, IP addresses, usernames, timezone and setting up basic services like DHCP, NAT and SSH.
+The Cisco 871 has 1 x FastEthernet external WAN port a 1 x 4 FastEthernet port switch. In order to run the script you will have to load it into the router’s flash memory or run it from a TFTP/HTTP server. This script will automatically set up overload NAT on the external FE interface for all the LAN IP addresses and it also set DHCP providing LAN IP addresses except the ones which are on the excluded list. Below you may find below the output of the script I’ve written, the resulted running config and also the actual code.</p>
+
+<p>Please let me know what you think about this, in my opinion it’s a very powerful tool.</p>
+
+<p>Download script file here: <a href="http://remote-lab.net:4000/public/images/871.txt">871.tcl</a></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Router<span class="o">(</span>tcl<span class="o">)</span><span class="c">#source flash:871.tcl</span>
+Please enter the hostname of this box: 871_SOHO
+Please enter the domain name of this box: HOME.NET
+Please enter the username you would like to configure <span class="k">for </span>this system: user
+Please enter the password <span class="k">for </span>user: pass
+Please enter the <span class="nb">enable </span>password: cisco
+Please enter the WAN IP address: 1.1.1.1
+Please enter the WAN netmask: 255.255.255.0
+Please enter the default gateway IP address: 1.1.1.2
+Please enter the LAN IP address: 192.168.0.1
+Please enter the LAN netmask: 255.255.255.240
+Configuring the DHCP service...
+Please enter the DNS Server IP address: 8.8.8.8
+Please enter the excluded IP address from DHCP assignments - separated by spaces 192.168.0.1 192.168.0.2
+Configuring NAT ...
+Activating SSH ...
+Please enter your timezone <span class="o">[</span> eg. UTC +2 <span class="o">]</span>: UTC -5
+Done...Your box is waiting <span class="k">for </span>some packets!</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">871_SOHO#sh run
+Building configuration...
+!
+version 12.4
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname 871_SOHO
+!
+boot-start-marker
+boot-end-marker
+!
+logging message-counter syslog
+logging buffered 25000
+<span class="nb">enable </span>secret 5 <span class="nv">$1$9xIG$BwuXzBtmLsl6acCURFny31</span>
+!
+aaa new-model
+!
+!
+aaa authentication login default <span class="nb">local</span>
+!
+!
+aaa session-id common
+clock timezone UTC -5
+!
+!
+dot11 syslog
+ip <span class="nb">source</span>-route
+!
+!
+ip dhcp excluded-address 192.168.0.1
+ip dhcp excluded-address 192.168.0.2
+!
+ip dhcp pool DHCP
+   network 192.168.0.0 255.255.255.240
+   default-router 192.168.0.1
+   dns-server 8.8.8.8
+!
+!
+ip cef
+no ip domain lookup
+ip domain name HOME.NET
+no ipv6 cef
+ntp server 64.6.144.6
+!
+multilink bundle-name authenticated
+!
+!
+!
+username user privilege 15 password 7 15020A1F17
+!
+!
+!
+archive
+ log config
+  hidekeys
+!
+!
+ip ssh version 2
+!
+!
+!
+interface FastEthernet0
+ switchport access vlan 55
+!
+interface FastEthernet1
+ switchport access vlan 55
+!
+interface FastEthernet2
+ switchport access vlan 55
+!
+interface FastEthernet3
+ switchport access vlan 55
+!
+interface FastEthernet4
+ ip address 1.1.1.1 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly
+ duplex auto
+ speed auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+interface Vlan55
+ ip address 192.168.0.1 255.255.255.240
+ ip nat inside
+ ip virtual-reassembly
+!
+ip forward-protocol nd
+ip route 0.0.0.0 0.0.0.0 1.1.1.2
+no ip http server
+no ip http secure-server
+!
+!
+ip nat inside <span class="nb">source </span>list 1 interface FastEthernet4 overload
+!
+access-list 1 permit 192.168.0.0 0.0.0.15
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ logging synchronous
+ no modem <span class="nb">enable
+</span>line aux 0
+line vty 0 4
+ length 0
+ transport input ssh
+!
+scheduler max-task-time 5000
+end       </code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ios_config <span class="s2">"service password-encryption"</span>
+ios_config <span class="s2">"no service config"</span>
+ios_config <span class="s2">"line con 0"</span> <span class="s2">"logging synchronous"</span>
+puts -nonewline <span class="s2">"Please enter the hostname of this box: "</span>
+flush stdout
+<span class="nb">set </span>hostname <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">"Please enter the domain name of this box: "</span>
+flush stdout
+<span class="nb">set </span>domain <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">"ip domain name </span><span class="nv">$domain</span><span class="s2">"</span>
+ios_config <span class="s2">"hostname </span><span class="nv">$hostname</span><span class="s2">"</span>
+ios_config <span class="s2">"logging buffered 25000"</span>
+ios_config <span class="s2">"ip cef"</span>
+ios_config <span class="s2">"no ip domain lookup"</span>
+ios_config <span class="s2">"no ip http server"</span>
+ios_config <span class="s2">"aaa new-model"</span>
+ios_config <span class="s2">"aaa authentication login default local"</span>
+puts -nonewline <span class="s2">"Please enter the username you would like to configure for this system: "</span>
+flush stdout
+<span class="nb">set </span>username <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">"Please enter the password for </span><span class="nv">$username</span><span class="s2">: "</span>
+flush stdout
+<span class="nb">set </span>password <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">"username </span><span class="nv">$username</span><span class="s2"> privilege 15 password </span><span class="nv">$password</span><span class="s2">"</span>
+puts -nonewline <span class="s2">"Please enter the enable password: "</span>
+flush stdout
+<span class="nb">set enable</span> <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">"enable secret </span><span class="nv">$enable</span><span class="s2">"</span>
+puts -nonewline <span class="s2">"Please enter the WAN IP address: "</span>
+flush stdout
+<span class="nb">set </span>wan_ip <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">"Please enter the WAN netmask: "</span>
+flush stdout
+<span class="nb">set </span>wan_netmask <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">"interface FastEthernet4"</span> <span class="s2">"ip address </span><span class="nv">$wan_ip</span><span class="s2"> </span><span class="nv">$wan_netmask</span><span class="s2">"</span>
+ios_config <span class="s2">"interface FastEthernet4"</span> <span class="s2">"no shutdown"</span>
+puts -nonewline <span class="s2">"Please enter the default gateway IP address: "</span>
+flush stdout
+<span class="nb">set </span>def_gw <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">"ip route 0.0.0.0 0.0.0.0 </span><span class="nv">$def_gw</span><span class="s2">"</span>
+puts -nonewline <span class="s2">"Please enter the LAN IP address: "</span>
+flush stdout
+<span class="nb">set </span>lan_ip <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">"Please enter the LAN netmask: "</span>
+flush stdout
+<span class="nb">set </span>lan_netmask <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">"interface vlan 1"</span> <span class="s2">"shutdown"</span>
+ios_config <span class="s2">"vlan 55"</span> <span class="s2">"name Local"</span>
+ios_config <span class="s2">"interface vlan 55"</span> <span class="s2">"ip address </span><span class="nv">$lan_ip</span><span class="s2"> </span><span class="nv">$lan_netmask</span><span class="s2">"</span>
+ios_config <span class="s2">"interface vlan 55"</span> <span class="s2">"no shutdown"</span>
+ios_config <span class="s2">"interface range FastEthernet 0 - 3"</span> <span class="s2">"switchport mode access"</span>
+ios_config <span class="s2">"interface range FastEthernet 0 - 3"</span> <span class="s2">"switchport access vlan 55"</span>
+puts <span class="s2">"Configuring the DHCP service..."</span>
+puts -nonewline <span class="s2">"Please enter the DNS Server IP address:"</span>
+flush stdout
+<span class="nb">set </span>dns_ip <span class="o">[</span> gets stdin <span class="o">]</span>
+puts -nonewline <span class="s2">"Please enter the excluded IP address from DHCP assignments - separated by spaces "</span>
+flush stdout
+<span class="nb">set </span>excluded <span class="o">[</span> gets stdin <span class="o">]</span>
+foreach i <span class="nv">$excluded</span> <span class="o">{</span>
+        ios_config <span class="s2">"ip dhcp excluded-address </span><span class="nv">$i</span><span class="s2">"</span>
+<span class="o">}</span>
+ios_config <span class="s2">"ip dhcp pool DHCP"</span> <span class="s2">"network </span><span class="nv">$lan_ip</span><span class="s2"> </span><span class="nv">$lan_netmask</span><span class="s2">"</span>
+ios_config <span class="s2">"ip dhcp pool DHCP"</span> <span class="s2">"default-route </span><span class="nv">$lan_ip</span><span class="s2">"</span>
+ios_config <span class="s2">"ip dhcp pool DHCP"</span> <span class="s2">"dns-server </span><span class="nv">$dns_ip</span><span class="s2">"</span>
+puts <span class="s2">"Configuring NAT ..."</span>
+<span class="nb">set </span>netmask_oct <span class="o">[</span>split <span class="nv">$lan_netmask</span> <span class="s2">"."</span><span class="o">]</span>
+foreach j <span class="nv">$netmask_oct</span> <span class="o">{</span>
+        <span class="nb">set </span>wildcard_o <span class="o">[</span>expr <span class="o">{</span>255 - <span class="nv">$j</span><span class="o">}]</span>
+        lappend wildcard <span class="nv">$wildcard_o</span>
+        <span class="o">}</span>
+<span class="nb">set </span>wildcard_o <span class="o">[</span>split <span class="nv">$wildcard</span> <span class="s2">" "</span><span class="o">]</span>
+<span class="nb">set </span>wildcard_o1 <span class="o">[</span>lindex <span class="nv">$wildcard_o</span> 0]
+<span class="nb">set </span>wildcard_o2 <span class="o">[</span>lindex <span class="nv">$wildcard_o</span> 1]
+<span class="nb">set </span>wildcard_o3 <span class="o">[</span>lindex <span class="nv">$wildcard_o</span> 2]
+<span class="nb">set </span>wildcard_o4 <span class="o">[</span>lindex <span class="nv">$wildcard_o</span> 3]
+<span class="nb">set </span>wildcard_mask <span class="s2">"</span><span class="nv">$wildcard_o1</span><span class="s2">.</span><span class="nv">$wildcard_o2</span><span class="s2">.</span><span class="nv">$wildcard_o3</span><span class="s2">.</span><span class="nv">$wildcard_o4</span><span class="s2">"</span>
+ios_config <span class="s2">"access-list 1 permit </span><span class="nv">$lan_ip</span><span class="s2"> </span><span class="nv">$wildcard_mask</span><span class="s2">"</span>
+ios_config <span class="s2">"ip nat inside source list 1 interface FastEthernet4 overload"</span>
+ios_config <span class="s2">"interface FastEthernet4"</span> <span class="s2">"ip nat outside"</span>
+ios_config <span class="s2">"interface Vlan 55"</span> <span class="s2">"ip nat inside"</span>
+puts <span class="s2">"Activating SSH ..."</span>
+ios_config <span class="s2">"line vty 0 4"</span> <span class="s2">"transport input ssh"</span>
+ios_config <span class="s2">"crypto key generate rsa general-keys modulus 1024"</span>
+ios_config <span class="s2">"ip ssh version 2"</span>
+ios_config <span class="s2">"ntp server 64.6.144.6"</span>
+puts -nonewline <span class="o">{</span>Please enter your timezone <span class="o">[</span> eg. UTC +2 <span class="o">]</span>:<span class="o">}</span>
+flush stdout
+<span class="nb">set </span>tzone <span class="o">[</span> gets stdin <span class="o">]</span>
+ios_config <span class="s2">"clock timezone </span><span class="nv">$tzone</span><span class="s2">"</span>
+puts <span class="s2">"Done...Your box is waiting for some packets!"</span></code></pre></figure>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

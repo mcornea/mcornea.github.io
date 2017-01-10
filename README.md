@@ -1,2 +1,3 @@
-## https://remote-lab.net/
+# remote-lab.net
 
+Marius Cornea personal blog.

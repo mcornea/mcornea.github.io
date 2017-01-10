@@ -1,64 +1,27 @@
-# Harmony Jekyll theme general configurations 
-
-# Base URL
-baseurl: 
-
-# Site live URL
-url: https://remote-lab.net
-
-# Localhost 
-# url: http://127.0.0.1:4000  
-
-# Harmony theme configuration. Please change accordingly.
-harmony:
-  name: remote-lab.net
-  # Little description about your site
-  description: learn by doing
-  # 'meta_description:' Write an awesome description for your new site here.
-  # It will appear in your document head meta (for Google search results) and 
-  # in your feed.xml site description.
-  meta_description: > # 
-    remote-lab.net learn by doing
-    Linux and networking tutorials
-    https://remote-lab.net
-  basetheme: theme-base-01 # pre defined thmes are darken, blue-water, redish.
-  author: # Author details
-    name: Marius Cornea
-    email: marius@remote-lab.net
-    url: https://remote-lab.net
-
-  # Google Analytics key, leave blank to ignore
-  google_analytics_key: UA-33897666-1
-
-  # Profile links, leave blank to ignore
-  social: 
-    github: remoteur
-    twitter: remoteur
-    facebook: marius.catalin.31542
-    gplus: 
-    dribble: 
-    pinterest: 
-  # Toggle disclaimer in footer
-  show_disclaimer: false
-
-# Conversion / Build settings 
-markdown:    kramdown
-# This is how you put pygments config in jekyll 2.0 instead of pygments: true
-highlighter: rouge
-
 # Permalinks
-permalink:        pretty
+#
+# Use of `relative_permalinks` ensures post links from the index work properly.
+permalink:           pretty
+relative_permalinks: false
 
-exclude: 
-  - CNAME
-  - Gemfile
-  - Rakefile
-  - README.md
-  - .gitignore
-  - .sass-cache
-  - Gemfile.lock
+# Setup
+title:               remote-lab.net
+tagline:             'learn by doing'
+description:         'a place to learn systems and networks administration'
+url:                 http://remote-lab.net
+baseurl:             ''
+paginate:            5
 
-# Sass conversion configs
-sass:
-    sass_dir: assets/css/_sass
-    style: :compressed
+# About/contact
+author:
+  name:              Marius Cornea
+  url:               https://www.facebook.com/marius.catalin.31542
+  email:             marius@remote-lab.net
+
+# Custom vars
+version:             1.0.0
+
+# Gems
+gems:
+  - jekyll-gist
+  - jekyll-paginate

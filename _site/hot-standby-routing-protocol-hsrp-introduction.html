@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Hot Standby Routing Protocol ( HSRP ) Introduction &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Hot Standby Routing Protocol ( HSRP ) Introduction</h1>
+  <span class="post-date">19 Feb 2012</span>
+  <p>In the following article I’ll make a brief introduction over HSRP and a simple lab topology to show its basic utility. HSRP is Cisco’s proprietary protcol which provides non-disruptive IP traffic failover when you’ve got multiple redundant gateways for you LAN segment.</p>
+
+<hr />
+
+<p>Let’s get back to the basics and remember how 2 hosts communicate on a local subnet: one host broadcasts an ARP request on the local segment, receives the reply, updates its mac address table and then sends frames directly to the learned mac address. When 2 hosts are located on different subnets a router - the default gatway is needed to route packets between the subnets. In this case the hosts operating system checks the destination IP address, sees that it’s not part of the local subnet and tries sending the frame to the default gateway. In order to do that the host first sends an ARP request asking for the mac-address associated to IP address of the default gateway and after it receives it caches the mac address and sends all the frames through the default gateway.</p>
+
+<p>Now HSRP comes in place where you have multiple default gateways but still on the hosts you can configure a single default gateway. What HSRP does is that it logically groups the multiple gateways providing a virtual IP and mac address for this group. The group can be formed out of a minimum of 2 devices - one of them will be the active gateway and the other one will be in standby mode . The election is based on a priority value ( 0 - 255 ) and the router with a higher priority is elected as the active one. The default priority is 100 and if both the devices have the same priority the one with a higher IP address becomes the active router. The routers exchange hello messages at regular time intervals so that they can be aware of each others state.</p>
+
+<p>Let’s have a look at a simple HSRP topology and see how we can configure basic functionality of the protocol. As you may see we’ve got 2 LAN segments connected through 2 L3 switches. The HSRP group is configured per interface and as you can see we’ve got HSRP group 0 for both of our LAN segments. This perfectly valid because the HSRP groups are locally significant only on an interface. The virtual IP address is set per interface and it needs to be the same for all the routers in the group and the virtual mac address is formed by 0000.0c07.acxx where xx is the HSRP group number as 2 hex digits.</p>
+
+<p>In our scenario we will not configure any priority so the elected active router will be the one with the interface which has the higher IP address: GW_2 in our case.</p>
+
+<p>That should be all you have to configure for basic HSRP. More detailed examples to follow where we shall tune the hello timers, configure authentication methods between the group members and try to load balance the traffic with the help of HSRP.</p>
+
+<p><img class="aligncenter size-large wp-image-123" title="HSRP" src="http://remote-lab.net:4000/public/images/BlankNetworkDiagram-777x1024.png" alt="" width="550" height="724" /></p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">GW_2#show standby
+FastEthernet0/1 - Group 0
+  State is Active
+    2 state changes, last state change 00:15:09
+  Virtual IP address is 192.168.10.1
+  Active virtual MAC address is 0000.0c07.ac00
+    Local virtual MAC address is 0000.0c07.ac00 <span class="o">(</span>v1 default<span class="o">)</span>
+  Hello <span class="nb">time </span>3 sec, hold <span class="nb">time </span>10 sec
+    Next hello sent <span class="k">in </span>1.664 secs
+  Preemption disabled
+  Active router is <span class="nb">local
+  </span>Standby router is 192.168.10.2, priority 100 <span class="o">(</span>expires <span class="k">in </span>10.032 sec<span class="o">)</span>
+  Priority 100 <span class="o">(</span>default 100<span class="o">)</span>
+  Group name is <span class="s2">"hsrp-Fa0/1-0"</span> <span class="o">(</span>default<span class="o">)</span>
+FastEthernet0/2 - Group 0
+  State is Active
+    2 state changes, last state change 00:15:09
+  Virtual IP address is 192.168.20.1
+  Active virtual MAC address is 0000.0c07.ac00
+    Local virtual MAC address is 0000.0c07.ac00 <span class="o">(</span>v1 default<span class="o">)</span>
+  Hello <span class="nb">time </span>3 sec, hold <span class="nb">time </span>10 sec
+    Next hello sent <span class="k">in </span>2.144 secs
+  Preemption disabled
+  Active router is <span class="nb">local
+  </span>Standby router is 192.168.20.2, priority 100 <span class="o">(</span>expires <span class="k">in </span>9.120 sec<span class="o">)</span>
+  Priority 100 <span class="o">(</span>default 100<span class="o">)</span>
+  Group name is <span class="s2">"hsrp-Fa0/2-0"</span> <span class="o">(</span>default<span class="o">)</span>
+GW_2#show run int fa0/1
+Building configuration...
+Current configuration : 114 bytes
+!
+interface FastEthernet0/1
+ no switchport
+ ip address 192.168.10.3 255.255.255.0
+ standby 0 ip 192.168.10.1
+end
+GW_2#show run int fa0/2
+Building configuration...
+Current configuration : 114 bytes
+!
+interface FastEthernet0/2
+ no switchport
+ ip address 192.168.20.3 255.255.255.0
+ standby 0 ip 192.168.20.1
+end</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">GW_1#sh standby
+FastEthernet0/1 - Group 0
+  State is Standby
+    4 state changes, last state change 00:15:52
+  Virtual IP address is 192.168.10.1
+  Active virtual MAC address is 0000.0c07.ac00
+    Local virtual MAC address is 0000.0c07.ac00 <span class="o">(</span>v1 default<span class="o">)</span>
+  Hello <span class="nb">time </span>3 sec, hold <span class="nb">time </span>10 sec
+    Next hello sent <span class="k">in </span>0.480 secs
+  Preemption disabled
+  Active router is 192.168.10.3, priority 100 <span class="o">(</span>expires <span class="k">in </span>10.976 sec<span class="o">)</span>
+  Standby router is <span class="nb">local
+  </span>Priority 100 <span class="o">(</span>default 100<span class="o">)</span>
+  Group name is <span class="s2">"hsrp-Fa0/1-0"</span> <span class="o">(</span>default<span class="o">)</span>
+FastEthernet0/2 - Group 0
+  State is Standby
+    4 state changes, last state change 00:15:54
+  Virtual IP address is 192.168.20.1
+  Active virtual MAC address is 0000.0c07.ac00
+    Local virtual MAC address is 0000.0c07.ac00 <span class="o">(</span>v1 default<span class="o">)</span>
+  Hello <span class="nb">time </span>3 sec, hold <span class="nb">time </span>10 sec
+    Next hello sent <span class="k">in </span>0.224 secs
+  Preemption disabled
+  Active router is 192.168.20.3, priority 100 <span class="o">(</span>expires <span class="k">in </span>10.288 sec<span class="o">)</span>
+  Standby router is <span class="nb">local
+  </span>Priority 100 <span class="o">(</span>default 100<span class="o">)</span>
+  Group name is <span class="s2">"hsrp-Fa0/2-0"</span> <span class="o">(</span>default<span class="o">)</span>
+GW_1#sh run int fa0/1
+Building configuration...
+Current configuration : 114 bytes
+!
+interface FastEthernet0/1
+ no switchport
+ ip address 192.168.10.2 255.255.255.0
+ standby 0 ip 192.168.10.1
+end
+GW_1#sh run int fa0/2
+Building configuration...
+Current configuration : 114 bytes
+!
+interface FastEthernet0/2
+ no switchport
+ ip address 192.168.20.2 255.255.255.0
+ standby 0 ip 192.168.20.1
+end</code></pre></figure>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

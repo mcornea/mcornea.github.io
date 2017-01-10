@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Build your OpenWRT image file &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Build your OpenWRT image file</h1>
+  <span class="post-date">07 Nov 2011</span>
+  <p>As I said in a previous post I will need an OpenWRT image set with the baud rate of 9600 bps for the console port in order to have my improvised USB-RS232-TTL adapters work. I will show the steps on how to build your image. Please note that I am using Ubuntu as OS but it should work with any other Linux distributions, you just have to install the dependencies.</p>
+
+<hr />
+
+<ul>
+  <li>Get a terminal window and type in:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$sudo</span> apt-get install build-essential subversion libncurses5-dev zlib1g-dev gawk bison 
+gcc flex
+<span class="nv">$mkdir</span> ~/backfire
+<span class="nv">$cd</span> ~/backfire
+<span class="nv">$svn</span> co svn://svn.openwrt.org/openwrt/branches/backfire .
+<span class="nv">$.</span>/scripts/feeds update -a</code></pre></figure>
+
+<ul>
+  <li>Prepare build</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$make</span> menuconfig</code></pre></figure>
+
+<p>Here you may choose what chipset you are using, the kernel modules and the packages you would like to install. I will choose the ones specific for the router I have : Asus WL500G. Just to be sure I will also install stty - a tool which can be used to set the baud rate of the console port after boot.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">Target System <span class="o">(</span>Broadcom BCM947xx/953xx <span class="o">[</span>2.4]<span class="o">)</span>
+Target Profile <span class="o">(</span>Generic, Broadcom WiFi <span class="o">(</span>default<span class="o">))</span>
+Select all packages by default
+Image configuration --&gt;;
+      Base system
+           busybox <span class="o">(</span>press enter to open hidden menu<span class="o">)</span>
+               Configuration
+                   Coreutils
+                      <span class="o">[</span><span class="k">*</span><span class="o">]</span> stty</code></pre></figure>
+
+<p>After choosing all the desired settings you have to save your config.</p>
+
+<ul>
+  <li>The next step is to add the 9600 baud rate console option to the kernel:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$vim</span> ~/backfire/.config</code></pre></figure>
+
+<p>and add the following line:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">CONFIG_CMDLINE</span><span class="o">=</span><span class="s2">"root=/dev/mtdblock2 rootfstype=squashfs,jffs2 init=/etc/preinit 
+noinitrd console=ttyS0,9600"</span></code></pre></figure>
+
+<ul>
+  <li>Start the build process and wait, it will take a while.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$make</span> world <span class="nv">V</span><span class="o">=</span>99</code></pre></figure>
+
+<ul>
+  <li>When it’s finished you’ll find the image in ~/backfire/bin and you can upload it through TFTP:
+Power your router while holding the reset button
+Connect one of the LAN interfaces to your computer and set your computers IP address to 192.168.1.x</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$tftp</span> 192.168.1.1
+tftp&gt;binary
+tftp&gt;trace 
+tftp&gt;put openwrt-brcm-2.4-squashfs.trx</code></pre></figure>
+
+<p><a href="http://remote-lab.net:4000/public/images/Screenshot-1.png"><img src="http://remote-lab.net:4000/public/images/Screenshot-1.png" alt="" title="OpenWRT" width="451" height="275" class="aligncenter size-full wp-image-79" /></a></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

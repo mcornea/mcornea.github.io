@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      SDN Intro: Basic L2 connectivity by using OVS and POX &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">SDN Intro: Basic L2 connectivity by using OVS and POX</h1>
+  <span class="post-date">12 Oct 2014</span>
+  <p>You’ve all probably heard about this fancy SDN term that’s been passing around in the networking world in the recent years. I’ll try to explain below what SDN means for me and what are the benefits of using such a model.</p>
+
+<hr />
+
+<p>SDN or Software Defined Networking refers to decoupling the data plane from the control plane. The data plane is the process by which the packets are forwarded and it’s done by the hardware silicon. The control plane is the process that instructs the data plane how to behave (routing protocols, firewall policies, etc). In a typical networking device we find those 2 planes coupled in a single box. The SDN model says we can separate them and keep the packet forwarding on a box that’s got the fast hardware silicon and move the control plane on a general purpose computer. Since the 2 planes are separated they need a means of communication which is OpenFlow.</p>
+
+<p>OpenFlow is a communications protocol that allows remote manipulation of the devices forwarding tables. Think of this protocol like a standard API that you can consume by running any software. This is great because you can purchase the networking device from a specific vendor and run the controller by your own code, open source project or other proprietary software. In my opinion this provides you the freedom to choose and will push the vendors to create better and better software. Personally I’m a big fan of opensource software and I’m dreaming about the moment when the networking world will be able to get the benefits of a big opensource project. 
+Another advantage that SDN brings is a central point that controls the network. Think about how we currently manage the networking devices. Even if the network is a whole that provides services to upper applications, we currently log into each separate device and write some commands that configure services. SDN would save us from doing repetitive and boring tasks such as provisioning vlans.
+Enough with the talk, let’s start a simple scenario by using the remote-lab.net environment. The lab topology consists of two hosts connected to an OpenvSwitch switch. The OVS switch is connected to an OpenFlow controller running Pox. The controller runs the code that enables L2 connectivity between the hosts but the actual forwarding is done by the OVS switch.
+<a href="http://remote-lab.net:4000/public/images/sdn_lab.png"><img src="http://remote-lab.net:4000/public/images/sdn_lab.png" alt="sdn_lab" width="686" height="364" class="aligncenter size-full wp-image-284" /></a></p>
+
+<p>Let’s first enable the ports the hosts are connected to, set an openvswitch bridge where the hosts are connected, set the IP addreses on the hosts and check we have connectivity between the hosts. By default the L2 learning mechanism is done by the OpenvSwitch internals.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ip link <span class="nb">set </span>dev eth1 up
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ip link <span class="nb">set </span>dev eth2 up
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl add-br sw0
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl add-port sw0 eth1
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl add-port sw0 eth2
+<span class="gp">root@host01:~&gt;&gt;&gt; </span>ip l <span class="nb">set </span>dev eth1 up
+<span class="gp">root@host01:~&gt;&gt;&gt; </span>ip addr add 192.168.0.1/24 dev eth1
+<span class="gp">root@host01:~&gt;&gt;&gt; </span>ip a s dev eth1
+3: eth1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 52:54:00:56:e2:b2 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.1/24 scope global eth1
+    inet6 fe80::5054:ff:fe56:e2b2/64 scope link
+       valid_lft forever preferred_lft forever
+<span class="gp">root@host02:~&gt;&gt;&gt; </span>ip l <span class="nb">set </span>dev eth1 up
+<span class="gp">root@host02:~&gt;&gt;&gt; </span>ip addr add 192.168.0.2/24 dev eth1
+<span class="gp">root@host02:~&gt;&gt;&gt; </span>ip a s dev eth1
+3: eth1: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc pfifo_fast state UP qlen 1000
+    link/ether 52:54:00:6e:22:0b brd ff:ff:ff:ff:ff:ff
+    inet 192.168.0.2/24 scope global eth1
+    inet6 fe80::5054:ff:fe6e:220b/64 scope link
+       valid_lft forever preferred_lft forever
+<span class="gp">root@host02:~&gt;&gt;&gt; </span>ping 192.168.0.1 -c1
+PING 192.168.0.1 <span class="o">(</span>192.168.0.1<span class="o">)</span> 56<span class="o">(</span>84<span class="o">)</span> bytes of data.
+64 bytes from 192.168.0.1: <span class="nv">icmp_req</span><span class="o">=</span>1 <span class="nv">ttl</span><span class="o">=</span>64 <span class="nb">time</span><span class="o">=</span>0.946 ms
+--- 192.168.0.1 ping statistics ---
+1 packets transmitted, 1 received, 0% packet loss, <span class="nb">time </span>0ms
+rtt min/avg/max/mdev <span class="o">=</span> 0.946/0.946/0.946/0.000 ms&lt;/code&gt;</code></pre></figure>
+
+<p>Now let’s go to the controller:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@ctrl01:~&gt;&gt;&gt; </span>ls
+floodlight  pox</code></pre></figure>
+
+<p>We see here that we have two directories that contain OpenFlow controller code - Floodlight and Pox. We’ll choose Pox for our example. Pox is platform for the rapid development and prototyping of network control software using Python. Pox comes with some preinstalled components. One of the components is called forwarding.l2_learning and it does what its name says - make OpenFlow switches act as a type of L2 learning switch. You can find the code in the pox/forwarding/l2_learning.py file. We’ll use this component for our example. Let’s start it:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@ctrl01:~/pox&gt;&gt;&gt; </span>./pox.py --verbose forwarding.l2_learning
+POX 0.2.0 <span class="o">(</span>carp<span class="o">)</span> / Copyright 2011-2013 James McCauley, et al.
+DEBUG:core:POX 0.2.0 <span class="o">(</span>carp<span class="o">)</span> going up...
+DEBUG:core:Running on CPython <span class="o">(</span>2.7.3/Jan 2 2013 13:56:14<span class="o">)</span>
+DEBUG:core:Platform is Linux-3.2.0-4-amd64-x86_64-with-debian-7.4
+INFO:core:POX 0.2.0 <span class="o">(</span>carp<span class="o">)</span> is up.
+DEBUG:openflow.of_01:Listening on 0.0.0.0:6633</code></pre></figure>
+
+<p>The next step is to configure OpenvSwitch to use the POX controller. OpenvSwitch has 2 ways of working with an OpenFlow controller - standalone and secure. In standalone mode, if the connection to the controller fails then it will fall back to using its internal logic to install the flows. While in secure mode it will not install any flows if the connection to the controller fails. We’ll use the standalone mode with 172.16.18.6 being the IP address of the POX controller.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl <span class="nb">set</span>-fail-mode sw0 standalone
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl <span class="nb">set</span>-controller sw0 tcp:172.16.18.6:6633
+<span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-vsctl show
+653dfcd6-85a4-4f72-995f-9fa05b5203f9
+    Bridge <span class="s2">"sw0"</span>
+        Controller <span class="s2">"tcp:172.16.18.6:6633"</span>
+            is_connected: <span class="nb">true
+        </span>fail_mode: standalone
+        Port <span class="s2">"sw0"</span>
+            Interface <span class="s2">"sw0"</span>
+                <span class="nb">type</span>: internal
+        Port <span class="s2">"eth2"</span>
+            Interface <span class="s2">"eth2"</span>
+        Port <span class="s2">"eth1"</span>
+            Interface <span class="s2">"eth1"</span>
+    ovs_version: <span class="s2">"1.9.3"</span></code></pre></figure>
+
+<p>We can see the following message on the OpenFlow controller:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">INFO:openflow.of_01:[46-3e-63-ba-e5-46 1] connected
+DEBUG:forwarding.l2_learning:Connection <span class="o">[</span>46-3e-63-ba-e5-46 1]</code></pre></figure>
+
+<p>Let’s see what happens when we try to ping one host from the other:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">DEBUG:forwarding.l2_learning:installing flow <span class="k">for </span>52:54:00:6e:22:0b.2 -&gt; 52:54:00:56:e2:b2.1
+DEBUG:forwarding.l2_learning:installing flow <span class="k">for </span>52:54:00:56:e2:b2.1 -&gt; 52:54:00:6e:22:0b.2</code></pre></figure>
+
+<p>Check the flows that are installed in the switch. Notice how the flows are defined:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">root@ovs01:~&gt;&gt;&gt; </span>ovs-ofctl dump-flows sw0
+NXST_FLOW reply <span class="o">(</span><span class="nv">xid</span><span class="o">=</span>0x4<span class="o">)</span>:
+ <span class="nv">cookie</span><span class="o">=</span>0x0, <span class="nv">duration</span><span class="o">=</span>7.348s, <span class="nv">table</span><span class="o">=</span>0, <span class="nv">n_packets</span><span class="o">=</span>7, <span class="nv">n_bytes</span><span class="o">=</span>686, <span class="nv">idle_timeout</span><span class="o">=</span>10, <span class="nv">hard_timeout</span><span class="o">=</span>30, <span class="nv">idle_age</span><span class="o">=</span>1, <span class="nv">priority</span><span class="o">=</span>65535,icmp,in_port<span class="o">=</span>2,vlan_tci<span class="o">=</span>0x0000,dl_src<span class="o">=</span>52:54:00:6e:22:0b,dl_dst<span class="o">=</span>52:54:00:56:e2:b2,nw_src<span class="o">=</span>192.168.0.2,nw_dst<span class="o">=</span>192.168.0.1,nw_tos<span class="o">=</span>0,icmp_type<span class="o">=</span>0,icmp_code<span class="o">=</span>0 <span class="nv">actions</span><span class="o">=</span>output:1
+ <span class="nv">cookie</span><span class="o">=</span>0x0, <span class="nv">duration</span><span class="o">=</span>6.329s, <span class="nv">table</span><span class="o">=</span>0, <span class="nv">n_packets</span><span class="o">=</span>6, <span class="nv">n_bytes</span><span class="o">=</span>588, <span class="nv">idle_timeout</span><span class="o">=</span>10, <span class="nv">hard_timeout</span><span class="o">=</span>30, <span class="nv">idle_age</span><span class="o">=</span>1, <span class="nv">priority</span><span class="o">=</span>65535,icmp,in_port<span class="o">=</span>1,vlan_tci<span class="o">=</span>0x0000,dl_src<span class="o">=</span>52:54:00:56:e2:b2,dl_dst<span class="o">=</span>52:54:00:6e:22:0b,nw_src<span class="o">=</span>192.168.0.1,nw_dst<span class="o">=</span>192.168.0.2,nw_tos<span class="o">=</span>0,icmp_type<span class="o">=</span>8,icmp_code<span class="o">=</span>0 <span class="nv">actions</span><span class="o">=</span>output:2
+ </code></pre></figure>
+
+<p>You can take any of these headers and manipulate them as you wish. I believe the whole model provides great flexibility and freedom and it will lead to better networking software.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

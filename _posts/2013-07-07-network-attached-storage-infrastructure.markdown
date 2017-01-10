@@ -12,7 +12,7 @@ Today we all need storage space and we get it in all kind of flavors: local disk
 
 ___
 
-<a href="{{'/assets/static/storage.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/storage.png' | prepend: site.baseurl | prepend: site.url }}" alt="storage" width="614" height="372" class="aligncenter size-full wp-image-198" /></a>
+<a href="{{'/public/images/storage.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/public/images/storage.png' | prepend: site.baseurl | prepend: site.url }}" alt="storage" width="614" height="372" class="aligncenter size-full wp-image-198" /></a>
 
 As you may see in the diagram the topology consists of 2 clients, 2 switches and 2 storage servers. All the components in the diagram are KVM virtual machines running on a single host. You can easily create this setup on your own workstation.   Clients need to be able to access the files on the storage servers as they would on their local drives. In order to do that we can export file system paths on the storage servers by protocols such as NFS or SMB/CIFS. NFS is my favorite one so I'll show how you can use it in this example. The clients will be basic Debian VMs running the NFS clients. 
 

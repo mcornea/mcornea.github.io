@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      VirtualBox Web Interface &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">VirtualBox Web Interface</h1>
+  <span class="post-date">22 Nov 2011</span>
+  <p>I am personally using <a href="https://www.virtualbox.org/">VirtualBox</a> as a virtualization solution as it fits my needs and it integrates well with Ubuntu. I recently found that you can set up a web interface and manage Virtualbox through it. In the following article I’ll describe how you can set up the web interface for VirtualBox using <a href="http://code.google.com/p/phpvirtualbox/">phpVirtualBox</a> and I’d also like to thank the developers for doing this great job.</p>
+
+<hr />
+
+<p>Firstly as with any web interface a web server is required so you’ll need to install apache web server with php support :</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">root@localhost#apt-get install apache2 php5 libapache2-mod-php5</code></pre></figure>
+
+<p>After this you’ll have a fully working webserver with php support having its root directory into /var/www/</p>
+
+<p>Now we will need to install VirtualBox. I prefer using the latest version so we’ll install VirtualBox 4.1</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">root@localhost#apt-get install virtualbox-4.1</code></pre></figure>
+
+<p>phpVirtualBox requires vboxwebserv service to run so you’ll have to run the following command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">root@localhost#vboxwebsrv -b --host <span class="o">{</span>ip_address<span class="o">}</span> --port 18083
+b: background
+host: the ip address of the interface used by the server to listen 
+port: the port used  by the server</code></pre></figure>
+
+<p>Download phpVirtualBox and move it to you web server’s root</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">root@localhost#wget http://phpvirtualbox.googlecode.com/files/phpvirtualbox-4.1-5.zip 
+root@localhost#unzip  phpvirtualbox-4.1-5.zip 
+root@localhost#mv phpvirtualbox-4.1-5 /var/www/vbox 
+root@localhost#cd /var/www/vbox</code></pre></figure>
+
+<p>Edit the config.php file by modifying the following variables to match your system’s:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">root@localhost#vim config.php
+ /<span class="k">*</span> Username / Password <span class="k">for </span>system user that runs VirtualBox <span class="k">*</span>/
+ var <span class="nv">$username</span> <span class="o">=</span> ‘vbox’;
+ var <span class="nv">$password</span> <span class="o">=</span> ‘your-password’;
+ var <span class="nv">$location</span> <span class="o">=</span> ‘http://<span class="o">{</span>ip_address<span class="o">}</span>:18083/’;</code></pre></figure>
+
+<p>And now you should have an accessible web interface for your VirtualBox which can be accessed at http://{ip_address}/vbox. The default username and password are admin/admin.</p>
+
+<p>In order to access the VMs consoles through the web interface you have to install the <a href="http://download.virtualbox.org/virtualbox/4.1.6/Oracle_VM_VirtualBox_Extension_Pack-4.1.6-74713.vbox-extpack">VirtualBox Extension Pack</a> and set the display settings to activate the remote display.</p>
+
+<p><img class="aligncenter size-full wp-image-93" title="phpvbsm" src="http://remote-lab.net:4000/public/images/phpvbsm.png" alt="" width="675" height="500" /></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

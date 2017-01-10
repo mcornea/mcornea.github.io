@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Free US local number pointed to your Cisco VoIP gateway &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Free US local number pointed to your Cisco VoIP gateway</h1>
+  <span class="post-date">20 Nov 2011</span>
+  <p>In today’s post I will show how to get a free US DID - a local number and point it to your VoIP network. For this setup I will use an analog phone plugged into a FXS port of a Cisco 1751-V router. The use of a voice router isn’t necessary, you may also use an ATA - Analog Telephone Adapter.
+<img class="aligncenter size-full wp-image-90" title="Diagram1" src="http://remote-lab.net:4000/public/images/Diagram1.png" alt="" width="286" height="360" /></p>
+
+<hr />
+
+<p>So now let’s get to the steps involved in having this done:</p>
+
+<ul>
+  <li>
+    <p>Go to <a href="http://www.ipkall.com/">http://www.ipkall.com/</a> , sign up and you will receive your DID by email. After receiving the email you should login and change the SIP Phone Number to whatever number you’d like to send to your SIP server. Also the SIP Proxy must match your server’s IP address used for receiving the calls, in my case this will be the Cisco 1751 voice gateway.</p>
+  </li>
+  <li>Configure the voice router:
+In order to have the calls completed you must tell the router what to do when receiving a calls:</li>
+  <li>Create an inbound voip dial-peer:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">dial-peer voice 1 voip
+ destination-pattern .T
+ session protocol sipv2
+ codec g711ulaw</code></pre></figure>
+
+<ul>
+  <li>Create a pots dial-peer which routes the calls made to 2064248860 - the DID I received from IPKall - on the analog voice port 2/0:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">dial-peer voice 2 pots
+ destination-pattern 2064248860
+ port 2/0</code></pre></figure>
+
+<ul>
+  <li>Forward the signaling and media ports to the voice gateway:
+I am using NAT for my home network so I will have to set the 871 router to forward all the packets coming on the SIP signaling port UDP 5060 and also the RTP media ports - which is the UDP range between 8000 and 32000 to the voice gateway.</li>
+  <li>Create an access list which matches the SIP signaling and the RTP media ports:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ip access-list extended SIP-RTP
+ permit udp any any eq 5060
+ permit udp any any range 8000 30000</code></pre></figure>
+
+<ul>
+  <li>Create a route map policy which uses the access list created earlier:</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">route-map SIP-RTP permit 10
+ match ip address SIP-RTP</code></pre></figure>
+
+<ul>
+  <li>Create a static inside NAT entry which matches the ports and translates the private address of the voice gateway to the public address</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ip nat inside <span class="nb">source </span>static 10.0.0.10 86.106.164.150 route-map SIP-RTP extendable</code></pre></figure>
+
+<p>And that should do it, I now have a local US number ringing back to my home phone in Bucharest without any charges :)</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

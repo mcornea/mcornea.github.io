@@ -18,7 +18,7 @@ ___
 I chose to deploy a cluster that serves as the infrastructure for a LEMP stack (Linux, Nginx, MariaDB, PHP). 
 This post will cover the setup details, a brief description of the Ansible roles that I used and some challenges that I faced.
 
-<a href="{{'/assets/static/lempha.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/lempha.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="LEMP stack HA cluster" width="800" height="640"/></a>
+<a href="{{'/public/images/lempha.jpg' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/public/images/lempha.jpg' | prepend: site.baseurl | prepend: site.url }}" alt="LEMP stack HA cluster" width="800" height="640"/></a>
 
 ## Cluster components:
  

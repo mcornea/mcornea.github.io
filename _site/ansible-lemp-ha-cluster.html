@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      LEMP stack HA cluster deployment with Ansible &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">LEMP stack HA cluster deployment with Ansible</h1>
+  <span class="post-date">26 Mar 2016</span>
+  <p>I’ve been playing with Ansible lately and I was thinking of a good practice exercise. The first thing that came to mind was an HA cluster since clustered nodes get almost identical configuration and most probably you want to use a config management system to deploy and don’t touch them with any manual configuration.</p>
+
+<hr />
+
+<p>I chose to deploy a cluster that serves as the infrastructure for a LEMP stack (Linux, Nginx, MariaDB, PHP). 
+This post will cover the setup details, a brief description of the Ansible roles that I used and some challenges that I faced.</p>
+
+<p><a href="http://remote-lab.net:4000/public/images/lempha.jpg"><img src="http://remote-lab.net:4000/public/images/lempha.jpg" alt="LEMP stack HA cluster" width="800" height="640" /></a></p>
+
+<h2 id="cluster-components">Cluster components:</h2>
+
+<ul>
+  <li>3 x CentOS 7 nodes</li>
+</ul>
+
+<p>Each node has 2 interfaces connected to one public network and one internal network. The public network is used for serving requests coming from the Internet. The internal one is used for communication such as database or file replication or communications between the loadbalancer and the backend servers.
+   They are built as monolithic nodes, each one running all the services but it should be fairly easy to break them down based on roles.</p>
+
+<ul>
+  <li>Keepalived: Virtual IP (VIP) address manager</li>
+</ul>
+
+<p>In the eventuality of the node holding the VIP going down Keepalived brings up the VIP on another node in the cluster. We’re going to make use of 2 x VIPs - one public VIP that is going to face the public network and will serve HTTP requests. A 2nd VIP on the internal network which serves the database requests.</p>
+
+<ul>
+  <li>HAProxy: Loadbalancer</li>
+</ul>
+
+<p>The Keepalived VIPs are used by HAProxy to expose the backends services. The public VIP has configured the 3 x Nginx servers as backends and provides roundrobin loadbalancing between them. The internal VIP has configured the 3 x MariaDB servers as backends. It is going to forward requests in an “active/passive” manner. This means that requests hitting the internal VIP will be routed to a single backend server. In the eventuality of the server going down then requests are routed to the next available backend server.</p>
+
+<ul>
+  <li>MariaDB Galera cluster</li>
+</ul>
+
+<p>The nodes form a multi-master synchronous MariaDB Galera cluster thus ensuring DB data consistency accross all nodes in the cluster.</p>
+
+<ul>
+  <li>Nginx + php-fpm</li>
+</ul>
+
+<p>We’re going to use Nginx + php-fpm for running PHP applications. These can, of course, be interchanged with any other web server. The Nginx root directory is set to /var/www which is mounted from a GlusterFS volume.</p>
+
+<ul>
+  <li>GlusterFS replicated volume</li>
+</ul>
+
+<p>The gluster volume is set up as a 3 replicas volume backed up by 3 bricks, one brick per each node.</p>
+
+<h2 id="how-it-works">How it works:</h2>
+
+<p>Let’s have a quick look at the flow that happens when you load a page in your browser:</p>
+
+<ol>
+  <li>request hits the public VIP</li>
+  <li>haproxy routes the request to one the nginx servers</li>
+  <li>nginx uses php-fpm to run the php code stored in /var/www</li>
+  <li>the php script is loaded from one of the gluster bricks</li>
+  <li>the code is evaluated and it runs a database query</li>
+  <li>the query hits the internal vip</li>
+  <li>haproxy routes the query to the active backend database server</li>
+  <li>the database query is run and the result is returned to the client</li>
+</ol>
+
+<h2 id="deploy">Deploy!</h2>
+
+<p>Below are the Ansible roles that I used for provisioning:</p>
+
+<ul>
+  <li>
+    <p>base</p>
+
+    <p>simple role that installs common tools such as vim or git. In my case it also sets SELinux to permissive. Shame on me because I still haven’t learnt SELinux :)</p>
+  </li>
+  <li>
+    <p>firewall</p>
+
+    <p>deploys and configures shorewall. It creates a firewall with 2 zones - one for the public network and one for the internal network. It also automatically allows all traffic between the nodes IP addresses and makes custom rules adjustable via group variables.</p>
+  </li>
+  <li>
+    <p>db</p>
+
+    <p>deploys and configures the Galera cluster</p>
+  </li>
+  <li>
+    <p>loadbalancer</p>
+
+    <p>deploys and configures HAProxy and Keepalived combo</p>
+  </li>
+  <li>
+    <p>storage</p>
+
+    <p>creates the gluster bricks and volume and mounts it to /var/www</p>
+  </li>
+  <li>
+    <p>web</p>
+
+    <p>deploys and configures nginx + php-fpm</p>
+  </li>
+</ul>
+
+<p>I struggled a bit with the db role since I needed to serialize actions and I couldn’t find a straightforward way of doing it. For example when a database server configuration change occurs you need to restart the mariadb service on each node individually and wait for it to get back in sync with the cluster. In order to do this I made a poor use of host variables. I’m pretty sure there must be a better way of achieving this and it’s something that I’m looking to improve.</p>
+
+<p>You can check the playbook <a href="https://github.com/remoteur/infra.remote-lab.net/tree/master/lemp-ha-cluster" target="_blank">here</a></p>
+
+<p>I’m quite impressed by Ansible’s learning curve. I don’t use it on a daily basis but every time I do I get the feeling that I can do complex tasks in a short timeframe which is awesome.</p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/getting-started-with-docker">
+            Getting started with Docker and the wonders of Open Source
+            <small>05 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

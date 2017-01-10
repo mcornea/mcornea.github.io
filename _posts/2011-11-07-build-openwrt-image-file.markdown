@@ -67,4 +67,4 @@ tftp>binary
 tftp>trace 
 tftp>put openwrt-brcm-2.4-squashfs.trx
 {% endhighlight %} 
-<a href="{{'/assets/static/Screenshot-1.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/assets/static/Screenshot-1.png' | prepend: site.baseurl | prepend: site.url }}" alt="" title="OpenWRT" width="451" height="275" class="aligncenter size-full wp-image-79" /></a>
+<a href="{{'/public/images/Screenshot-1.png' | prepend: site.baseurl | prepend: site.url }}"><img src="{{'/public/images/Screenshot-1.png' | prepend: site.baseurl | prepend: site.url }}" alt="" title="OpenWRT" width="451" height="275" class="aligncenter size-full wp-image-79" /></a>

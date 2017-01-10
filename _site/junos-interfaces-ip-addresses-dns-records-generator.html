@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      JunOS interfaces IP addresses DNS records generator &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">JunOS interfaces IP addresses DNS records generator</h1>
+  <span class="post-date">23 Feb 2014</span>
+  <p>This post is closely related to the previous one where I showed how you can parse the interfaces IP addresses from a curly bracket JunOS config file. The following script will be used to generate A and PTR records for a BIND zone file. Please note that the script needs to be run within the same directory as the Perl parser script and the config file.</p>
+
+<hr />
+
+<p>The entries will have the following format:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">type</span>-fpc-pic-port 300 IN A <span class="nv">$value</span>
+<span class="nv">$value</span> IN PTR <span class="nb">type</span>-fpc-pic-port.hostname.domain</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#/bin/bash</span>
+<span class="nv">PERL</span><span class="o">=</span><span class="s1">'/usr/bin/perl'</span>
+<span class="nv">PARSER</span><span class="o">=</span><span class="s1">'./parser.pl'</span>
+<span class="nv">CONFIG_FILE</span><span class="o">=</span><span class="s1">'config.txt'</span>
+<span class="nv">CONFIG_SYS</span><span class="o">=</span><span class="s1">'sys'</span>
+<span class="nv">CONFIG_INT</span><span class="o">=</span><span class="s1">'int'</span>
+<span class="nv">hostname</span><span class="o">=</span><span class="sb">`</span><span class="nv">$PERL</span> <span class="nv">$PARSER</span> <span class="nv">$CONFIG_SYS</span> | grep host-name | sed -e s/host-name// -e s/<span class="se">\;</span>// | tr <span class="s1">'\r'</span> <span class="s1">' '</span> | sed -e s/<span class="se">\ </span>//g<span class="sb">`</span>
+<span class="nv">domain</span><span class="o">=</span><span class="sb">`</span><span class="nv">$PERL</span> <span class="nv">$PARSER</span> <span class="nv">$CONFIG_SYS</span> | grep domain-name | sed -e s/domain-name// -e s/<span class="se">\;</span>// | tr <span class="s1">'\r'</span> <span class="s1">' '</span> | sed -e s/<span class="se">\ </span>//g<span class="sb">`</span>
+<span class="k">for </span>i <span class="k">in</span> <span class="sb">`</span>grep <span class="s2">"ge-[0-9]</span><span class="se">\/</span><span class="s2">[0-9]</span><span class="se">\/</span><span class="s2">[0-9] {</span><span class="se">\|</span><span class="s2">ae[0-9] {</span><span class="se">\|</span><span class="s2">lo[0-9] {"</span> <span class="nv">$CONFIG_FILE</span> | sed -e s/<span class="se">\ </span>//g  -e s/<span class="se">\{</span>// | tr <span class="s1">'\r'</span> <span class="s1">' '</span><span class="sb">`</span>
+    <span class="k">do
+        </span><span class="nv">intname</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$i</span> | sed s/<span class="se">\\\/</span>/-/g<span class="sb">`</span>
+        <span class="k">for </span>j <span class="k">in</span> <span class="sb">`</span><span class="nv">$PERL</span> <span class="nv">$PARSER</span> <span class="nv">$CONFIG_INT</span> <span class="nv">$i</span> | grep unit | sed -e s/<span class="se">\ </span>unit//g  -e s/<span class="se">\{</span>// -e s/<span class="se">\ </span>//g | tr <span class="s1">'\r'</span> <span class="s1">' '</span><span class="sb">`</span>
+            <span class="k">do
+                </span><span class="nv">inetaddr</span><span class="o">=</span><span class="sb">`</span><span class="nv">$PERL</span> <span class="nv">$PARSER</span> <span class="nv">$CONFIG_INT</span> <span class="nv">$i</span> <span class="nv">$j</span> | tr <span class="s1">'\r'</span> <span class="s1">' '</span><span class="sb">`</span>
+                <span class="nv">lastoct</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="nv">$inetaddr</span> | awk -F <span class="s1">'.'</span> <span class="o">{</span><span class="s1">'print $4'</span><span class="o">}</span><span class="sb">`</span>
+                <span class="k">if</span> <span class="o">[</span> <span class="nv">$j</span> -eq 0 <span class="o">]</span>
+                <span class="k">then
+                    </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$intname</span><span class="s2"> 300 IN A  </span><span class="nv">$inetaddr</span><span class="s2">"</span>
+                    <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$lastoct</span><span class="s2">  IN  PTR </span><span class="nv">$intname</span><span class="s2">.</span><span class="nv">$hostname</span><span class="s2">.</span><span class="nv">$domain</span><span class="s2">."</span>
+                    <span class="nb">echo</span>&lt;/p&gt;
+                <span class="k">else
+                    if</span> <span class="o">[</span> <span class="nv">$j</span> -eq 10 <span class="o">]</span>
+                    <span class="k">then
+                        </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$intname</span><span class="s2"> 300 IN A  </span><span class="nv">$inetaddr</span><span class="s2">"</span>
+                        <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$lastoct</span><span class="s2">  IN  PTR </span><span class="nv">$intname</span><span class="s2">.</span><span class="nv">$hostname</span><span class="s2">.</span><span class="nv">$domain</span><span class="s2">."</span>
+                        <span class="nb">echo
+                    </span><span class="k">else
+                        </span><span class="nb">echo</span> <span class="s2">"</span><span class="nv">$intname</span><span class="s2">-u</span><span class="nv">$j</span><span class="s2"> 300 IN A  </span><span class="nv">$inetaddr</span><span class="s2">"</span>
+                        <span class="nb">echo</span> <span class="s2">"</span><span class="nv">$lastoct</span><span class="s2">  IN  PTR </span><span class="nv">$intname</span><span class="s2">-u</span><span class="nv">$j</span><span class="s2">.</span><span class="nv">$hostname</span><span class="s2">.</span><span class="nv">$domain</span><span class="s2">."</span>
+                        <span class="nb">echo
+                    </span><span class="k">fi
+                fi
+            done
+    done</span></code></pre></figure>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

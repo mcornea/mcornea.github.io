@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      KVM Installation on Ubuntu 12.10 &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">KVM Installation on Ubuntu 12.10</h1>
+  <span class="post-date">19 Apr 2013</span>
+  <p>In this post I’d like to do an introduction on how you can install KVM and the tools that allow you to easily run VMs.
+KVM - Kernel Virtual Machine is a Linux kernel module that enables the user space programs to use the hardware virtualization capabilities of Intel or AMD processors.</p>
+
+<hr />
+
+<p>QEMU is a machine emulator that allows you to run instructions for specific architecture on your x86 CPU. It is also a virtualizer that executes the guest VM code directly on the hypervisor CPU, which is our use case providing almost native performance for the guest VMs.</p>
+
+<p>The libvirt library provides an interface used for the KVM instances management.</p>
+
+<p>bridge-utils allow you to bridge multiple ethernet devices and it will help you provide connectivity to your VM instances.</p>
+
+<p>virtinst provides cli tools that allow you to create VMs</p>
+
+<p>virt-manager is a graphical tool used for the VM management</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">marius@remoteur:~\&gt; </span>sudo aptitude install qemu-kvm libvirt-bin bridge-utils virtinst virt-manager</code></pre></figure>
+
+<p>The next step is to add our username to the libvirtd group:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">marius@remoteur:~\&gt; </span>sudo adduser <span class="sb">`</span>id -un<span class="sb">`</span> libvirtd</code></pre></figure>
+
+<p>At this time we should be able to start creating an instance. Let’s prepare the storage and the network our VM will use.
+For the storage we will create an emtpy image file of 5GiB size:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">marius@remoteur:~\&gt; </span>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>vm.storage <span class="nv">bs</span><span class="o">=</span>1024 <span class="nv">count</span><span class="o">=</span>0 <span class="nv">seek</span><span class="o">=</span><span class="nv">$[</span>1024<span class="k">*</span>1024<span class="k">*</span>5]</code></pre></figure>
+
+<p>We will create a bridge called br0 and add eth0 wich is my laptop wired network interface to it. When created the VM should have an interface called vnet0 that is part of this bridge group:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">marius@remoteur:~\&gt; </span>sudo brctl add br0
+<span class="gp">marius@remoteur:~\&gt; </span>sudo brctl addif br0 eth0
+<span class="gp">marius@remoteur:~\&gt; </span>brctl show
+bridge name      bridge id        STP enabled      interfaces
+br0           8000.c82a141ab88e        no          eth0</code></pre></figure>
+
+<p>Now let’s define our VM instance.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">marius@remoteur:~\&gt; </span>sudo virt-install --name vm --disk <span class="nv">path</span><span class="o">=</span>/home/marius/vm.storage,bus<span class="o">=</span>virtio,cache<span class="o">=</span>none --network <span class="nv">bridge</span><span class="o">=</span>br0,model<span class="o">=</span>virtio --location<span class="o">=</span>ftp://ftp.lug.ro/debian/dists/wheezy/main/installer-amd64/ --cpuset<span class="o">=</span>auto --vcpu<span class="o">=</span>1 --ram<span class="o">=</span>1024 --extra-args<span class="o">=</span><span class="s2">"priority=low"</span></code></pre></figure>
+
+<p>After this our install should be starting. You can use virt-manager to manage all the machines that are running on your local or remote hypervisor. It also allows you to access their consoles and adjust different parameters in the VM definition.
+<a href="http://remote-lab.net:4000/public/images/virt-manager.png"><img class="aligncenter size-medium wp-image-147" title="virt-manager" alt="" src="http://remote-lab.net:4000/public/images/virt-manager.png" width="500" height="465" /></a></p>
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

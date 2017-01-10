@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      OSPF lab provisioning on IOS with Ansible &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">OSPF lab provisioning on IOS with Ansible</h1>
+  <span class="post-date">24 Feb 2015</span>
+  <p>In this post we’ll see how we can quickly get a basic OSPF lab deployed by using Ansible. Our setup consists of 3 x Cisco IOS routers which are connected according to the diagram below. All the routers should already have SSH set up and an interface connected to the management network that will be used for retrieving the configuration files from the server. On the server side we need a Linux machine that has Ansible installed.</p>
+
+<hr />
+<p><a href="http://remote-lab.net:4000/public/images/ansible_ospf-New-Page.png"><img src="http://remote-lab.net:4000/public/images/ansible_ospf-New-Page.png" alt="ansible_ospf - New Page" width="649" height="594" class="aligncenter size-full wp-image-297" /></a></p>
+
+<p>So let’s get started by building the Ansible playbook. I’ll explain the site.yml file below:</p>
+
+<ul>
+  <li>Run the playbook on the ‘localhost’ server by using the ‘marius’ username with sudo</li>
+  <li>Install and start Apache as the routers will pull the config files over HTTP</li>
+  <li>Install Git - used to clone the netmiko library repo</li>
+  <li>Install paramiko - dependency library for netmiko</li>
+  <li>Clone the netmiko repo and install it as a system module</li>
+  <li>Next we use the netmiko.j2 template to create a script file. The script uses netmiko and takes as arguments the ip address, username, password and command that will be run on the remote Cisco device.</li>
+  <li>We generate the configuration files that are going to be pulled by the routers. For this we use the config.j2 template and write the configuration files on the Apache DocumentRoot. This will results in 3 files: /var/www/html/rtr-A.config, /var/www/html/rtr-B.config, /var/www/html/rtr-C.config containing the configuration commands for each of the routers.</li>
+  <li>We run the script that we have created on step 6 by passing the ‘copy http://server_ip/config_file_name running-config’ command to each of the routers.</li>
+  <li>Define the variables used in the template files and commands.</li>
+</ul>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/e7129f02662986263018.js"> </script>
+
+<p>Now let’s go through the template files. 
+The config.j2 template is used to build the configuration commands that will be loaded by the routers. What this does is basically loop through the interfaces defined for each of the routers and create the ip address statements for each of them. After this, it generates an entry for the ospf process and creates a network statement if the ‘ospf’ variable is set to yes for a specific interface.</p>
+
+<noscript><pre>400: Invalid request
+</pre></noscript>
+<script src="https://gist.github.com/5cd291f364ce422e5797.js"> </script>
+
+<p>The netmiko.j2 template is just a python script that’s using netmiko to connect to the router, first runs ‘file prompt quiet’ configuration command to disable the save confirmation message. Then it runs the command that’s passed as the 4th argument.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">netmiko</span><span class="o">.</span><span class="n">j2</span>
+<span class="c">#!/usr/bin/env python</span>
+<span class="kn">import</span> <span class="nn">netmiko</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">cisco_881</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="s">'device_type'</span><span class="p">:</span> <span class="s">'cisco_ios'</span><span class="p">,</span>
+	<span class="s">'ip'</span><span class="p">:</span>   <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+	<span class="s">'username'</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+	<span class="s">'password'</span><span class="p">:</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+	<span class="s">'secret'</span><span class="p">:</span> <span class="s">'secret'</span><span class="p">,</span>
+	<span class="s">'verbose'</span><span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">SSHClass</span> <span class="o">=</span> <span class="n">netmiko</span><span class="o">.</span><span class="n">ssh_dispatcher</span><span class="p">(</span><span class="n">device_type</span><span class="o">=</span><span class="n">cisco_881</span><span class="p">[</span><span class="s">'device_type'</span><span class="p">])</span>
+<span class="n">net_connect</span> <span class="o">=</span> <span class="n">SSHClass</span><span class="p">(</span><span class="o">**</span><span class="n">cisco_881</span><span class="p">)</span>
+<span class="n">config_commands</span> <span class="o">=</span> <span class="p">[</span> <span class="s">'file prompt quiet'</span> <span class="p">]</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">net_connect</span><span class="o">.</span><span class="n">send_config_set</span><span class="p">(</span><span class="n">config_commands</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">net_connect</span><span class="o">.</span><span class="n">send_command</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span></code></pre></figure>
+
+<p>In order to run this we will also need the /etc/ansible/hosts file to contain the localhost hostname. You can find all the files in this GitHub repo: <a href="https://github.com/remoteur/ansible-ospflab.git">https://github.com/remoteur/ansible-ospflab.git</a></p>
+
+<p>Once we have all the files in place we can run the playbook by the ‘ansible-playbook site.yml’ command. This is how the output looks like:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">ansible-playbook site.yml 
+PLAY <span class="o">[</span>localhost] <span class="k">**************************************************************</span> 
+GATHERING FACTS <span class="k">***************************************************************</span>
+ok: <span class="o">[</span>localhost]
+TASK: <span class="o">[</span>Install Apache] <span class="k">********************************************************</span>
+ok: <span class="o">[</span>localhost]
+TASK: <span class="o">[</span>Start Apache] <span class="k">**********************************************************</span>
+ok: <span class="o">[</span>localhost]
+TASK: <span class="o">[</span>Install Git] <span class="k">***********************************************************</span>
+ok: <span class="o">[</span>localhost]
+TASK: <span class="o">[</span>Install paramiko] <span class="k">******************************************************</span>
+ok: <span class="o">[</span>localhost]
+TASK: <span class="o">[</span>Clone netmiko] <span class="k">*********************************************************</span>
+ok: <span class="o">[</span>localhost]
+TASK: <span class="o">[</span>Install netmiko] <span class="k">*******************************************************</span>
+changed: <span class="o">[</span>localhost]
+TASK: <span class="o">[</span>Create netmiko script] <span class="k">*************************************************</span>
+ok: <span class="o">[</span>localhost]
+TASK: <span class="o">[</span>Generate config file] <span class="k">**************************************************</span>
+ok: <span class="o">[</span>localhost] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'mgmt_pass'</span>: <span class="s1">'parola'</span>, <span class="s1">'int'</span>: <span class="o">[{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/1'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.1'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/2'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.5'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.0'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'Loopback0'</span>, <span class="s1">'address'</span>: <span class="s1">'1.1.1.1'</span><span class="o">}]</span>, <span class="s1">'name'</span>: <span class="s1">'rtr-A'</span>, <span class="s1">'mgmt_ip'</span>: <span class="s1">'192.168.0.81'</span>, <span class="s1">'mgmt_user'</span>: <span class="s1">'admin'</span><span class="o">})</span>
+ok: <span class="o">[</span>localhost] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'mgmt_pass'</span>: <span class="s1">'parola'</span>, <span class="s1">'int'</span>: <span class="o">[{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/1'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.2'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/2'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.9'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.0'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'Loopback0'</span>, <span class="s1">'address'</span>: <span class="s1">'2.2.2.2'</span><span class="o">}]</span>, <span class="s1">'name'</span>: <span class="s1">'rtr-B'</span>, <span class="s1">'mgmt_ip'</span>: <span class="s1">'192.168.0.78'</span>, <span class="s1">'mgmt_user'</span>: <span class="s1">'admin'</span><span class="o">})</span>
+ok: <span class="o">[</span>localhost] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'mgmt_pass'</span>: <span class="s1">'parola'</span>, <span class="s1">'int'</span>: <span class="o">[{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/1'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.6'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/2'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.10'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.0'</span>, <span class="s1">'ospf'</span>: <span class="s1">'no'</span>, <span class="s1">'name'</span>: <span class="s1">'Loopback0'</span>, <span class="s1">'address'</span>: <span class="s1">'3.3.3.3'</span><span class="o">}]</span>, <span class="s1">'name'</span>: <span class="s1">'rtr-C'</span>, <span class="s1">'mgmt_ip'</span>: <span class="s1">'192.168.0.79'</span>, <span class="s1">'mgmt_user'</span>: <span class="s1">'admin'</span><span class="o">})</span>
+TASK: <span class="o">[</span>Connect to routers and pull the config] <span class="k">********************************</span>
+changed: <span class="o">[</span>localhost] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'mgmt_pass'</span>: <span class="s1">'parola'</span>, <span class="s1">'int'</span>: <span class="o">[{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/1'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.1'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/2'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.5'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.0'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'Loopback0'</span>, <span class="s1">'address'</span>: <span class="s1">'1.1.1.1'</span><span class="o">}]</span>, <span class="s1">'name'</span>: <span class="s1">'rtr-A'</span>, <span class="s1">'mgmt_ip'</span>: <span class="s1">'192.168.0.81'</span>, <span class="s1">'mgmt_user'</span>: <span class="s1">'admin'</span><span class="o">})</span>
+changed: <span class="o">[</span>localhost] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'mgmt_pass'</span>: <span class="s1">'parola'</span>, <span class="s1">'int'</span>: <span class="o">[{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/1'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.2'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/2'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.9'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.0'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'Loopback0'</span>, <span class="s1">'address'</span>: <span class="s1">'2.2.2.2'</span><span class="o">}]</span>, <span class="s1">'name'</span>: <span class="s1">'rtr-B'</span>, <span class="s1">'mgmt_ip'</span>: <span class="s1">'192.168.0.78'</span>, <span class="s1">'mgmt_user'</span>: <span class="s1">'admin'</span><span class="o">})</span>
+changed: <span class="o">[</span>localhost] <span class="o">=</span>&gt; <span class="o">(</span><span class="nv">item</span><span class="o">={</span><span class="s1">'mgmt_pass'</span>: <span class="s1">'parola'</span>, <span class="s1">'int'</span>: <span class="o">[{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/1'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.6'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.252'</span>, <span class="s1">'ospf'</span>: <span class="s1">'yes'</span>, <span class="s1">'name'</span>: <span class="s1">'GigabitEthernet0/2'</span>, <span class="s1">'address'</span>: <span class="s1">'10.0.0.10'</span><span class="o">}</span>, <span class="o">{</span><span class="s1">'netmask'</span>: <span class="s1">'255.255.255.0'</span>, <span class="s1">'ospf'</span>: <span class="s1">'no'</span>, <span class="s1">'name'</span>: <span class="s1">'Loopback0'</span>, <span class="s1">'address'</span>: <span class="s1">'3.3.3.3'</span><span class="o">}]</span>, <span class="s1">'name'</span>: <span class="s1">'rtr-C'</span>, <span class="s1">'mgmt_ip'</span>: <span class="s1">'192.168.0.79'</span>, <span class="s1">'mgmt_user'</span>: <span class="s1">'admin'</span><span class="o">})</span>
+PLAY RECAP <span class="k">********************************************************************</span>
+localhost                  : <span class="nv">ok</span><span class="o">=</span>10   <span class="nv">changed</span><span class="o">=</span>2    <span class="nv">unreachable</span><span class="o">=</span>0    <span class="nv">failed</span><span class="o">=</span>0</code></pre></figure>
+
+<p>This is how one of routers configuration files looks like:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">/var/www/html/rtr-A.config :
+interface GigabitEthernet0/1
+no shutdown
+ip address 10.0.0.1 255.255.255.252
+interface GigabitEthernet0/2
+no shutdown
+ip address 10.0.0.5 255.255.255.252
+interface Loopback0
+no shutdown
+ip address 1.1.1.1 255.255.255.0
+router ospf 1
+network 10.0.0.1 0.0.0.0 area 0
+network 10.0.0.5 0.0.0.0 area 0
+network 1.1.1.1 0.0.0.0 area 0</code></pre></figure>
+
+<p>So now we have the lab up and running. Why bother automating this? In the end it’s a basic test environment. Here’s my motivation:</p>
+
+<ul>
+  <li>I hate doing repetitive stuff</li>
+  <li>Reproducibility. Manual repetitive stuff results in errored configurations, at least for me. If I do such a setup manually I usually get a terminal started for each of the routers and start writing commands. My problem is that almost all the time I end up messing up something like setting the wrong IP addresses on interfaces. By running this playbook I will always get the same result</li>
+  <li>I have the complete picture in one place and I can check the whole setup before running it, no need to switch through terminals, screens or other stuff</li>
+  <li>Time. I’m running this setup on Openstack by using Cisco vIOS images so getting everything up and running from scratch takes me less than 5 minutes which is pretty awesome</li>
+</ul>
+
+<p>Let me know if you have any questions and I’ll be more than happy to answer. 
+Thanks</p>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

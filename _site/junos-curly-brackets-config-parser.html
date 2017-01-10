@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      JunOS config interfaces IP address parser &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>a place to learn systems and networks administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2017. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">JunOS config interfaces IP address parser</h1>
+  <span class="post-date">23 Feb 2014</span>
+  <p>In this post I will show how you can obtain an interface IP address out of a JunOS curly brackets configuration file. You may find below the script and also the source configuration file. Please note that in order to run the script both files need to be placed in the same directory.</p>
+
+<hr />
+
+<p>Please check it and let me know what you think, it’s my first Perl script so it could definitely be improved.</p>
+
+<figure class="highlight"><pre><code class="language-perl" data-lang="perl"><span class="c1">#!/usr/bin/perl</span>
+<span class="nb">open</span> <span class="p">(</span><span class="nv">CONFIG</span><span class="p">,</span> <span class="s">'config.txt'</span><span class="p">);</span>
+<span class="k">my</span> <span class="nv">$data</span> <span class="o">=</span> <span class="k">do</span> <span class="p">{</span> <span class="nb">local</span> <span class="vg">$/</span><span class="p">;</span> <span class="sr">&lt;CONFIG&gt;</span><span class="p">;};</span>
+<span class="nb">close</span> <span class="p">(</span><span class="nv">CONFIG</span><span class="p">);</span>
+<span class="k">my</span> <span class="nv">$system</span> <span class="o">=</span> <span class="nv">$data</span> <span class="o">=~</span> <span class="sr">m{(\bsystem\s*({(?:(?&gt;[^{}</span><span class="p">]</span><span class="o">+</span><span class="p">)</span><span class="o">|</span><span class="p">(?</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">}))}</span>
+    <span class="p">?</span> <span class="nv">$1</span>
+    <span class="p">:</span> <span class="nb">die</span> <span class="s">"system not found"</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">$intconfig</span> <span class="o">=</span> <span class="nv">$data</span> <span class="o">=~</span> <span class="sr">m{(\binterfaces\s*({(?:(?&gt;[^{}</span><span class="p">]</span><span class="o">+</span><span class="p">)</span><span class="o">|</span><span class="p">(?</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">}))}</span>
+    <span class="p">?</span> <span class="nv">$1</span>
+    <span class="p">:</span> <span class="nb">die</span> <span class="s">"interfaces not found"</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">eq</span> <span class="s">'sys'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">print</span> <span class="nv">$system</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">eq</span> <span class="s">'int'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">defined</span> <span class="nv">$ARGV</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">print</span> <span class="nv">$intconfig</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">defined</span> <span class="nv">$ARGV</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="p">{</span>
+        <span class="k">my</span> <span class="nv">$int</span> <span class="o">=</span> <span class="nv">$intconfig</span> <span class="o">=~</span> <span class="sr">m{(\b$ARGV[1]\s*({(?:(?&gt;[^{}</span><span class="p">]</span><span class="o">+</span><span class="p">)</span><span class="o">|</span><span class="p">(?</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">}))}</span>
+            <span class="p">?</span> <span class="nv">$1</span>
+            <span class="p">:</span> <span class="nb">die</span> <span class="s">"$ARGV[1] not found"</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">defined</span> <span class="nv">$ARGV</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">print</span> <span class="nv">$int</span><span class="o">.</span> <span class="s">"\n"</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">defined</span> <span class="nv">$ARGV</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">my</span> <span class="nv">$unit</span> <span class="o">=</span> <span class="nv">$int</span> <span class="o">=~</span><span class="sr">m{(\bunit $ARGV[2]\s*({(?:(?&gt;[^{}</span><span class="p">]</span><span class="o">+</span><span class="p">)</span><span class="o">|</span><span class="p">(?</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">}))}</span>
+                <span class="p">?</span> <span class="nv">$1</span>
+                <span class="p">:</span> <span class="nb">die</span> <span class="s">"$ARGV[2] not found"</span><span class="p">;</span>
+            <span class="k">my</span> <span class="nv">$inet</span> <span class="o">=</span> <span class="nv">$unit</span> <span class="o">=~</span> <span class="sr">m{(\bfamily inet\s*({(?:(?&gt;[^{}</span><span class="p">]</span><span class="o">+</span><span class="p">)</span><span class="o">|</span><span class="p">(?</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">*</span><span class="p">}))}</span>
+                <span class="p">?</span> <span class="nv">$1</span>
+                <span class="p">:</span> <span class="nb">die</span> <span class="s">"family inet not found in section"</span><span class="p">;</span>
+            <span class="k">my</span> <span class="nv">$inetaddr</span> <span class="o">=</span> <span class="nv">$inet</span> <span class="o">=~</span> <span class="sr">m{\baddress\s(\d{1,3}</span><span class="p">(?:</span><span class="o">\.\</span><span class="nv">d</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">}){</span><span class="mi">3</span><span class="p">})}</span>
+                <span class="p">?</span> <span class="nv">$1</span>
+                <span class="p">:</span> <span class="nb">die</span> <span class="s">"no IP address"</span><span class="p">;</span>
+            <span class="k">print</span> <span class="nv">$inetaddr</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">eq</span> <span class="s">'--help'</span> <span class="ow">or</span> <span class="o">!</span><span class="nb">defined</span> <span class="nv">$ARGV</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">print</span> <span class="s">"Usage : ./parser.pl sys                              # outputs system section config"</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s">"        ./parser.pl int                              # outputs interfaces section config"</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s">"        ./parser.pl int [int-name]                   # outputs specific interface section config"</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s">"        ./parser.pl int ge-1/1/7                     # outputs ge-1/1/7 interface section config"</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s">"        ./parser.pl int [int-name] [unit-id]         # outputs specific interface unit IP address"</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span>
+    <span class="k">print</span> <span class="s">"        ./parser.pl int ge-1/1/7 1001                # outputs ge-1/1/7 interface unit 1001 IP address"</span><span class="p">,</span> <span class="s">"\n"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="sr">&lt;/code&gt;</span>
+<span class="o">&lt;</span><span class="nv">code</span> <span class="nv">lang</span><span class="o">=</span><span class="s">"perl[notools]"</span><span class="o">&gt;</span>
+<span class="nv">marius@remoteur:</span><span class="o">~&gt;&gt;&gt;</span> <span class="nv">cat</span> <span class="nv">config</span><span class="o">.</span><span class="nv">txt</span>
+<span class="nb">system</span> <span class="p">{</span>
+    <span class="nv">host</span><span class="o">-</span><span class="nv">name</span> <span class="nv">junos</span><span class="o">-</span><span class="nv">device</span><span class="p">;</span>
+    <span class="nv">domain</span><span class="o">-</span><span class="nv">name</span> <span class="nv">corporate</span><span class="o">.</span><span class="nv">net</span>
+    <span class="nb">time</span><span class="o">-</span><span class="nv">zone</span> <span class="nv">Europe</span><span class="o">/</span><span class="nv">Bucharest</span><span class="p">;</span>
+    <span class="nv">default</span><span class="o">-</span><span class="nv">address</span><span class="o">-</span><span class="nv">selection</span><span class="p">;</span>
+    <span class="nb">no</span><span class="o">-</span><span class="nv">redirects</span><span class="p">;</span>
+    <span class="nv">location</span> <span class="nv">country</span><span class="o">-</span><span class="nv">code</span> <span class="nv">RO</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">interfaces</span> <span class="p">{</span>
+    <span class="ow">ge</span><span class="o">-</span><span class="mi">1</span><span class="sr">/0/</span><span class="mi">0</span> <span class="p">{</span>
+        <span class="nv">description</span> <span class="s">"Core: R:core1 RP:ge-0/1/4 (ptp, isis)"</span><span class="p">;</span>
+        <span class="nv">mtu</span> <span class="mi">9192</span><span class="p">;</span>
+        <span class="nv">unit</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="nv">family</span> <span class="nv">inet</span> <span class="p">{</span>
+                <span class="nv">address</span> <span class="mf">192.168.140.29</span><span class="o">/</span><span class="mi">31</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="ow">ge</span><span class="o">-</span><span class="mi">1</span><span class="sr">/0/</span><span class="mi">1</span> <span class="p">{</span>
+        <span class="nv">description</span> <span class="s">"Cust: R:cust-a RP:ge-1/0/0 (srx240H)"</span><span class="p">;</span>
+        <span class="nv">unit</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="nv">family</span> <span class="nv">inet</span> <span class="p">{</span>
+                <span class="nv">address</span> <span class="mf">172.16.166.196</span><span class="o">/</span><span class="mi">30</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="ow">ge</span><span class="o">-</span><span class="mi">1</span><span class="sr">/0/</span><span class="mi">2</span> <span class="p">{</span>
+        <span class="nv">flexible</span><span class="o">-</span><span class="nv">vlan</span><span class="o">-</span><span class="nv">tagging</span><span class="p">;</span>
+        <span class="nv">native</span><span class="o">-</span><span class="nv">vlan</span><span class="o">-</span><span class="nv">id</span> <span class="mi">10</span><span class="p">;</span>
+        <span class="nv">mtu</span> <span class="mi">9192</span><span class="p">;</span>
+        <span class="nv">unit</span> <span class="mi">10</span> <span class="p">{</span>
+            <span class="nv">description</span> <span class="s">"Cust: R:cust-b (data, feed A)"</span><span class="p">;</span>
+            <span class="nv">vlan</span><span class="o">-</span><span class="nv">id</span> <span class="mi">10</span><span class="p">;</span>
+            <span class="nv">family</span> <span class="nv">inet</span> <span class="p">{</span>
+                <span class="nv">address</span> <span class="mf">192.168.136.184</span><span class="o">/</span><span class="mi">31</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="nv">unit</span> <span class="mi">1001</span> <span class="p">{</span>
+            <span class="nv">description</span> <span class="s">"Core: R:cust-b (cpe management)"</span><span class="p">;</span>
+            <span class="nv">vlan</span><span class="o">-</span><span class="nv">id</span> <span class="mi">1001</span><span class="p">;</span>
+            <span class="nv">family</span> <span class="nv">inet</span> <span class="p">{</span>
+                <span class="nv">filter</span> <span class="p">{</span>
+                    <span class="nv">output</span> <span class="nv">Protect</span><span class="o">-</span><span class="nv">cpe</span><span class="p">;</span>
+                <span class="p">}</span>
+                <span class="nv">address</span> <span class="mf">10.15.4.6</span><span class="o">/</span><span class="mi">30</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nv">ae0</span> <span class="p">{</span>
+        <span class="nv">description</span> <span class="s">"Core: R:colo-vc2 RI:ae5"</span><span class="p">;</span>
+        <span class="nv">aggregated</span><span class="o">-</span><span class="nv">ether</span><span class="o">-</span><span class="nv">options</span> <span class="p">{</span>
+            <span class="nv">minimum</span><span class="o">-</span><span class="nv">links</span> <span class="mi">1</span><span class="p">;</span>
+            <span class="nb">link</span><span class="o">-</span><span class="nv">speed</span> <span class="mi">1</span><span class="nv">g</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="nv">unit</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="nv">family</span> <span class="nv">inet</span> <span class="p">{</span>
+                <span class="nv">address</span> <span class="mf">192.168.140.126</span><span class="o">/</span><span class="mi">31</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nv">lo0</span> <span class="p">{</span>
+        <span class="nv">unit</span> <span class="mi">0</span> <span class="p">{</span>
+            <span class="nv">description</span> <span class="s">"Core: R:primary routing loopback"</span><span class="p">;</span>
+            <span class="nv">family</span> <span class="nv">inet</span> <span class="p">{</span>
+                <span class="nv">address</span> <span class="mf">192.168.128.166</span><span class="o">/</span><span class="mi">32</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/ansible-lemp-ha-cluster">
+            LEMP stack HA cluster deployment with Ansible
+            <small>26 Mar 2016</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/rdo-manager-ha-openstack-deployment">
+            HA Openstack deployment using RDO-Manager
+            <small>17 Oct 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/raspberry-pi-car-automation">
+            Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite
+            <small>19 Apr 2015</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

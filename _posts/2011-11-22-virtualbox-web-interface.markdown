@@ -52,4 +52,4 @@ And now you should have an accessible web interface for your VirtualBox which ca
 
 In order to access the VMs consoles through the web interface you have to install the <a href="http://download.virtualbox.org/virtualbox/4.1.6/Oracle_VM_VirtualBox_Extension_Pack-4.1.6-74713.vbox-extpack">VirtualBox Extension Pack</a> and set the display settings to activate the remote display.
 
-<img class="aligncenter size-full wp-image-93" title="phpvbsm" src="{{'/assets/static/phpvbsm.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="675" height="500" />
+<img class="aligncenter size-full wp-image-93" title="phpvbsm" src="{{'/public/images/phpvbsm.png' | prepend: site.baseurl | prepend: site.url }}" alt="" width="675" height="500" />

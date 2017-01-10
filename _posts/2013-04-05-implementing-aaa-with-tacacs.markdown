@@ -12,7 +12,7 @@ To start with AAA, stands for Authentication, Authorization and Accounting. The 
 
 ___
 
-<a href="{{'/assets/static/tacacs.gif' | prepend: site.baseurl | prepend: site.url }}"><img class="aligncenter size-medium wp-image-147" title="tacacs" src="{{'/assets/static/tacacs.gif' | prepend: site.baseurl | prepend: site.url }}" alt="" width="300" height="265" /></a>
+<a href="{{'/public/images/tacacs.gif' | prepend: site.baseurl | prepend: site.url }}"><img class="aligncenter size-medium wp-image-147" title="tacacs" src="{{'/public/images/tacacs.gif' | prepend: site.baseurl | prepend: site.url }}" alt="" width="300" height="265" /></a>
 
 Installing TACACS+ Server:
 

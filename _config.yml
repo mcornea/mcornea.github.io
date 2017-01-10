@@ -7,8 +7,8 @@ relative_permalinks: false
 # Setup
 title:               remote-lab.net
 tagline:             'learn by doing'
-description:         'a place to learn systems and networks administration'
-url:                 http://remote-lab.net
+description:         'A place to learn system and network administration'
+url:                 https://remote-lab.net
 baseurl:             ''
 paginate:            5
 

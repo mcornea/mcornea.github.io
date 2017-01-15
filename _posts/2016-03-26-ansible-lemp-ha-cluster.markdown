@@ -89,3 +89,5 @@ I struggled a bit with the db role since I needed to serialize actions and I cou
 You can check the playbook <a href="https://github.com/remoteur/infra.remote-lab.net/tree/master/lemp-ha-cluster" target="_blank">here</a>
 
 I'm quite impressed by Ansible's learning curve. I don't use it on a daily basis but every time I do I get the feeling that I can do complex tasks in a short timeframe which is awesome. 
+
+{% include twitter_plug.html %}

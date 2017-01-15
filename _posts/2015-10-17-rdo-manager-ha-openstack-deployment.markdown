@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 status: publish
 published: true
 title: HA Openstack deployment using RDO-Manager

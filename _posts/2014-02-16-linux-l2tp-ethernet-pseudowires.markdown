@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: Linux L2TP ethernet pseudowires
 date: '2014-02-16 23:29:21 +0000'
 categories:

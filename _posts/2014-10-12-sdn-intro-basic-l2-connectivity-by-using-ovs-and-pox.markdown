@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: 'SDN Intro: Basic L2 connectivity by using OVS and POX'
 date: '2014-10-12 21:35:48 +0000'
 categories:

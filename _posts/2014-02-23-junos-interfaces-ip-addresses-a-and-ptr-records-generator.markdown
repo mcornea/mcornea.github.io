@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 status: publish
 published: true
 title: JunOS interfaces IP addresses DNS records generator

@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: JunOS config interfaces IP address parser
 date: '2014-02-23 20:58:36 +0000'
 categories:

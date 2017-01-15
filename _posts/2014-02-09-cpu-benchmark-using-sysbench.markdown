@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: CPU benchmark using sysbench
 date: '2014-02-09 12:00:22 +0000'
 categories:

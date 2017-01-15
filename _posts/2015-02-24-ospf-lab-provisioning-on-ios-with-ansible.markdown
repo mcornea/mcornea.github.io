@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 status: publish
 published: true
 title: OSPF lab provisioning on IOS with Ansible

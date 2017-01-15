@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: Virtualized application infrastructure
 date: '2014-05-07 12:32:41 +0000'
 categories:

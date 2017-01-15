@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: Linux reload partition table
 date: '2014-02-01 22:14:56 +0000'
 categories:

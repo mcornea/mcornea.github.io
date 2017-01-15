@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: 'Ansible playbook: postfix with Mandrill relay'
 date: '2014-09-14 12:52:15 +0000'
 categories:

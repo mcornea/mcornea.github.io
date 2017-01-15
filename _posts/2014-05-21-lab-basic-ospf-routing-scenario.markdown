@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: Lab - basic OSPF routing scenario
 date: '2014-05-21 20:25:28 +0000'
 categories:

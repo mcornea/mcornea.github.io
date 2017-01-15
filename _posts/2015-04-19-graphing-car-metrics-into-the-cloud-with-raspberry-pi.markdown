@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: Graphing car metrics into the cloud with Raspberry Pi, OBD and Graphite  
 date: '2015-04-19 19:44:40 +0000'
 categories:

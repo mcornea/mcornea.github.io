@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: Bash create file by using heredocs
 date: '2014-02-01 22:51:47 +0000'
 categories:

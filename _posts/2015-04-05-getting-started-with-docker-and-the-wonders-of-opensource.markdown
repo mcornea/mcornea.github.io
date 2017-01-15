@@ -1,5 +1,6 @@
 ---
 layout: post
+comments: True
 title: Getting started with Docker and the wonders of Open Source
 date: '2015-04-05 22:07:40 +0000'
 categories:

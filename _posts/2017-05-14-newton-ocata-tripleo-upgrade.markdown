@@ -118,11 +118,11 @@ OS::TripleO::Services::NovaPlacement
 OS::TripleO::Services::PankoApi
 {% endhighlight %}
 
-In addition there are new services which are not activated by default. I recommend checking the complete list of services in the <a href="https://github.com/openstack/tripleo-heat-templates/blob/stable/ocata/roles_data.yaml" target="_blank">tripleo-heat-templates roles_data.yaml</a>
+In addition there are new services which are not activated by default so they're not mandatory. I recommend checking the complete list of services in the <a href="https://github.com/openstack/tripleo-heat-templates/blob/stable/ocata/roles_data.yaml" target="_blank">tripleo-heat-templates roles_data.yaml</a>
 
 ### Disable roles upgrade:
 
-While at this step we also want to mark the roles that we want to upgrade individual nodes for, in our case the compute nodes. Skipping upgrade is done via the disable_upgrade_deployment flah and since we have 2 type of compute roles we want to assign this flag to both of them:
+While at this step we also want to mark the roles where we want to upgrade individual nodes, in our case the compute nodes. Skipping upgrade for these roles is done via the disable_upgrade_deployment flag and since we have 2 type of compute roles we want to assign this flag to both of them:
 {% highlight bash %}
 - name: Compute
   disable_upgrade_deployment: True
@@ -135,7 +135,7 @@ While at this step we also want to mark the roles that we want to upgrade indivi
 
 ## Composable steps major upgrade
 
-Run the major upgrade composable steps by adding the major-upgrade-composable-steps.yaml Heat environment file to the openstack overcloud deploy command used for the deployment:
+Run the major upgrade composable steps by adding the major-upgrade-composable-steps.yaml Heat environment file to the openstack overcloud deploy command used for the initial deployment:
 
 {% highlight bash %}
 source ~/stackrc
@@ -208,7 +208,7 @@ At this point the upgrade process is complete and both undercloud and overcloud 
 
 ## Post upgrade actions
 
-Some of the upgraded software components (e.g kernel, openvswitch) require a node reboot to get their new versions loaded. We're going to take this step to reboot the remaining nodes in the deployment. All the nodes are deployed in an HA topology so we can reboot the nodes one by one so the service availability doesn’t get affected.
+Some of the upgraded software components (e.g kernel, openvswitch) require a node reboot to get their new versions loaded. We're going to take this step to reboot the remaining nodes in the deployment. All the nodes are deployed in an HA topology so we can reboot them one by one so the service availability doesn’t get affected.
 
 We’ll start with the Ceph OSD storage nodes. Before rebooting a node we want to set noout and norebalance flags for the OSDs to avoid rebalancing. Once the node is rebooted we unset the flags, make sure that the cluster is in a HEALTH_OK state and move to the next node in the cluster.
 
@@ -226,7 +226,7 @@ ceph osd unset norebalance
 ceph health
 {% endhighlight %}
 
-Going forward to the networker nodes we can reboot them in a rolling fashion, waiting for the node and its Neutron agents respectively to come back online and then moving to the next one. Floating IPs failover will automatically occur when the agent goes down.
+Going forward to the networker nodes we can reboot them in a rolling fashion, waiting for the node and its Neutron agents respectively to come back online and then move to the next one. Floating IPs failover will automatically occur when the agent goes down.
 
 Commands that I found useful while rebooting the Networker nodes:
 

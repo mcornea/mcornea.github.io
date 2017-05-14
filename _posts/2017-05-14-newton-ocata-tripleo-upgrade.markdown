@@ -206,6 +206,15 @@ openstack overcloud deploy --templates $THT \
 
 At this point the upgrade process is complete and both undercloud and overcloud are running Ocata.
 
+### Upload new overcloud images
+As one last step we want to update the overcloud images so new nodes which are going to be added later to the deployment load the current version images and not the old ones. To do this we should to go to the directory where images have been built/downloaded and run:
+
+{% highlight bash %}
+## Download images from https://images.rdoproject.org/
+source ~/stackrc
+openstack overcloud image upload --update-existing
+{% endhighlight %}
+
 ## Post upgrade actions
 
 Some of the upgraded software components (e.g kernel, openvswitch) require a node reboot to get their new versions loaded. We're going to take this step to reboot the remaining nodes in the deployment. All the nodes are deployed in an HA topology so we can reboot them one by one so the service availability doesn’t get affected.

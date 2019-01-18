@@ -18,7 +18,7 @@ This is a quick post documenting the commands required for setting up Openshift 
 
 {% highlight bash %}
 ## Admin within a project
-oadm policy add-role-to-user admin $user -n $project
+oc adm policy add-role-to-user admin $user -n $project
 ## Cluster wide admin
-oadm policy add-cluster-role-to-user cluster-admin $user
+oc adm policy add-cluster-role-to-user cluster-admin $user
 {% endhighlight %}

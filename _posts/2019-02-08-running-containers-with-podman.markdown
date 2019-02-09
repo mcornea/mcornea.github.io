@@ -12,13 +12,15 @@ categories:
 permalink: podman-containers
 ---
 
-<a href="https://podman.io/" target="_blank"><img src="{{'/public/images/podman.svg' | prepend: site.baseurl | prepend: site.url }}" alt="Podman" width="700" height="200"/></a>
-
 In this post I'll document how to build and run containers with Podman. Podman 
 is a tool which allows you managing OCI containers without the need for a daemon. 
 It aims to provide parity with the docker cli options making it easy for users 
 to transition to using this new tool. You can read more about the Podman motivation
 in this detailed <a href="https://www.projectatomic.io/blog/2018/02/reintroduction-podman/" target="_blank">article</a>.
+
+<a href="https://podman.io/" target="_blank"><img src="{{'/public/images/podman.svg' | prepend: site.baseurl | prepend: site.url }}" alt="Podman" width="700" height="200"/></a>
+
+___
 
 I ran the steps below on a Fedora 29 system and used an nginx container for this
 exercise.

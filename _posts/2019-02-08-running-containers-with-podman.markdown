@@ -18,7 +18,7 @@ It aims to provide parity with the docker cli options making it easy for users
 to transition to using this new tool. You can read more about the Podman motivation
 in this detailed <a href="https://www.projectatomic.io/blog/2018/02/reintroduction-podman/" target="_blank">article</a>.
 
-<a href="https://podman.io/" target="_blank"><img src="{{'/public/images/podman.svg' | prepend: site.baseurl | prepend: site.url }}" alt="Podman" width="700" height="200"/></a>
+<center><a href="https://podman.io/" target="_blank"><img src="{{'/public/images/podman.png' | prepend: site.baseurl | prepend: site.url }}" alt="Podman" /></a></center>
 
 ___
 

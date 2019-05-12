@@ -124,6 +124,10 @@ openshift_master_default_subdomain=containers.remote-lab.net
 openshift_master_overwrite_named_certificates=true
 openshift_master_named_certificates=[{"certfile": "/etc/pki/tls/certs/containers.remote-lab.net.cer", "keyfile": "/etc/pki/tls/private/containers.remote-lab.net.key", "names": ["containers.remote-lab.net"], "cafile": "/etc/pki/tls/certs/containers.remote-lab.net.ca.cer"}]
 
+openshift_cluster_monitoring_operator_install=false
+openshift_metrics_install_metrics=false
+ansible_service_broker_install=false
+
 [masters]
 containers.remote-lab.net
 

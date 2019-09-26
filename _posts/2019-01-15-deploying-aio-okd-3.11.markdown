@@ -188,6 +188,7 @@ View details with 'oc describe <resource>/<name>' or list everything with 'oc ge
 {% highlight bash %}
 [centos@containers ~]$ cat /etc/pki/tls/certs/containers.remote-lab.net.cer /etc/pki/tls/private/containers.remote-lab.net.key /etc/pki/tls/certs/containers.remote-lab.net.ca.cer > containers.remote-lab.net.pem
 [centos@containers ~]$ sudo sh -c "oc secrets new router-certs tls.crt=/home/centos/containers.remote-lab.net.pem tls.key=/etc/pki/tls/private/containers.remote-lab.net.key -o json --type='kubernetes.io/tls' --confirm | oc replace -f -"
+[centos@containers ~]$ sudo oc delete pod $(sudo oc get pods | awk '/router/ {print $1}')
 {% endhighlight %}
 
 ___

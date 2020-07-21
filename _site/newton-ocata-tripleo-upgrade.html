@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  <!-- Enable responsiveness on mobile devices-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title>
+    
+      Upgrading Openstack from Newton to Ocata with TripleO &middot; remote-lab.net
+    
+  </title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/public/css/poole.css">
+  <link rel="stylesheet" href="/public/css/syntax.css">
+  <link rel="stylesheet" href="/public/css/lanyon.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700%7CPT+Sans:400">
+
+  <!-- Icons -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/public/apple-touch-icon-precomposed.png">
+  <link rel="shortcut icon" href="/public/favicon.ico">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/atom.xml">
+</head>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-4849917349039446",
+    enable_page_level_ads: true
+  });
+</script>
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-33897666-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+  <body>
+
+    <!-- Target for toggling the sidebar `.sidebar-checkbox` is for regular
+     styles, `#sidebar-checkbox` for behavior. -->
+<input type="checkbox" class="sidebar-checkbox" id="sidebar-checkbox">
+
+<!-- Toggleable sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-item">
+    <p>A place to learn system and network administration</p>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="sidebar-nav-item" href="/">Home</a>
+
+    
+
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/about/">About</a>
+        
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/archive/">Archive</a>
+        
+      
+    
+      
+    
+      
+        
+          <a class="sidebar-nav-item" href="/docs/">Docs</a>
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+
+    <a class="sidebar-nav-item" href="https://compute.remote-lab.net" target="_blank">Compute</a>
+  </nav>
+
+  <div class="sidebar-item">
+    <p>
+      &copy; 2020. All rights reserved.
+    </p>
+  </div>
+</div>
+
+
+    <!-- Wrap is the content to shift when toggling the sidebar. We wrap the
+         content to avoid any CSS collisions with our real content. -->
+    <div class="wrap">
+      <div class="masthead">
+        <div class="container">
+          <h3 class="masthead-title">
+            <a href="/" title="Home">remote-lab.net</a>
+            <small>learn by doing</small>
+          </h3>
+        </div>
+      </div>
+
+      <div class="container content">
+        <div class="post">
+  <h1 class="post-title">Upgrading Openstack from Newton to Ocata with TripleO</h1>
+  <span class="post-date">14 May 2017</span>
+  <p>During the last cycle I’ve been working on testing upgrades from Newton to Ocata and in this post I’ll describe how the upgrade process looks like and share some tips which might be helpful when you’re upgrading.</p>
+
+<hr />
+
+<h1 id="deployment">Deployment</h1>
+
+<p>We’re going to start with a composable roles RDO deployment including:</p>
+
+<ul>
+  <li>3 x controller nodes running the control plane services</li>
+  <li>2 x networker nodes running Neutron agents</li>
+  <li>3 x cephstorage nodes running Ceph OSDs</li>
+  <li>2 x compute + 2 x computealt nodes running Nova compute</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>We have 2 types of heterogeneous hardware used for the compute hypervisors so we split them into different roles in order to be able to apply per role configurations.
+</code></pre></div></div>
+
+<h1 id="upgrade">Upgrade</h1>
+
+<p>I’m going to describe below the overall upgrade steps and later we’ll go through the details and commands that are required for implementation.</p>
+
+<p><a href="http://0.0.0.0:4000/public/images/upgrade_deployment.png"><img src="http://0.0.0.0:4000/public/images/upgrade_deployment.png" alt="Upgrade deployment" width="800" height="480" /></a></p>
+
+<p>The upgrade process consists of the following main stages:</p>
+
+<ol>
+  <li>
+    <p>Undercloud upgrade</p>
+  </li>
+  <li>
+    <p>Composable steps major upgrade</p>
+
+    <p>In Ocata the concept of composable upgrades was introduced. This means that each service has assigned a set of Ansible tasks which get run during upgrade. Each of these tasks is tagged with a step that signifies when it gets run.</p>
+
+    <p>From a high level perspective during upgrade we first stop the services, then upgrade(including service specific steps) and then bring the services back on. For now only the Ceph services support rolling upgrades(one node at a time). This means that we should expect to see control plane downtime while performing these steps. Nevertheless we expect the data plane not to be affected so instances availability should not be interrupted.</p>
+
+    <p>During this phase we have the ability to disable upgrades for services running on specific roles. By default upgrade is disabled for compute and swift object storage roles to allow the user to do maintenance related activities while upgrading individual nodes such as migrating instances before upgrade, rebooting nodes post upgrade, etc.</p>
+  </li>
+  <li>
+    <p>Individual nodes upgrade</p>
+
+    <p>Nodes part of the roles that are not upgraded during the composable steps can be individually upgraded by using the upgrade-non-controller.sh script.</p>
+  </li>
+  <li>
+    <p>Upgrade converge</p>
+
+    <p>During converge step we unpin Nova RPC version and the puppet configuration gets reapplied on all overcloud nodes.</p>
+  </li>
+</ol>
+
+<h1 id="undercloud-upgrade">Undercloud upgrade</h1>
+
+<ul>
+  <li>Disable Newton repos</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>yum-config-manager <span class="nt">--disable</span> <span class="s1">'*newton*'</span></code></pre></figure>
+
+<ul>
+  <li>Enable Ocata repos</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>yum <span class="nb">install</span> <span class="nt">-y</span> centos-release-openstack-ocata</code></pre></figure>
+
+<ul>
+  <li>Stop services before upgrade</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>systemctl stop openstack-<span class="k">*</span>  neutron-<span class="k">*</span> httpd</code></pre></figure>
+
+<ul>
+  <li>Upgrade packages before upgrade</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">sudo </span>yum <span class="nt">-y</span> update instack-undercloud openstack-puppet-modules openstack-tripleo-common python-tripleoclient</code></pre></figure>
+
+<ul>
+  <li>Upgrade undercloud</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">openstack undercloud upgrade</code></pre></figure>
+
+<p>At this point the undercloud is upgraded and running Ocata.</p>
+
+<h1 id="overcloud-upgrade">Overcloud upgrade</h1>
+
+<h2 id="switch-repos">Switch repos</h2>
+
+<ul>
+  <li>Disable Newton repos</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source</span> ~/stackrc
+<span class="k">for </span>node <span class="k">in</span> <span class="si">$(</span>nova list | <span class="nb">awk</span>  <span class="s1">'{print $12}'</span> | <span class="nb">grep</span> <span class="nt">-oP</span> <span class="s1">'[0-9.]+'</span><span class="si">)</span><span class="p">;</span> <span class="k">do </span>ssh <span class="nt">-o</span> <span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no <span class="nt">-l</span> heat-admin <span class="nv">$node</span> <span class="s1">'sudo yum-config-manager --disable '</span><span class="k">*</span>newton<span class="k">*</span><span class="s1">''</span><span class="p">;</span><span class="k">done</span></code></pre></figure>
+
+<ul>
+  <li>Enable Ocata repos</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source</span> ~/stackrc
+<span class="k">for </span>node <span class="k">in</span> <span class="si">$(</span>nova list | <span class="nb">awk</span>  <span class="s1">'{print $12}'</span> | <span class="nb">grep</span> <span class="nt">-oP</span> <span class="s1">'[0-9.]+'</span><span class="si">)</span><span class="p">;</span> <span class="k">do </span>ssh <span class="nt">-o</span> <span class="nv">StrictHostKeyChecking</span><span class="o">=</span>no <span class="nt">-l</span> heat-admin <span class="nv">$node</span> <span class="s1">'sudo yum install -y centos-release-openstack-ocata'</span><span class="p">;</span><span class="k">done</span></code></pre></figure>
+
+<h2 id="update-roles_datayaml">Update roles_data.yaml</h2>
+
+<h3 id="services-adjustments">Services adjustments:</h3>
+
+<p>In Ocata some of the services in roles_data.yaml were deprecated and new ones were introduced. In our case, since we’re using a custom role_data.yaml, we need to manually adjust it to include these changes.</p>
+
+<p>The following services were removed so they need to be removed from roles_data.yaml</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">OS::TripleO::Services::Core
+OS::TripleO::Services::GlanceRegistry
+OS::TripleO::Services::VipHosts</code></pre></figure>
+
+<p>The following services were newly introduced and are active by default so they need to be added to roles_data.yaml</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">OS::TripleO::Services::MySQLClient
+OS::TripleO::Services::NovaPlacement
+OS::TripleO::Services::PankoApi</code></pre></figure>
+
+<p>In addition there are new services which are not activated by default so they’re not mandatory. I recommend checking the complete list of services in the <a href="https://github.com/openstack/tripleo-heat-templates/blob/stable/ocata/roles_data.yaml" target="_blank">tripleo-heat-templates roles_data.yaml</a></p>
+
+<h3 id="disable-roles-upgrade">Disable roles upgrade:</h3>
+
+<p>While at this step we also want to mark the roles where we want to upgrade individual nodes, in our case the compute nodes. Skipping upgrade for these roles is done via the disable_upgrade_deployment flag and since we have 2 type of compute roles we want to assign this flag to both of them:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">- name: Compute
+  disable_upgrade_deployment: True
+<span class="o">[</span>...]
+- name: ComputeAlt
+  disable_upgrade_deployment: True
+<span class="o">[</span>...]</code></pre></figure>
+
+<h2 id="composable-steps-major-upgrade">Composable steps major upgrade</h2>
+
+<p>Run the major upgrade composable steps by adding the major-upgrade-composable-steps.yaml Heat environment file to the openstack overcloud deploy command used for the initial deployment:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source</span> ~/stackrc
+<span class="nb">export </span><span class="nv">THT</span><span class="o">=</span>/usr/share/openstack-tripleo-heat-templates/
+
+openstack overcloud deploy <span class="nt">--templates</span> <span class="nv">$THT</span> <span class="se">\</span>
+<span class="nt">-r</span> ~/deployment/roles/roles_data.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/puppet-pacemaker.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/network-isolation.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/network-management.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/storage-environment.yaml <span class="se">\</span>
+<span class="nt">-e</span> ~/deployment/environments/nodes.yaml <span class="se">\</span>
+<span class="nt">-e</span> ~/deployment/environments/network-environment.yaml <span class="se">\</span>
+<span class="nt">-e</span> ~/deployment/environments/disk-layout.yaml <span class="se">\</span>
+<span class="nt">-e</span> ~/deployment/environments/neutron-settings.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/major-upgrade-composable-steps.yaml </code></pre></figure>
+
+<p>During this step services running on all the roles except the ones which were specifically disabled in roles_data are being upgraded.</p>
+
+<h2 id="individual-nodes-upgrade">Individual nodes upgrade</h2>
+
+<p>Individual nodes can be upgraded via the upgrade-non-controller.sh script:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source</span> ~/stackrc
+upgrade-non-controller.sh <span class="nt">--upgrade</span> overcloud-compute-0</code></pre></figure>
+
+<p>Before upgrading a compute node one might consider to migrate the workloads to another node in order to avoid potential issues which may arise during the upgrade. A reboot is also required in case components such as the kernel or openvswitch get upgraded so once the upgrade is finished it is a proper time for reboot.</p>
+
+<p>Commands that I found useful while migrating workloads:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">## migrate all instances from specific host</span>
+nova host-evacuate-live 
+<span class="c">## migrate specific instance to specific host</span>
+nova live-migration     </code></pre></figure>
+
+<p>The openstack unified CLI can output in JSON format which is easy to parse with the help of jq:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">openstack server list <span class="nt">-f</span> json | jq <span class="nt">-r</span> <span class="nt">-c</span> <span class="s1">'[.[] | select(.Status | contains("ACTIVE") or contains("PAUSED")) | .Name]'</span>
+<span class="c">## outputs instances which are in ACTIVE or PAUSED state</span></code></pre></figure>
+
+<h2 id="converge-major-upgrade">Converge major upgrade</h2>
+
+<p>Once all the compute nodes have been upgraded we can move forward to the last step in the upgrade process. During previous steps the upgrade_levels configuration section contained ‘compute = auto’ in nova.conf. The converge step removes this option and reapplies the puppet configuration on all overcloud nodes.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source</span> ~/stackrc
+<span class="nb">export </span><span class="nv">THT</span><span class="o">=</span>/usr/share/openstack-tripleo-heat-templates/
+
+openstack overcloud deploy <span class="nt">--templates</span> <span class="nv">$THT</span> <span class="se">\</span>
+<span class="nt">-r</span> ~/deployment/roles/roles_data.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/puppet-pacemaker.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/network-isolation.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/network-management.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/storage-environment.yaml <span class="se">\</span>
+<span class="nt">-e</span> ~/deployment/environments/nodes.yaml <span class="se">\</span>
+<span class="nt">-e</span> ~/deployment/environments/network-environment.yaml <span class="se">\</span>
+<span class="nt">-e</span> ~/deployment/environments/disk-layout.yaml <span class="se">\</span>
+<span class="nt">-e</span> ~/deployment/environments/neutron-settings.yaml <span class="se">\</span>
+<span class="nt">-e</span> <span class="nv">$THT</span>/environments/major-upgrade-converge.yaml</code></pre></figure>
+
+<p>At this point the upgrade process is complete and both undercloud and overcloud are running Ocata.</p>
+
+<h3 id="upload-new-overcloud-images">Upload new overcloud images</h3>
+<p>As one last step we want to update the overcloud images so new nodes which are going to be added later to the deployment load the current version images and not the old ones. To do this we should to go to the directory where images have been built/downloaded and run:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">## Download images from https://images.rdoproject.org/</span>
+<span class="nb">source</span> ~/stackrc
+openstack overcloud image upload <span class="nt">--update-existing</span></code></pre></figure>
+
+<h2 id="post-upgrade-actions">Post upgrade actions</h2>
+
+<p>Some of the upgraded software components (e.g kernel, openvswitch) require a node reboot to get their new versions loaded. We’re going to take this step to reboot the remaining nodes in the deployment. All the nodes are deployed in an HA topology so we can reboot them one by one so the service availability doesn’t get affected.</p>
+
+<p>We’ll start with the Ceph OSD storage nodes. Before rebooting a node we want to set noout and norebalance flags for the OSDs to avoid rebalancing. Once the node is rebooted we unset the flags, make sure that the cluster is in a HEALTH_OK state and move to the next node in the cluster.</p>
+
+<p>Commands that I found useful while rebooting the Ceph OSD nodes:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">## set the flags to avoid rebalancing</span>
+ceph osd <span class="nb">set </span>noout
+ceph osd <span class="nb">set </span>norebalance
+<span class="c">## make sure all pgs are active+clean</span>
+ceph pg <span class="nb">stat</span>
+<span class="c">## unset flags</span>
+ceph osd <span class="nb">unset </span>noout
+ceph osd <span class="nb">unset </span>norebalance
+<span class="c">## make sure cluster is in HEALTH_OK</span>
+ceph health</code></pre></figure>
+
+<p>Going forward to the networker nodes we can reboot them in a rolling fashion, waiting for the node and its Neutron agents respectively to come back online and then move to the next one. Floating IPs failover will automatically occur when the agent goes down.</p>
+
+<p>Commands that I found useful while rebooting the Networker nodes:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">## list all neutron agents</span>
+neutron agent-list
+<span class="c">## list neutron routers</span>
+neutron router-list
+<span class="c">## list dhcp agents assigned to particular net</span>
+neutron dhcp-agent-list-hosting-net
+<span class="c">## list l3 agents assinged to particular router</span>
+neutron l3-agent-list-hosting-router</code></pre></figure>
+
+<p>In the last step we’re going to reboot the controller nodes serially, waiting for each node to come back online in the pacemaker cluster and verifying that all pacemaker resources, haproxy backends and Openstack systemd services are running.</p>
+
+<p>Commands that I found useful while rebooting the Controller nodes:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">## pacemaker cluster status</span>
+pcs status
+<span class="c">## get haproxy stats</span>
+<span class="nb">echo </span>show <span class="nb">stat</span> | nc <span class="nt">-U</span> /var/lib/haproxy/stats
+<span class="c">## show openstack systemd services</span>
+systemctl list-units openstack-<span class="k">*</span></code></pre></figure>
+
+
+</div>
+
+<div class="related">
+  <h2>Related Posts</h2>
+  <ul class="related-posts">
+    
+      <li>
+        <h3>
+          <a href="/fedora-coreos-openstack">
+            Running a Fedora CoreOS OpenStack instance
+            <small>20 Jul 2020</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/podman-containers">
+            Running containers with Podman
+            <small>08 Feb 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+      <li>
+        <h3>
+          <a href="/openshift-cluster-admin-user">
+            Configuring users with admin role in OpenShift
+            <small>18 Jan 2019</small>
+          </a>
+        </h3>
+      </li>
+    
+  </ul>
+</div>
+
+
+        
+  <!-- Add Disqus comments. -->
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+      /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+      var disqus_shortname = 'remote-lab-net'; // required: replace example with your forum shortname
+
+      /* * * DON'T EDIT BELOW THIS LINE * * */
+      (function() {
+          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+      </div>
+    </div>
+
+    <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+
+    <script>
+      (function(document) {
+        var toggle = document.querySelector('.sidebar-toggle');
+        var sidebar = document.querySelector('#sidebar');
+        var checkbox = document.querySelector('#sidebar-checkbox');
+
+        document.addEventListener('click', function(e) {
+          var target = e.target;
+
+          if(!checkbox.checked ||
+             sidebar.contains(target) ||
+             (target === checkbox || target === toggle)) return;
+
+          checkbox.checked = false;
+        }, false);
+      })(document);
+    </script>
+  </body>
+</html>

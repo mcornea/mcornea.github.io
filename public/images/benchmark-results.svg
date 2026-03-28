@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 380" font-family="monospace" font-size="12">
+  <style>
+    rect.bg { fill: #1a1a2e; stroke: #e0e0e0; stroke-width: 2; rx: 6; }
+    text { fill: #e0e0e0; }
+    text.title { font-size: 14px; font-weight: bold; fill: #ffffff; }
+    text.axis { font-size: 11px; fill: #90a4ae; }
+    text.value { font-size: 11px; fill: #ffffff; font-weight: bold; }
+    text.label { font-size: 11px; fill: #b0bec5; }
+    line.grid { stroke: #2a2a4e; stroke-width: 1; }
+    line.axis-line { stroke: #4a4a6e; stroke-width: 1; }
+    rect.bar-direct { fill: #4fc3f7; rx: 2; }
+    rect.bar-bridge { fill: #ffcc80; rx: 2; }
+    rect.bar-tcred { fill: #a5d6a7; rx: 2; }
+    rect.legend { rx: 2; }
+  </style>
+
+  <rect class="bg" x="0" y="0" width="780" height="380"/>
+
+  <!-- Title -->
+  <text class="title" x="390" y="30" text-anchor="middle">Benchmark Results (default perftest parameters)</text>
+
+  <!-- Legend -->
+  <rect class="legend" x="200" y="42" width="12" height="12" fill="#4fc3f7"/>
+  <text class="label" x="218" y="53">Direct PF</text>
+  <rect class="legend" x="330" y="42" width="12" height="12" fill="#ffcc80"/>
+  <text class="label" x="348" y="53">Bridge (no TC RED)</text>
+  <rect class="legend" x="530" y="42" width="12" height="12" fill="#a5d6a7"/>
+  <text class="label" x="548" y="53">Bridge + TC RED</text>
+
+  <!-- ==================== Bandwidth Chart (left) ==================== -->
+  <text class="title" x="210" y="78" text-anchor="middle">Bandwidth (MiB/sec)</text>
+
+  <!-- Y-axis gridlines and labels -->
+  <line class="grid" x1="60" y1="100" x2="360" y2="100"/>
+  <text class="axis" x="55" y="104" text-anchor="end">3000</text>
+  <line class="grid" x1="60" y1="140" x2="360" y2="140"/>
+  <text class="axis" x="55" y="144" text-anchor="end">2500</text>
+  <line class="grid" x1="60" y1="180" x2="360" y2="180"/>
+  <text class="axis" x="55" y="184" text-anchor="end">2000</text>
+  <line class="grid" x1="60" y1="220" x2="360" y2="220"/>
+  <text class="axis" x="55" y="224" text-anchor="end">1500</text>
+  <line class="grid" x1="60" y1="260" x2="360" y2="260"/>
+  <text class="axis" x="55" y="264" text-anchor="end">1000</text>
+  <line class="grid" x1="60" y1="300" x2="360" y2="300"/>
+  <text class="axis" x="55" y="304" text-anchor="end">500</text>
+  <line class="axis-line" x1="60" y1="340" x2="360" y2="340"/>
+  <text class="axis" x="55" y="344" text-anchor="end">0</text>
+
+  <!-- Bars: max=3000, chart height=240px (y=100 to y=340) -->
+  <!-- Direct: 2921 → height = 233.7 → y = 106 -->
+  <rect class="bar-direct" x="100" y="106" width="50" height="234"/>
+  <text class="value" x="125" y="100" text-anchor="middle">2921</text>
+
+  <!-- Bridge: 1737 → height = 139.0 → y = 201 -->
+  <rect class="bar-bridge" x="180" y="201" width="50" height="139"/>
+  <text class="value" x="205" y="195" text-anchor="middle">1737</text>
+
+  <!-- TC RED: 1300 → height = 104.0 → y = 236 -->
+  <rect class="bar-tcred" x="260" y="236" width="50" height="104"/>
+  <text class="value" x="285" y="230" text-anchor="middle">1300</text>
+
+  <!-- Percentage annotations -->
+  <text class="label" x="205" y="352" text-anchor="middle">-41%</text>
+  <text class="label" x="285" y="352" text-anchor="middle">-55%</text>
+
+  <!-- ==================== Latency Chart (right) ==================== -->
+  <text class="title" x="585" y="78" text-anchor="middle">Latency typical (usec)</text>
+
+  <!-- Y-axis gridlines and labels -->
+  <line class="grid" x1="450" y1="100" x2="720" y2="100"/>
+  <text class="axis" x="445" y="104" text-anchor="end">12</text>
+  <line class="grid" x1="450" y1="140" x2="720" y2="140"/>
+  <text class="axis" x="445" y="144" text-anchor="end">10</text>
+  <line class="grid" x1="450" y1="180" x2="720" y2="180"/>
+  <text class="axis" x="445" y="184" text-anchor="end">8</text>
+  <line class="grid" x1="450" y1="220" x2="720" y2="220"/>
+  <text class="axis" x="445" y="224" text-anchor="end">6</text>
+  <line class="grid" x1="450" y1="260" x2="720" y2="260"/>
+  <text class="axis" x="445" y="264" text-anchor="end">4</text>
+  <line class="grid" x1="450" y1="300" x2="720" y2="300"/>
+  <text class="axis" x="445" y="304" text-anchor="end">2</text>
+  <line class="axis-line" x1="450" y1="340" x2="720" y2="340"/>
+  <text class="axis" x="445" y="344" text-anchor="end">0</text>
+
+  <!-- Bars: max=12, chart height=240px (y=100 to y=340) -->
+  <!-- Direct: 1.29 → height = 25.8 → y = 314 -->
+  <rect class="bar-direct" x="490" y="314" width="50" height="26"/>
+  <text class="value" x="515" y="308" text-anchor="middle">1.29</text>
+
+  <!-- Bridge: 10.77 → height = 215.4 → y = 125 -->
+  <rect class="bar-bridge" x="570" y="125" width="50" height="215"/>
+  <text class="value" x="595" y="119" text-anchor="middle">10.77</text>
+
+  <!-- TC RED: 10.38 → height = 207.6 → y = 132 -->
+  <rect class="bar-tcred" x="650" y="132" width="50" height="208"/>
+  <text class="value" x="675" y="126" text-anchor="middle">10.38</text>
+
+  <!-- Percentage annotations -->
+  <text class="label" x="595" y="352" text-anchor="middle">+8.3x</text>
+  <text class="label" x="675" y="352" text-anchor="middle">+8.0x</text>
+</svg>

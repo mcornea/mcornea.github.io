@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 420" font-family="monospace" font-size="13">
+  <style>
+    rect.host { fill: #1a1a2e; stroke: #e0e0e0; stroke-width: 2; rx: 6; }
+    rect.card { fill: #16213e; stroke: #4fc3f7; stroke-width: 1.5; rx: 4; }
+    rect.port { fill: #0f3460; stroke: #81d4fa; stroke-width: 1; rx: 3; }
+    rect.bridge { fill: #1b5e20; stroke: #66bb6a; stroke-width: 1.5; rx: 4; }
+    text { fill: #e0e0e0; }
+    text.title { font-size: 15px; font-weight: bold; fill: #ffffff; }
+    text.label { font-size: 12px; fill: #b3e5fc; }
+    text.port-text { font-size: 11px; fill: #e1f5fe; }
+    text.small { font-size: 10px; fill: #90a4ae; }
+    text.bridge-text { font-size: 12px; fill: #a5d6a7; font-weight: bold; }
+    text.vm { font-size: 11px; fill: #ffcc80; font-weight: bold; }
+    line.cable { stroke: #66bb6a; stroke-width: 2.5; stroke-dasharray: 6,3; }
+    line.bridge-link { stroke: #66bb6a; stroke-width: 2; }
+    text.cable-label { font-size: 10px; fill: #a5d6a7; }
+  </style>
+
+  <!-- Host box -->
+  <rect class="host" x="10" y="10" width="760" height="400"/>
+  <text class="title" x="390" y="38" text-anchor="middle">compute02 (host)</text>
+
+  <!-- Card A box -->
+  <rect class="card" x="50" y="60" width="260" height="240"/>
+  <text class="label" x="180" y="85" text-anchor="middle" font-weight="bold">Card A (41:00.x)</text>
+
+  <!-- Card A port 0 -->
+  <rect class="port" x="70" y="100" width="220" height="55"/>
+  <text class="port-text" x="80" y="120">port 0 (41:00.0)</text>
+  <text class="vm" x="80" y="143">→ vm00 PF</text>
+
+  <!-- Card A port 1 -->
+  <rect class="port" x="70" y="195" width="220" height="55"/>
+  <text class="port-text" x="80" y="215">port 1 (41:00.1)</text>
+  <text class="bridge-text" x="80" y="238">→ br-cp</text>
+
+  <!-- Card B box -->
+  <rect class="card" x="470" y="60" width="260" height="240"/>
+  <text class="label" x="600" y="85" text-anchor="middle" font-weight="bold">Card B (61:00.x)</text>
+
+  <!-- Card B port 0 -->
+  <rect class="port" x="490" y="100" width="220" height="55"/>
+  <text class="port-text" x="500" y="120">port 0 (61:00.0)</text>
+  <text class="bridge-text" x="500" y="143">→ br-cp</text>
+
+  <!-- Card B port 1 -->
+  <rect class="port" x="490" y="195" width="220" height="55"/>
+  <text class="port-text" x="500" y="215">port 1 (61:00.1)</text>
+  <text class="vm" x="500" y="238">→ vm01 PF</text>
+
+  <!-- Cable 1: A:port0 to B:port0 -->
+  <line class="cable" x1="290" y1="127" x2="490" y2="127"/>
+  <text class="cable-label" x="390" y="120" text-anchor="middle">cable 1</text>
+
+  <!-- Cable 2: A:port1 to B:port1 -->
+  <line class="cable" x1="290" y1="222" x2="490" y2="222"/>
+  <text class="cable-label" x="390" y="215" text-anchor="middle">cable 2</text>
+
+  <!-- Bridge box -->
+  <rect class="bridge" x="240" y="330" width="300" height="55"/>
+  <text class="bridge-text" x="390" y="355" text-anchor="middle" font-size="14">br-cp bridge</text>
+  <text class="cable-label" x="390" y="373" text-anchor="middle" font-size="11">(TC RED)</text>
+
+  <!-- Bridge link from A:port1 down to bridge -->
+  <line class="bridge-link" x1="180" y1="250" x2="180" y2="357"/>
+  <line class="bridge-link" x1="180" y1="357" x2="240" y2="357"/>
+  <text class="small" x="168" y="290" text-anchor="end">A:port1</text>
+
+  <!-- Bridge link from B:port0 down to bridge -->
+  <line class="bridge-link" x1="600" y1="155" x2="600" y2="357"/>
+  <line class="bridge-link" x1="540" y1="357" x2="600" y2="357"/>
+  <text class="small" x="612" y="240" text-anchor="start">B:port0</text>
+</svg>

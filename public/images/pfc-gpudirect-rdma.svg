@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" font-family="monospace" font-size="13">
+  <style>
+    rect.vm { fill: #16213e; stroke: #4fc3f7; stroke-width: 1.5; rx: 5; }
+    rect.device { fill: #0f3460; stroke: #81d4fa; stroke-width: 1; rx: 3; }
+    rect.gpu { fill: #1b2838; stroke: #76ff03; stroke-width: 1.5; rx: 3; }
+    text { fill: #e0e0e0; }
+    text.title { font-size: 16px; font-weight: bold; fill: #ffffff; }
+    text.label { font-size: 12px; fill: #b3e5fc; }
+    text.device-text { font-size: 11px; fill: #e1f5fe; }
+    text.small { font-size: 10px; fill: #90a4ae; }
+    text.gpu-text { font-size: 11px; fill: #c8e6c9; }
+    text.speed { font-size: 11px; fill: #ffcc02; font-weight: bold; }
+  </style>
+
+  <!-- Background -->
+  <rect width="800" height="400" fill="#0d1117" rx="8"/>
+
+  <!-- Title -->
+  <text class="title" x="400" y="30" text-anchor="middle">Triggering PFC with GPUDirect RDMA</text>
+  <text class="small" x="400" y="48" text-anchor="middle">NIC buffer backpressure triggers lossless flow control</text>
+
+  <!-- ==================== vm00 (left) ==================== -->
+  <rect class="vm" x="30" y="65" width="310" height="230"/>
+  <text class="label" x="185" y="87" text-anchor="middle" font-weight="bold">vm00 (server)</text>
+
+  <!-- vm00 GPU -->
+  <rect class="gpu" x="50" y="100" width="120" height="60"/>
+  <text class="gpu-text" x="110" y="122" text-anchor="middle" font-weight="bold">RTX 3090</text>
+  <text class="small" x="110" y="146" text-anchor="middle" fill="#a5d6a7">BAR1 memory</text>
+
+  <!-- vm00 NIC -->
+  <rect class="device" x="200" y="100" width="120" height="60"/>
+  <text class="device-text" x="260" y="122" text-anchor="middle" font-weight="bold">ConnectX-4 Lx</text>
+  <text class="small" x="260" y="146" text-anchor="middle">mlx5_0</text>
+
+  <!-- vm00: GPUDirect PCIe path -->
+  <line x1="170" y1="130" x2="200" y2="130" stroke="#76ff03" stroke-width="2"/>
+  <text class="small" x="185" y="120" text-anchor="middle" fill="#76ff03">PCIe</text>
+
+  <!-- vm00 NIC RX buffer (slightly filling - under NIC) -->
+  <rect x="200" y="175" width="120" height="40" fill="#1a237e" stroke="#ef5350" stroke-width="1" rx="2"/>
+  <text x="260" y="191" text-anchor="middle" font-size="9" fill="#ef9a9a">NIC RX buffer</text>
+  <rect x="201" y="197" width="40" height="16" fill="#4e342e" rx="1"/>
+
+  <!-- vm00 PFC status -->
+  <rect x="55" y="230" width="270" height="35" fill="#0d1117" stroke="#455a64" stroke-width="1" rx="3"/>
+  <text x="190" y="245" text-anchor="middle" font-size="10" fill="#90a4ae">rx_prio0_pause: 12,667</text>
+  <text x="190" y="259" text-anchor="middle" font-size="10" fill="#90a4ae">tx_prio0_pause: 80</text>
+
+  <!-- vm00 annotation -->
+  <text class="small" x="185" y="280" text-anchor="middle" fill="#ef5350">receives PAUSE + sends PAUSE</text>
+
+
+  <!-- ==================== vm01 (right) ==================== -->
+  <rect class="vm" x="460" y="65" width="310" height="230"/>
+  <text class="label" x="615" y="87" text-anchor="middle" font-weight="bold">vm01 (client)</text>
+
+  <!-- vm01 GPU -->
+  <rect class="gpu" x="630" y="100" width="120" height="60"/>
+  <text class="gpu-text" x="690" y="122" text-anchor="middle" font-weight="bold">RTX 3090</text>
+  <text class="small" x="690" y="146" text-anchor="middle" fill="#a5d6a7">BAR1 memory</text>
+
+  <!-- vm01 NIC -->
+  <rect class="device" x="480" y="100" width="120" height="60"/>
+  <text class="device-text" x="540" y="122" text-anchor="middle" font-weight="bold">ConnectX-4 Lx</text>
+  <text class="small" x="540" y="146" text-anchor="middle">mlx5_0</text>
+
+  <!-- vm01: GPUDirect PCIe path (slow, cross-NUMA) -->
+  <line x1="600" y1="130" x2="630" y2="130" stroke="#ff9800" stroke-width="2" stroke-dasharray="4,2"/>
+  <text class="small" x="615" y="120" text-anchor="middle" fill="#ff9800">PCIe</text>
+  <text x="615" y="108" text-anchor="middle" font-size="8" fill="#ff9800">cross-NUMA</text>
+
+  <!-- vm01 NIC RX buffer (FILLING UP - key visual, under NIC) -->
+  <rect x="480" y="175" width="120" height="40" fill="#1a237e" stroke="#ef5350" stroke-width="1.5" rx="2"/>
+  <text x="540" y="191" text-anchor="middle" font-size="9" fill="#ef9a9a">NIC RX buffer</text>
+  <!-- Buffer fill (high - danger!) -->
+  <rect x="481" y="197" width="103" height="16" fill="#b71c1c" rx="1"/>
+  <!-- xoff threshold marker -->
+  <line x1="577" y1="196" x2="577" y2="215" stroke="#ffcc02" stroke-width="1.5"/>
+  <text x="583" y="209" font-size="7" fill="#ffcc02" text-anchor="start">xoff</text>
+
+  <!-- vm01 PFC status -->
+  <rect x="475" y="230" width="270" height="35" fill="#0d1117" stroke="#455a64" stroke-width="1" rx="3"/>
+  <text x="610" y="245" text-anchor="middle" font-size="10" fill="#90a4ae">tx_prio0_pause: 12,667</text>
+  <text x="610" y="259" text-anchor="middle" font-size="10" fill="#90a4ae">rx_prio0_pause: 80</text>
+
+  <!-- vm01 annotation -->
+  <text class="small" x="615" y="280" text-anchor="middle" fill="#ef5350">sends PAUSE + receives PAUSE</text>
+
+
+  <!-- ==================== Link between NICs ==================== -->
+
+  <!-- RDMA Write bidirectional data flow -->
+  <line x1="320" y1="118" x2="480" y2="118" stroke="#4fc3f7" stroke-width="2"/>
+  <polygon points="474,112 484,118 474,124" fill="#4fc3f7"/>
+  <polygon points="326,112 316,118 326,124" fill="#4fc3f7"/>
+  <text class="speed" x="400" y="112" text-anchor="middle">RDMA Write bidir (25GbE)</text>
+
+  <!-- PFC PAUSE (vm01 → vm00, dominant: 12,667 frames) -->
+  <line x1="480" y1="138" x2="320" y2="138" stroke="#ef5350" stroke-width="3"/>
+  <polygon points="326,132 316,138 326,144" fill="#ef5350"/>
+  <text x="400" y="133" text-anchor="middle" font-size="10" fill="#ef5350" font-weight="bold">PFC PAUSE (12,667)</text>
+
+  <!-- PFC PAUSE (vm00 → vm01, minor: 80 frames) -->
+  <line x1="320" y1="150" x2="480" y2="150" stroke="#ef5350" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <polygon points="474,145 484,150 474,155" fill="#ef5350"/>
+  <text x="400" y="163" text-anchor="middle" font-size="9" fill="#ef5350">PFC PAUSE (80)</text>
+
+  <!-- ==================== Results bar ==================== -->
+  <rect x="70" y="310" width="280" height="38" fill="#1b5e20" stroke="#66bb6a" stroke-width="1" rx="4"/>
+  <text x="210" y="326" text-anchor="middle" font-size="10" fill="#a5d6a7">GPUDirect bidirectional 30s</text>
+  <text x="210" y="341" text-anchor="middle" font-size="12" fill="#c8e6c9" font-weight="bold">5296 MiB/s — 12,667 pauses — 0 drops</text>
+
+  <rect x="450" y="310" width="280" height="38" fill="#0d47a1" stroke="#42a5f5" stroke-width="1" rx="4"/>
+  <text x="590" y="326" text-anchor="middle" font-size="10" fill="#90caf9">CPU-memory bidirectional 10s</text>
+  <text x="590" y="341" text-anchor="middle" font-size="12" fill="#bbdefb" font-weight="bold">5831 MiB/s — 0 pauses — 0 drops</text>
+
+  <!-- Legend -->
+  <line x1="70" y1="375" x2="95" y2="375" stroke="#4fc3f7" stroke-width="2.5"/>
+  <text class="small" x="100" y="379" fill="#b3e5fc">RDMA data</text>
+
+  <line x1="195" y1="375" x2="220" y2="375" stroke="#ef5350" stroke-width="3"/>
+  <text class="small" x="225" y="379" fill="#ef9a9a">PFC PAUSE</text>
+
+  <line x1="320" y1="375" x2="345" y2="375" stroke="#ff9800" stroke-width="2" stroke-dasharray="4,2"/>
+  <text class="small" x="350" y="379" fill="#ffcc80">Slow PCIe path (cross-NUMA)</text>
+
+  <rect x="545" y="370" width="12" height="10" fill="#b71c1c" rx="1"/>
+  <text class="small" x="562" y="379" fill="#ef9a9a">Buffer filling past xoff threshold</text>
+</svg>
